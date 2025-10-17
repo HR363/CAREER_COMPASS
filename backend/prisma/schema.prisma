@@ -15,7 +15,7 @@ model User {
   name      String
   email     String   @unique
   password  String
-  role      UserRole @default(STUDENT)
+  role      String   @default("STUDENT")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -79,27 +79,18 @@ model Session {
   mentorId    String
   studentId   String
   scheduledAt DateTime
-  status      SessionStatus @default(SCHEDULED)
+  status      String         @default("SCHEDULED")
   roomId      String        @unique
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
   // Relations
-  mentor  User @relation("MentorSessions", fields: [mentorId], references: [id], onDelete: Cascade)
-  student User @relation("StudentSessions", fields: [studentId], references: [id], onDelete: Cascade)
+  mentor  User @relation("MentorSessions", fields: [mentorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  student User @relation("StudentSessions", fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("sessions")
 }
 
-enum UserRole {
-  ADMIN
-  MENTOR
-  STUDENT
-}
-
-enum SessionStatus {
-  SCHEDULED
-  IN_PROGRESS
-  COMPLETED
-  CANCELLED
-}
+// Enums converted to strings for SQL Server compatibility
+// UserRole: "ADMIN" | "MENTOR" | "STUDENT"
+// SessionStatus: "SCHEDULED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED"
