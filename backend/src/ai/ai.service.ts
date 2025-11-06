@@ -6,7 +6,8 @@ import { LearningPathDto } from './dto/learning-path.dto';
 
 @Injectable()
 export class AiService {
-  private readonly geminiApiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+  // ✅ Use the latest stable API version and valid model name
+  private readonly geminiApiUrl = 'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent';
   private readonly apiKey = process.env.GEMINI_API_KEY;
 
   constructor(private prisma: PrismaService) {}
@@ -15,13 +16,12 @@ export class AiService {
     try {
       const prompt = this.buildCareerRecommendationPrompt(dto);
       const response = await this.callGeminiAPI(prompt);
-      
+
       const recommendations = {
         suggestedCareers: response,
         learningPath: null,
       };
 
-      // Save recommendation to database
       await this.prisma.recommendation.create({
         data: {
           userId,
@@ -40,13 +40,12 @@ export class AiService {
     try {
       const prompt = this.buildLearningPathPrompt(dto);
       const response = await this.callGeminiAPI(prompt);
-      
+
       const learningPath = {
         careerPath: dto.careerPath,
         learningPath: response,
       };
 
-      // Check if recommendation exists, if so update, otherwise create
       const existingRecommendation = await this.prisma.recommendation.findFirst({
         where: { userId },
       });
@@ -145,11 +144,7 @@ User message: ${message}`;
         {
           contents: [
             {
-              parts: [
-                {
-                  text: prompt,
-                },
-              ],
+              parts: [{ text: prompt }],
             },
           ],
           generationConfig: {
@@ -166,9 +161,8 @@ User message: ${message}`;
         }
       );
 
-      const content = response.data.candidates[0].content.parts[0].text;
-      
-      // Try to parse as JSON, fallback to plain text
+      const content = response.data.candidates?.[0]?.content?.parts?.[0]?.text;
+
       try {
         return JSON.parse(content);
       } catch {
