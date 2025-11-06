@@ -3,11 +3,10 @@ import { AdminService } from './admin.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
-import { UserRole } from '@prisma/client';
 
 @Controller('admin')
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(UserRole.ADMIN)
+@Roles('ADMIN')
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
@@ -34,7 +33,7 @@ export class AdminController {
   @Put('users/:id/role')
   async updateUserRole(
     @Param('id') userId: string,
-    @Body() body: { role: UserRole },
+    @Body() body: { role: string },
   ) {
     return this.adminService.updateUserRole(userId, body.role);
   }

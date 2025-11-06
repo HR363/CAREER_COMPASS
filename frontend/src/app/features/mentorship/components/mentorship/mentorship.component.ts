@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService, User } from '../../../../../core/services/auth.service';
-import { MentorshipService, Session } from '../../../../../core/services/mentorship.service';
+import { AuthService, User } from '../../../../core/services/auth.service';
+import { MentorshipService, Session } from '../../../../core/services/mentorship.service';
 
 @Component({
   selector: 'app-mentorship',
@@ -158,10 +158,10 @@ export class MentorshipComponent implements OnInit {
 
   loadSessions(): void {
     this.mentorshipService.getSessions().subscribe({
-      next: (sessions) => {
+      next: (sessions: Session[]) => {
         this.sessions = sessions;
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error loading sessions:', error);
       }
     });
@@ -190,12 +190,12 @@ export class MentorshipComponent implements OnInit {
       };
 
       this.mentorshipService.scheduleSession(scheduleData).subscribe({
-        next: (session) => {
+        next: (session: any) => {
           this.isScheduling = false;
           this.scheduleForm.reset();
           this.loadSessions();
         },
-        error: (error) => {
+        error: (error: any) => {
           this.isScheduling = false;
           console.error('Error scheduling session:', error);
         }
@@ -213,7 +213,7 @@ export class MentorshipComponent implements OnInit {
         next: () => {
           this.loadSessions();
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error cancelling session:', error);
         }
       });

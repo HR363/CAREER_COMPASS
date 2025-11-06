@@ -1,9 +1,8 @@
 import { UsersService } from './users.service';
-import { UserRole } from '@prisma/client';
 export declare class UsersController {
     private readonly usersService;
     constructor(usersService: UsersService);
-    findAll(role?: UserRole): Promise<{
+    findAll(role?: string): Promise<{
         profile: {
             education: string;
             skills: string;

@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { UserRole } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(role?: UserRole) {
+  async findAll(role?: string) {
     const where = role ? { role } : {};
     
     return this.prisma.user.findMany({

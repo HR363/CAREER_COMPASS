@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@ang
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AiService } from '../../../../../core/services/ai.service';
-import { AuthService } from '../../../../../core/services/auth.service';
+import { AiService } from '../../../../core/services/ai.service';
+import { AuthService } from '../../../../core/services/auth.service';
 
 interface ChatMessage {
   id: string;
@@ -148,12 +148,12 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         // Send to AI service
         this.isLoading = true;
         this.aiService.chatWithAI({ message: messageText }).subscribe({
-          next: (response) => {
+          next: (response: any) => {
             this.isLoading = false;
             this.removeMessage(loadingMessage.id);
             this.addMessage(response.response, false);
           },
-          error: (error) => {
+          error: (error: any) => {
             this.isLoading = false;
             this.removeMessage(loadingMessage.id);
             this.addMessage('Sorry, I encountered an error. Please try again.', false);
@@ -187,7 +187,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  private formatMessage(content: string): string {
+  formatMessage(content: string): string {
     // Simple formatting for line breaks and basic markdown
     return content
       .replace(/\n/g, '<br>')

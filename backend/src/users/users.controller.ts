@@ -3,7 +3,6 @@ import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
-import { UserRole } from '@prisma/client';
 
 @Controller('users')
 @UseGuards(JwtAuthGuard)
@@ -12,8 +11,8 @@ export class UsersController {
 
   @Get()
   @UseGuards(RolesGuard)
-  @Roles(UserRole.ADMIN)
-  async findAll(@Query('role') role?: UserRole) {
+  @Roles('ADMIN')
+  async findAll(@Query('role') role?: string) {
     return this.usersService.findAll(role);
   }
 
@@ -24,7 +23,7 @@ export class UsersController {
 
   @Get('students')
   @UseGuards(RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.MENTOR)
+  @Roles('ADMIN', 'MENTOR')
   async getStudents() {
     return this.usersService.getStudents();
   }

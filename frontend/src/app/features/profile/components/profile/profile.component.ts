@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService, User } from '../../../../../core/services/auth.service';
-import { AiService } from '../../../../../core/services/ai.service';
+import { AuthService, User } from '../../../../core/services/auth.service';
+import { AiService } from '../../../../core/services/ai.service';
 
 @Component({
   selector: 'app-profile',
@@ -231,11 +231,11 @@ export class ProfileComponent implements OnInit {
     };
 
     this.aiService.getCareerRecommendations(requestData).subscribe({
-      next: (response) => {
+      next: (response: any) => {
         this.isGeneratingRecommendations = false;
         this.recommendations = response;
       },
-      error: (error) => {
+      error: (error: any) => {
         this.isGeneratingRecommendations = false;
         console.error('Error getting recommendations:', error);
         alert('Failed to generate recommendations. Please try again.');

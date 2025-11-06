@@ -1,14 +1,15 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../../../../core/services/auth.service';
-import { MentorshipService, Session } from '../../../../../core/services/mentorship.service';
-import { WebSocketService } from '../../../../../core/services/websocket.service';
+import { AuthService } from '../../../../core/services/auth.service';
+import { MentorshipService, Session } from '../../../../core/services/mentorship.service';
+import { WebSocketService } from '../../../../core/services/websocket.service';
 
 @Component({
   selector: 'app-video-call',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   template: `
     <div class="min-h-screen bg-secondary-900 flex flex-col">
       <!-- Header -->
@@ -106,7 +107,7 @@ import { WebSocketService } from '../../../../../core/services/websocket.service
               <h3 class="text-white font-medium">Chat</h3>
             </div>
             
-            <div class="flex-1 p-4 overflow-y-auto" #chatMessages>
+            <div class="flex-1 p-4 overflow-y-auto" #chatContainer>
               <div *ngFor="let message of chatMessages" class="mb-3">
                 <div [ngClass]="message.isFromUser ? 'text-right' : 'text-left'">
                   <div [ngClass]="message.isFromUser ? 'bg-primary-600' : 'bg-secondary-700'"
@@ -143,7 +144,7 @@ import { WebSocketService } from '../../../../../core/services/websocket.service
 export class VideoCallComponent implements OnInit, OnDestroy {
   @ViewChild('localVideo') localVideo!: ElementRef<HTMLVideoElement>;
   @ViewChild('remoteVideo') remoteVideo!: ElementRef<HTMLVideoElement>;
-  @ViewChild('chatMessages') chatMessages!: ElementRef;
+  @ViewChild('chatContainer') chatContainer!: ElementRef;
 
   session: Session | null = null;
   
@@ -184,11 +185,11 @@ export class VideoCallComponent implements OnInit, OnDestroy {
 
   private async loadSession(sessionId: string): Promise<void> {
     this.mentorshipService.getSession(sessionId).subscribe({
-      next: (session) => {
+      next: (session: any) => {
         this.session = session;
         this.joinSession();
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error loading session:', error);
         this.router.navigate(['/mentorship']);
       }
@@ -255,19 +256,19 @@ export class VideoCallComponent implements OnInit, OnDestroy {
   }
 
   private setupWebSocketListeners(): void {
-    this.webSocketService.onWebRTCOffer((data) => {
+    this.webSocketService.onWebRTCOffer((data: any) => {
       this.handleOffer(data.offer);
     });
 
-    this.webSocketService.onWebRTCAnswer((data) => {
+    this.webSocketService.onWebRTCAnswer((data: any) => {
       this.handleAnswer(data.answer);
     });
 
-    this.webSocketService.onIceCandidate((data) => {
+    this.webSocketService.onIceCandidate((data: any) => {
       this.handleIceCandidate(data.candidate);
     });
 
-    this.webSocketService.onChatMessage((data) => {
+    this.webSocketService.onChatMessage((data: any) => {
       this.chatMessages.push({
         content: data.message,
         isFromUser: data.fromUserId !== this.authService.getCurrentUser()?.id,
@@ -337,7 +338,7 @@ export class VideoCallComponent implements OnInit, OnDestroy {
         next: () => {
           this.leaveSession();
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error ending session:', error);
           this.leaveSession();
         }
@@ -367,8 +368,8 @@ export class VideoCallComponent implements OnInit, OnDestroy {
 
   private scrollChatToBottom(): void {
     setTimeout(() => {
-      if (this.chatMessages) {
-        this.chatMessages.nativeElement.scrollTop = this.chatMessages.nativeElement.scrollHeight;
+      if (this.chatContainer) {
+        this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
       }
     }, 100);
   }

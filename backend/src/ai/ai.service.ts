@@ -46,17 +46,26 @@ export class AiService {
         learningPath: response,
       };
 
-      // Update or create recommendation with learning path
-      await this.prisma.recommendation.upsert({
+      // Check if recommendation exists, if so update, otherwise create
+      const existingRecommendation = await this.prisma.recommendation.findFirst({
         where: { userId },
-        update: {
-          learningPath: JSON.stringify(response),
-        },
-        create: {
-          userId,
-          learningPath: JSON.stringify(response),
-        },
       });
+
+      if (existingRecommendation) {
+        await this.prisma.recommendation.update({
+          where: { id: existingRecommendation.id },
+          data: {
+            learningPath: JSON.stringify(response),
+          },
+        });
+      } else {
+        await this.prisma.recommendation.create({
+          data: {
+            userId,
+            learningPath: JSON.stringify(response),
+          },
+        });
+      }
 
       return learningPath;
     } catch (error) {

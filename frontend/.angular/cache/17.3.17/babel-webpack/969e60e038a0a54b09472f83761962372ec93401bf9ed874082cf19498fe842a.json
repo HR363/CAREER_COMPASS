@@ -1,0 +1,1 @@
+{"ast":null,"code":"import { ChatComponent } from './components/chat/chat.component';\nexport const chatRoutes = [{\n  path: '',\n  component: ChatComponent\n}];","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

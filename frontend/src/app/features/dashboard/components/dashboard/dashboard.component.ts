@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { AuthService, User } from '../../../../../core/services/auth.service';
-import { AiService } from '../../../../../core/services/ai.service';
-import { MentorshipService } from '../../../../../core/services/mentorship.service';
+import { AuthService, User } from '../../../../core/services/auth.service';
+import { AiService } from '../../../../core/services/ai.service';
+import { MentorshipService } from '../../../../core/services/mentorship.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -190,12 +190,12 @@ export class DashboardComponent implements OnInit {
   loadDashboardData(): void {
     // Load recent sessions
     this.mentorshipService.getSessions().subscribe({
-      next: (sessions) => {
+      next: (sessions: any[]) => {
         this.recentSessions = sessions.slice(0, 5);
         this.totalSessions = sessions.length;
-        this.completedSessions = sessions.filter(s => s.status === 'COMPLETED').length;
+        this.completedSessions = sessions.filter((s: any) => s.status === 'COMPLETED').length;
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error loading sessions:', error);
       }
     });

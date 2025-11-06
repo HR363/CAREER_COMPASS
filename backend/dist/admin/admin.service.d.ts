@@ -1,5 +1,4 @@
 import { PrismaService } from '../prisma/prisma.service';
-import { UserRole } from '@prisma/client';
 export declare class AdminService {
     private prisma;
     constructor(prisma: PrismaService);
@@ -69,7 +68,7 @@ export declare class AdminService {
         suggestedCareers: string | null;
         learningPath: string | null;
     })[]>;
-    updateUserRole(userId: string, role: UserRole): Promise<{
+    updateUserRole(userId: string, role: string): Promise<{
         name: string;
         email: string;
         role: string;
