@@ -1,1 +1,0 @@
-{"ast":null,"code":"import { AdminComponent } from './components/admin/admin.component';\nexport const adminRoutes = [{\n  path: '',\n  component: AdminComponent\n}];","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

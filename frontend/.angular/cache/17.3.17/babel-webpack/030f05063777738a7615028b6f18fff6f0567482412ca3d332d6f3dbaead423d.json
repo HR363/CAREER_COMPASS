@@ -1,1 +1,0 @@
-{"ast":null,"code":"import { DashboardComponent } from './components/dashboard/dashboard.component';\nexport const dashboardRoutes = [{\n  path: '',\n  component: DashboardComponent\n}];","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}
