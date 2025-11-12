@@ -1,0 +1,43 @@
+<div class="landing-container">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">Welcome to CareerCompass AI</h1>
+      <p class="hero-subtitle">Your Personalized Career Guidance Platform</p>
+      <p class="hero-description">
+        Navigate your career journey with confidence using AI-powered insights,
+        personalized learning paths, and expert mentorship.
+      </p>
+      <div class="hero-actions">
+        <a routerLink="/auth/register" class="btn btn-primary">Get Started</a>
+        <a routerLink="/auth/login" class="btn btn-secondary">Sign In</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <h2 class="section-title">Why Choose CareerCompass?</h2>
+    <div class="features-grid">
+      <div class="feature-card" *ngFor="let feature of features">
+        <div class="feature-icon">{{ feature.icon }}</div>
+        <h3 class="feature-title">{{ feature.title }}</h3>
+        <p class="feature-description">{{ feature.description }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <h2 class="cta-title">Ready to Transform Your Career?</h2>
+    <p class="cta-description">
+      Join thousands of professionals who have found their path with CareerCompass AI
+    </p>
+    <a routerLink="/auth/register" class="btn btn-primary btn-large">Start Your Journey</a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="landing-footer">
+    <p>&copy; 2025 CareerCompass AI. All rights reserved.</p>
+  </footer>
+</div>
