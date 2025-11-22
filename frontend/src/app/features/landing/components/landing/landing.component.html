@@ -1,43 +1,226 @@
 <div class="landing-container">
+  <!-- Animated Background -->
+  <div class="animated-bg">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav-bar">
+    <div class="nav-content">
+      <div class="logo">
+        <span class="logo-icon">🧭</span>
+        <span class="logo-text">CareerCompass</span>
+      </div>
+      <div class="nav-actions">
+        <a routerLink="/auth/login" class="nav-link">Sign In</a>
+        <a routerLink="/auth/register" class="btn-nav-primary">Get Started</a>
+      </div>
+    </div>
+  </nav>
+
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="hero-content">
-      <h1 class="hero-title">Welcome to CareerCompass AI</h1>
-      <p class="hero-subtitle">Your Personalized Career Guidance Platform</p>
-      <p class="hero-description">
-        Navigate your career journey with confidence using AI-powered insights,
-        personalized learning paths, and expert mentorship.
+      <div class="badge">🚀 AI-Powered Career Platform</div>
+      <h1 class="hero-title">
+        Navigate Your Career 
+        <span class="gradient-text">with Confidence</span>
+      </h1>
+      <p class="hero-subtitle">
+        Transform your professional journey with AI-driven insights, personalized learning paths, 
+        and expert mentorship—all in one platform.
       </p>
       <div class="hero-actions">
-        <a routerLink="/auth/register" class="btn btn-primary">Get Started</a>
-        <a routerLink="/auth/login" class="btn btn-secondary">Sign In</a>
+        <a routerLink="/auth/register" class="btn-hero-primary">
+          <span>Start Free Trial</span>
+          <span class="arrow">→</span>
+        </a>
+        <a routerLink="/auth/login" class="btn-hero-secondary">
+          <span class="play-icon">▶</span>
+          <span>Watch Demo</span>
+        </a>
+      </div>
+      
+      <!-- Stats -->
+      <div class="hero-stats">
+        <div class="stat-item" *ngFor="let stat of stats">
+          <div class="stat-icon">{{ stat.icon }}</div>
+          <div class="stat-value">{{ stat.value }}</div>
+          <div class="stat-label">{{ stat.label }}</div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Features Section -->
   <section class="features-section">
-    <h2 class="section-title">Why Choose CareerCompass?</h2>
-    <div class="features-grid">
-      <div class="feature-card" *ngFor="let feature of features">
-        <div class="feature-icon">{{ feature.icon }}</div>
-        <h3 class="feature-title">{{ feature.title }}</h3>
-        <p class="feature-description">{{ feature.description }}</p>
+    <div class="section-header">
+      <span class="section-badge">✨ Comprehensive Features</span>
+      <h2 class="section-title">Everything You Need to Succeed in Your Career Journey</h2>
+      <p class="section-subtitle">
+        Discover a complete ecosystem of powerful tools, personalized insights, and expert guidance designed to transform 
+        your professional growth. Whether you're just starting out or advancing to the next level, we provide everything 
+        you need to navigate your career path with confidence and clarity.
+      </p>
+    </div>
+    
+    <div class="features-bento">
+      <!-- Large featured card -->
+      <div class="feature-card featured" [style.animation-delay.s]="0">
+        <img class="feature-image-large" [src]="features[0].image" [alt]="features[0].title" loading="lazy">
+        
+        <div class="feature-content-overlay">
+          <div class="feature-badge">Most Popular</div>
+          <div class="feature-icon-large">{{ features[0].icon }}</div>
+          <h3 class="feature-title-large">{{ features[0].title }}</h3>
+          <p class="feature-description-large">{{ features[0].description }}</p>
+          <div class="feature-stats">
+            <div class="stat">
+              <div class="stat-number">10K+</div>
+              <div class="stat-label">Users</div>
+            </div>
+            <div class="stat">
+              <div class="stat-number">95%</div>
+              <div class="stat-label">Success Rate</div>
+            </div>
+          </div>
+          <a class="feature-btn">Explore Now →</a>
+        </div>
+      </div>
+
+      <!-- Compact cards -->
+      <div class="feature-card compact" *ngFor="let feature of features.slice(1); let i = index" 
+           [style.animation-delay.s]="(i + 1) * 0.1">
+        <img class="feature-compact-image" [src]="feature.image" [alt]="feature.title" loading="lazy">
+        
+        <div class="feature-compact-overlay">
+          <div class="feature-icon-compact">{{ feature.icon }}</div>
+          <h3 class="feature-title-compact">{{ feature.title }}</h3>
+          <p class="feature-description-compact">{{ feature.description }}</p>
+          <a class="feature-link-compact">Learn more →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works">
+    <div class="section-header">
+      <span class="section-badge">Process</span>
+      <h2 class="section-title">Your Journey in 3 Simple Steps</h2>
+    </div>
+    
+    <div class="steps-container">
+      <div class="step-card">
+        <div class="step-number">01</div>
+        <div class="step-icon">📝</div>
+        <h3 class="step-title">Create Your Profile</h3>
+        <p class="step-description">Tell us about your skills, interests, and career goals</p>
+      </div>
+      
+      <div class="step-connector"></div>
+      
+      <div class="step-card">
+        <div class="step-number">02</div>
+        <div class="step-icon">🤖</div>
+        <h3 class="step-title">Get AI Recommendations</h3>
+        <p class="step-description">Receive personalized career paths and learning roadmaps</p>
+      </div>
+      
+      <div class="step-connector"></div>
+      
+      <div class="step-card">
+        <div class="step-number">03</div>
+        <div class="step-icon">🎯</div>
+        <h3 class="step-title">Connect & Grow</h3>
+        <p class="step-description">Meet mentors and start your transformation journey</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials-section">
+    <div class="section-header">
+      <span class="section-badge">Success Stories</span>
+      <h2 class="section-title">Loved by Thousands of Professionals</h2>
+    </div>
+    
+    <div class="testimonials-grid">
+      <div class="testimonial-card" *ngFor="let testimonial of testimonials">
+        <div class="testimonial-header">
+          <div class="avatar">{{ testimonial.avatar }}</div>
+          <div class="testimonial-info">
+            <div class="testimonial-name">{{ testimonial.name }}</div>
+            <div class="testimonial-role">{{ testimonial.role }}</div>
+          </div>
+          <div class="rating">
+            <span *ngFor="let star of [1,2,3,4,5]">⭐</span>
+          </div>
+        </div>
+        <p class="testimonial-content">"{{ testimonial.content }}"</p>
       </div>
     </div>
   </section>
 
   <!-- CTA Section -->
   <section class="cta-section">
-    <h2 class="cta-title">Ready to Transform Your Career?</h2>
-    <p class="cta-description">
-      Join thousands of professionals who have found their path with CareerCompass AI
-    </p>
-    <a routerLink="/auth/register" class="btn btn-primary btn-large">Start Your Journey</a>
+    <div class="cta-card">
+      <div class="cta-icon">🚀</div>
+      <h2 class="cta-title">Ready to Transform Your Career?</h2>
+      <p class="cta-description">
+        Join thousands of professionals who have accelerated their careers with CareerCompass AI
+      </p>
+      <div class="cta-actions">
+        <a routerLink="/auth/register" class="btn-cta-primary">
+          Start Your Free Trial
+          <span class="arrow">→</span>
+        </a>
+        <p class="cta-note">✓ No credit card required • ✓ 14-day free trial • ✓ Cancel anytime</p>
+      </div>
+    </div>
   </section>
 
   <!-- Footer -->
   <footer class="landing-footer">
-    <p>&copy; 2025 CareerCompass AI. All rights reserved.</p>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <span class="logo-icon">🧭</span>
+          <span class="logo-text">CareerCompass</span>
+        </div>
+        <p class="footer-tagline">Navigate your career with confidence</p>
+      </div>
+      
+      <div class="footer-links">
+        <div class="footer-column">
+          <h4>Product</h4>
+          <a href="#">Features</a>
+          <a href="#">Pricing</a>
+          <a href="#">Mentors</a>
+        </div>
+        <div class="footer-column">
+          <h4>Company</h4>
+          <a href="#">About</a>
+          <a href="#">Blog</a>
+          <a href="#">Careers</a>
+        </div>
+        <div class="footer-column">
+          <h4>Support</h4>
+          <a href="#">Help Center</a>
+          <a href="#">Contact</a>
+          <a href="#">FAQ</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2025 CareerCompass AI. All rights reserved.</p>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
   </footer>
 </div>
