@@ -1,0 +1,134 @@
+<div class="profile-container">
+  <!-- Animated Background -->
+  <div class="animated-bg">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="profile-nav">
+    <div class="nav-content">
+      <div class="nav-left">
+        <button (click)="goBack()" class="back-btn">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        <h1 class="nav-title">👤 Profile</h1>
+      </div>
+      <div class="nav-right">
+        <span class="user-name">{{ currentUser?.name }}</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="profile-content">
+    <!-- Profile Header Card -->
+    <div class="profile-header-card">
+      <div class="avatar-section">
+        <div class="avatar">
+          <svg class="avatar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+          </svg>
+        </div>
+        <div class="user-info">
+          <h2 class="user-name-large">{{ currentUser?.name }}</h2>
+          <p class="user-email">{{ currentUser?.email }}</p>
+          <span class="role-badge" [ngClass]="'badge-' + currentUser?.role">
+            {{ currentUser?.role }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Form Card -->
+    <div class="form-card">
+      <h3 class="card-title">✏️ Profile Information</h3>
+      
+      <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Education</label>
+            <input type="text" 
+                   formControlName="education" 
+                   placeholder="e.g., Bachelor's in Computer Science"
+                   class="form-input">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Career Goals</label>
+            <input type="text" 
+                   formControlName="goals" 
+                   placeholder="e.g., Become a Senior Software Engineer"
+                   class="form-input">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Skills</label>
+          <textarea formControlName="skills" 
+                    rows="3" 
+                    placeholder="Enter your skills (comma-separated): JavaScript, React, Node.js, Python..."
+                    class="form-textarea"></textarea>
+          <p class="form-hint">Separate skills with commas</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Interests</label>
+          <textarea formControlName="interests" 
+                    rows="3" 
+                    placeholder="Enter your interests (comma-separated): Web Development, AI, Data Science..."
+                    class="form-textarea"></textarea>
+          <p class="form-hint">Separate interests with commas</p>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" 
+                  (click)="goBack()"
+                  class="btn-secondary">
+            Cancel
+          </button>
+          <button type="submit" 
+                  [disabled]="profileForm.invalid || isUpdating"
+                  class="btn-primary">
+            <span *ngIf="isUpdating" class="spinner"></span>
+            {{ isUpdating ? 'Updating...' : 'Update Profile' }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Career Recommendations Card -->
+    <div class="recommendations-card" *ngIf="currentUser?.role === 'STUDENT'">
+      <h3 class="card-title">🚀 Career Recommendations</h3>
+      <p class="card-description">
+        Based on your profile, we can suggest personalized career paths and learning roadmaps.
+      </p>
+      
+      <button (click)="getCareerRecommendations()" 
+              [disabled]="isGeneratingRecommendations"
+              class="btn-primary">
+        <span *ngIf="isGeneratingRecommendations" class="spinner"></span>
+        {{ isGeneratingRecommendations ? 'Generating...' : 'Get Recommendations' }}
+      </button>
+
+      <!-- Recommendations Display -->
+      <div *ngIf="recommendations" class="recommendations-list">
+        <h4 class="recommendations-title">Suggested Career Paths</h4>
+        <div class="career-cards">
+          <div *ngFor="let career of recommendations.suggestedCareers" class="career-card">
+            <h5 class="career-title">{{ career.title }}</h5>
+            <p class="career-description">{{ career.description }}</p>
+            <div class="career-details">
+              <p><strong>Skills:</strong> {{ career.requiredSkills }}</p>
+              <p><strong>Salary:</strong> {{ career.salaryRange }}</p>
+              <p><strong>Why this fits:</strong> {{ career.matchReason }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
