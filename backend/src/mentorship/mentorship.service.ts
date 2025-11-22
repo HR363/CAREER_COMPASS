@@ -1,11 +1,15 @@
 import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { AgoraService } from '../agora/agora.service';
 import { ScheduleSessionDto } from './dto/schedule-session.dto';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class MentorshipService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private agoraService: AgoraService,
+  ) {}
 
   async scheduleSession(dto: ScheduleSessionDto) {
     // Verify mentor exists and is actually a mentor
@@ -166,5 +170,43 @@ export class MentorshipService {
         status: 'CANCELLED',
       },
     });
+  }
+
+  async getVideoCallToken(sessionId: string, userId: string) {
+    const session = await this.prisma.session.findUnique({
+      where: { id: sessionId },
+    });
+
+    if (!session) {
+      throw new NotFoundException('Session not found');
+    }
+
+    // Verify user is part of this session
+    if (session.mentorId !== userId && session.studentId !== userId) {
+      throw new ForbiddenException('You are not authorized to join this session');
+    }
+
+    // Check if session is scheduled or in progress
+    if (session.status !== 'SCHEDULED' && session.status !== 'IN_PROGRESS') {
+      throw new ForbiddenException('Session is not available for joining');
+    }
+
+    // Use session ID as channel name
+    const channelName = sessionId;
+    
+    // Generate token with user ID
+    const token = this.agoraService.generateRtcToken(
+      channelName,
+      0, // 0 means Agora will auto-assign a uid
+      'publisher', // Both mentor and student can publish
+      3600, // Token valid for 1 hour
+    );
+
+    return {
+      appId: this.agoraService.getAppId(),
+      channel: channelName,
+      token,
+      uid: 0,
+    };
   }
 }

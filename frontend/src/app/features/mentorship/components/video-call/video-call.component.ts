@@ -5,6 +5,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
 import { MentorshipService, Session } from '../../../../core/services/mentorship.service';
 import { WebSocketService } from '../../../../core/services/websocket.service';
+import AgoraRTC, {
+  IAgoraRTCClient,
+  ICameraVideoTrack,
+  IMicrophoneAudioTrack,
+  IAgoraRTCRemoteUser,
+} from 'agora-rtc-sdk-ng';
 
 @Component({
   selector: 'app-video-call',
@@ -148,14 +154,16 @@ export class VideoCallComponent implements OnInit, OnDestroy {
 
   session: Session | null = null;
   
-  // WebRTC
-  private peerConnection: RTCPeerConnection | null = null;
-  private localStream: MediaStream | null = null;
+  // Agora RTC
+  private client: IAgoraRTCClient | null = null;
+  private localAudioTrack: IMicrophoneAudioTrack | null = null;
+  private localVideoTrack: ICameraVideoTrack | null = null;
   
   // UI State
   isMuted = false;
   isVideoEnabled = true;
   isRemoteStreamActive = false;
+  isConnected = false;
   
   // Chat
   chatMessages: Array<{content: string, isFromUser: boolean, timestamp: Date}> = [];
@@ -174,7 +182,7 @@ export class VideoCallComponent implements OnInit, OnDestroy {
     
     if (sessionId) {
       await this.loadSession(sessionId);
-      await this.initializeVideoCall();
+      await this.initializeAgoraCall();
       this.setupWebSocketListeners();
     }
   }
@@ -196,78 +204,82 @@ export class VideoCallComponent implements OnInit, OnDestroy {
     });
   }
 
-  private async initializeVideoCall(): Promise<void> {
+  private async initializeAgoraCall(): Promise<void> {
     try {
-      // Get user media
-      this.localStream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true
-      });
+      const sessionId = this.route.snapshot.paramMap.get('id');
+      if (!sessionId) return;
 
-      // Set up local video
-      if (this.localVideo) {
-        this.localVideo.nativeElement.srcObject = this.localStream;
+      // Get Agora credentials from backend
+      const credentials: any = await this.mentorshipService.getVideoCallToken(sessionId).toPromise();
+      
+      // Create Agora client
+      this.client = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8' });
+
+      // Set up event listeners
+      this.setupAgoraEvents();
+
+      // Join the channel
+      await this.client.join(
+        credentials.appId,
+        credentials.channel,
+        credentials.token,
+        credentials.uid
+      );
+
+      // Create and publish local tracks
+      [this.localAudioTrack, this.localVideoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks();
+
+      // Play local video
+      if (this.localVideo && this.localVideoTrack) {
+        this.localVideoTrack.play(this.localVideo.nativeElement);
       }
 
-      // Initialize peer connection
-      this.initializePeerConnection();
+      // Publish tracks
+      await this.client.publish([this.localAudioTrack, this.localVideoTrack]);
+      
+      this.isConnected = true;
 
     } catch (error) {
-      console.error('Error accessing media devices:', error);
+      console.error('Error initializing Agora call:', error);
     }
   }
 
-  private initializePeerConnection(): void {
-    const configuration = {
-      iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:stun1.l.google.com:19302' }
-      ]
-    };
+  private setupAgoraEvents(): void {
+    if (!this.client) return;
 
-    this.peerConnection = new RTCPeerConnection(configuration);
-
-    // Add local stream to peer connection
-    if (this.localStream) {
-      this.localStream.getTracks().forEach(track => {
-        this.peerConnection!.addTrack(track, this.localStream!);
-      });
-    }
-
-    // Handle remote stream
-    this.peerConnection.ontrack = (event) => {
-      const remoteStream = event.streams[0];
-      if (this.remoteVideo) {
-        this.remoteVideo.nativeElement.srcObject = remoteStream;
+    // Handle remote user joined
+    this.client.on('user-published', async (user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') => {
+      await this.client!.subscribe(user, mediaType);
+      
+      if (mediaType === 'video') {
         this.isRemoteStreamActive = true;
+        setTimeout(() => {
+          const remoteVideoTrack = user.videoTrack;
+          if (remoteVideoTrack && this.remoteVideo) {
+            remoteVideoTrack.play(this.remoteVideo.nativeElement);
+          }
+        }, 100);
       }
-    };
 
-    // Handle ICE candidates
-    this.peerConnection.onicecandidate = (event) => {
-      if (event.candidate && this.session) {
-        this.webSocketService.sendIceCandidate(
-          this.session.roomId,
-          event.candidate,
-          'remote-user' // This should be the actual remote user ID
-        );
+      if (mediaType === 'audio') {
+        const remoteAudioTrack = user.audioTrack;
+        if (remoteAudioTrack) {
+          remoteAudioTrack.play();
+        }
       }
-    };
+    });
+
+    // Handle remote user left
+    this.client.on('user-unpublished', (user: IAgoraRTCRemoteUser) => {
+      this.isRemoteStreamActive = false;
+    });
+
+    this.client.on('user-left', (user: IAgoraRTCRemoteUser) => {
+      this.isRemoteStreamActive = false;
+    });
   }
 
   private setupWebSocketListeners(): void {
-    this.webSocketService.onWebRTCOffer((data: any) => {
-      this.handleOffer(data.offer);
-    });
-
-    this.webSocketService.onWebRTCAnswer((data: any) => {
-      this.handleAnswer(data.answer);
-    });
-
-    this.webSocketService.onIceCandidate((data: any) => {
-      this.handleIceCandidate(data.candidate);
-    });
-
     this.webSocketService.onChatMessage((data: any) => {
       this.chatMessages.push({
         content: data.message,
@@ -288,47 +300,17 @@ export class VideoCallComponent implements OnInit, OnDestroy {
     }
   }
 
-  private async handleOffer(offer: RTCSessionDescriptionInit): Promise<void> {
-    if (this.peerConnection) {
-      await this.peerConnection.setRemoteDescription(offer);
-      const answer = await this.peerConnection.createAnswer();
-      await this.peerConnection.setLocalDescription(answer);
-      
-      if (this.session) {
-        this.webSocketService.sendWebRTCAnswer(this.session.roomId, answer, 'remote-user');
-      }
-    }
-  }
-
-  private async handleAnswer(answer: RTCSessionDescriptionInit): Promise<void> {
-    if (this.peerConnection) {
-      await this.peerConnection.setRemoteDescription(answer);
-    }
-  }
-
-  private async handleIceCandidate(candidate: RTCIceCandidateInit): Promise<void> {
-    if (this.peerConnection) {
-      await this.peerConnection.addIceCandidate(candidate);
-    }
-  }
-
   toggleMute(): void {
-    if (this.localStream) {
-      const audioTrack = this.localStream.getAudioTracks()[0];
-      if (audioTrack) {
-        audioTrack.enabled = !audioTrack.enabled;
-        this.isMuted = !audioTrack.enabled;
-      }
+    if (this.localAudioTrack) {
+      this.isMuted = !this.isMuted;
+      this.localAudioTrack.setEnabled(!this.isMuted);
     }
   }
 
   toggleVideo(): void {
-    if (this.localStream) {
-      const videoTrack = this.localStream.getVideoTracks()[0];
-      if (videoTrack) {
-        videoTrack.enabled = !videoTrack.enabled;
-        this.isVideoEnabled = videoTrack.enabled;
-      }
+    if (this.localVideoTrack) {
+      this.isVideoEnabled = !this.isVideoEnabled;
+      this.localVideoTrack.setEnabled(this.isVideoEnabled);
     }
   }
 
@@ -374,13 +356,24 @@ export class VideoCallComponent implements OnInit, OnDestroy {
     }, 100);
   }
 
-  private cleanup(): void {
-    if (this.localStream) {
-      this.localStream.getTracks().forEach(track => track.stop());
+  private async cleanup(): Promise<void> {
+    // Stop and close local tracks
+    if (this.localAudioTrack) {
+      this.localAudioTrack.stop();
+      this.localAudioTrack.close();
+      this.localAudioTrack = null;
     }
-    
-    if (this.peerConnection) {
-      this.peerConnection.close();
+
+    if (this.localVideoTrack) {
+      this.localVideoTrack.stop();
+      this.localVideoTrack.close();
+      this.localVideoTrack = null;
+    }
+
+    // Leave the channel
+    if (this.client) {
+      await this.client.leave();
+      this.client = null;
     }
 
     this.webSocketService.disconnect();

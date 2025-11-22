@@ -50,4 +50,8 @@ export class MentorshipService {
   cancelSession(sessionId: string): Observable<any> {
     return this.http.put(`${environment.apiUrl}/mentorship/sessions/${sessionId}/cancel`, {});
   }
+
+  getVideoCallToken(sessionId: string): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/mentorship/sessions/${sessionId}/token`);
+  }
 }

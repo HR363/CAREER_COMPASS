@@ -53,4 +53,12 @@ export class MentorshipController {
   ) {
     return this.mentorshipService.cancelSession(sessionId, user.id, user.role);
   }
+
+  @Get('sessions/:id/token')
+  async getVideoCallToken(
+    @Param('id') sessionId: string,
+    @CurrentUser() user: any,
+  ) {
+    return this.mentorshipService.getVideoCallToken(sessionId, user.id);
+  }
 }
