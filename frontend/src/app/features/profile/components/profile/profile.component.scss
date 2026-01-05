@@ -1,4 +1,10 @@
-// Profile Component Styles - Dark Theme
+// Profile Component Styles - Dark Theme with Neomorphism
+
+// Neomorphism base colors
+$neo-bg: #1a1a2e;
+$neo-light: rgba(50, 50, 80, 0.5);
+$neo-dark: rgba(5, 5, 15, 0.8);
+
 .profile-container {
   min-height: 100vh;
   background: #0f0f23;
@@ -51,10 +57,14 @@
 .profile-nav {
   position: relative;
   z-index: 10;
-  background: rgba(255, 255, 255, 0.03);
+  background: $neo-bg;
   backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  // Neomorphism navbar
+  box-shadow: 
+    0 8px 24px $neo-dark,
+    0 -2px 10px $neo-light,
+    inset 0 1px 1px rgba(255, 255, 255, 0.03);
 
   .nav-content {
     max-width: 1200px;
@@ -73,17 +83,32 @@
 
   .back-btn {
     padding: 0.5rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 0.5rem;
+    background: $neo-bg;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 0.75rem;
     color: rgba(255, 255, 255, 0.7);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    // Neomorphism button
+    box-shadow: 
+      5px 5px 12px $neo-dark,
+      -3px -3px 8px $neo-light,
+      inset 1px 1px 2px rgba(255, 255, 255, 0.05);
 
     &:hover {
-      background: rgba(255, 255, 255, 0.1);
+      background: lighten($neo-bg, 3%);
       color: #ffffff;
       transform: translateX(-3px);
+      box-shadow: 
+        8px 8px 18px $neo-dark,
+        -5px -5px 12px $neo-light,
+        inset 1px 1px 2px rgba(255, 255, 255, 0.08);
+    }
+    
+    &:active {
+      box-shadow: 
+        inset 4px 4px 8px $neo-dark,
+        inset -2px -2px 6px $neo-light;
     }
   }
 
@@ -113,16 +138,25 @@
 
 // Profile Header Card
 .profile-header-card {
-  background: rgba(255, 255, 255, 0.03);
+  background: $neo-bg;
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 2rem;
   padding: 2.5rem;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  transition: transform 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  // Neomorphism card
+  box-shadow: 
+    16px 16px 32px $neo-dark,
+    -10px -10px 24px $neo-light,
+    inset 1px 1px 2px rgba(255, 255, 255, 0.05);
 
   &:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px);
+    box-shadow: 
+      24px 24px 48px $neo-dark,
+      -16px -16px 36px $neo-light,
+      inset 2px 2px 4px rgba(255, 255, 255, 0.08),
+      0 0 50px rgba(102, 126, 234, 0.1);
   }
 }
 
@@ -135,14 +169,19 @@
 .avatar {
   width: 6rem;
   height: 6rem;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
-  border: 2px solid rgba(99, 102, 241, 0.5);
+  background: linear-gradient(145deg, #1e1e3a, #16162a);
+  border: 2px solid rgba(99, 102, 241, 0.3);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+  // Neomorphism avatar
+  box-shadow: 
+    10px 10px 24px $neo-dark,
+    -6px -6px 16px $neo-light,
+    inset 2px 2px 4px rgba(99, 102, 241, 0.2),
+    0 0 30px rgba(99, 102, 241, 0.2);
 }
 
 .avatar-icon {
@@ -175,34 +214,43 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  // Neomorphism badge
+  box-shadow: 
+    4px 4px 10px $neo-dark,
+    -3px -3px 8px $neo-light,
+    inset 1px 1px 2px rgba(255, 255, 255, 0.05);
 
   &.badge-ADMIN {
-    background: rgba(239, 68, 68, 0.2);
+    background: $neo-bg;
     color: #fca5a5;
-    border: 1px solid rgba(239, 68, 68, 0.4);
+    border: 1px solid rgba(239, 68, 68, 0.3);
   }
 
   &.badge-MENTOR {
-    background: rgba(168, 85, 247, 0.2);
+    background: $neo-bg;
     color: #c4b5fd;
-    border: 1px solid rgba(168, 85, 247, 0.4);
+    border: 1px solid rgba(168, 85, 247, 0.3);
   }
 
   &.badge-STUDENT {
-    background: rgba(59, 130, 246, 0.2);
+    background: $neo-bg;
     color: #93c5fd;
-    border: 1px solid rgba(59, 130, 246, 0.4);
+    border: 1px solid rgba(59, 130, 246, 0.3);
   }
 }
 
 // Form Card
 .form-card, .recommendations-card {
-  background: rgba(255, 255, 255, 0.03);
+  background: $neo-bg;
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 2rem;
   padding: 2.5rem;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  // Neomorphism card
+  box-shadow: 
+    16px 16px 32px $neo-dark,
+    -10px -10px 24px $neo-light,
+    inset 1px 1px 2px rgba(255, 255, 255, 0.05);
 }
 
 .card-title {
@@ -242,13 +290,17 @@
 .form-input, .form-textarea {
   width: 100%;
   padding: 0.875rem 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0.75rem;
+  background: darken($neo-bg, 3%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
   color: #ffffff;
   font-size: 1rem;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-family: inherit;
+  // Neomorphism inset input
+  box-shadow: 
+    inset 4px 4px 8px $neo-dark,
+    inset -3px -3px 6px $neo-light;
 
   &::placeholder {
     color: rgba(255, 255, 255, 0.3);
@@ -256,9 +308,12 @@
 
   &:focus {
     outline: none;
-    background: rgba(255, 255, 255, 0.08);
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    background: darken($neo-bg, 2%);
+    border-color: rgba(102, 126, 234, 0.4);
+    box-shadow: 
+      inset 4px 4px 8px $neo-dark,
+      inset -3px -3px 6px $neo-light,
+      0 0 20px rgba(102, 126, 234, 0.2);
   }
 }
 
@@ -282,11 +337,11 @@
 
 .btn-primary, .btn-secondary {
   padding: 0.875rem 1.75rem;
-  border-radius: 0.75rem;
+  border-radius: 1rem;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: none;
   display: flex;
   align-items: center;
@@ -301,21 +356,51 @@
 .btn-primary {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #ffffff;
-  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+  // Neomorphism button
+  box-shadow: 
+    8px 8px 18px $neo-dark,
+    -5px -5px 12px $neo-light,
+    inset 1px 1px 2px rgba(255, 255, 255, 0.2);
 
   &:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 
+      12px 12px 24px $neo-dark,
+      -8px -8px 18px $neo-light,
+      inset 2px 2px 4px rgba(255, 255, 255, 0.25),
+      0 0 40px rgba(102, 126, 234, 0.4);
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: 
+      inset 6px 6px 12px $neo-dark,
+      inset -4px -4px 8px $neo-light;
   }
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.05);
+  background: $neo-bg;
   color: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  // Neomorphism button
+  box-shadow: 
+    6px 6px 14px $neo-dark,
+    -4px -4px 10px $neo-light,
+    inset 1px 1px 2px rgba(255, 255, 255, 0.05);
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: lighten($neo-bg, 3%);
+    box-shadow: 
+      10px 10px 20px $neo-dark,
+      -6px -6px 16px $neo-light,
+      inset 1px 1px 2px rgba(255, 255, 255, 0.08);
+  }
+  
+  &:active {
+    box-shadow: 
+      inset 4px 4px 8px $neo-dark,
+      inset -3px -3px 6px $neo-light;
   }
 }
 
@@ -352,15 +437,23 @@
 }
 
 .career-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1rem;
+  background: darken($neo-bg, 2%);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 1.25rem;
   padding: 1.5rem;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  // Neomorphism inset card
+  box-shadow: 
+    inset 3px 3px 6px $neo-dark,
+    inset -2px -2px 4px $neo-light;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.08);
-    transform: translateX(5px);
+    background: darken($neo-bg, 1%);
+    transform: translateX(8px);
+    box-shadow: 
+      8px 8px 18px $neo-dark,
+      -5px -5px 12px $neo-light,
+      inset 1px 1px 2px rgba(255, 255, 255, 0.05);
   }
 }
 

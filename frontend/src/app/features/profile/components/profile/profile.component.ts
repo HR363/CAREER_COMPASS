@@ -17,7 +17,7 @@ export class ProfileComponent implements OnInit {
   profileForm: FormGroup;
   isUpdating = false;
   isGeneratingRecommendations = false;
-  recommendations: any = null;
+  recommendations: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -97,7 +97,26 @@ export class ProfileComponent implements OnInit {
     this.aiService.getCareerRecommendations(requestData).subscribe({
       next: (response: any) => {
         this.isGeneratingRecommendations = false;
-        this.recommendations = response;
+        // Handle the response structure - suggestedCareers contains the array
+        let careers = response?.suggestedCareers || response;
+        
+        // If it's still a string, try to parse it
+        if (typeof careers === 'string') {
+          try {
+            // Strip markdown code fences if present
+            let cleaned = careers.trim();
+            cleaned = cleaned.replace(/^```(?:json)?\s*\n?/i, '');
+            cleaned = cleaned.replace(/\n?```\s*$/i, '');
+            careers = JSON.parse(cleaned.trim());
+          } catch (e) {
+            console.error('Failed to parse careers:', e);
+            careers = [];
+          }
+        }
+        
+        // Ensure it's an array
+        this.recommendations = Array.isArray(careers) ? careers : [];
+        console.log('Career recommendations:', this.recommendations);
       },
       error: (error: any) => {
         this.isGeneratingRecommendations = false;
@@ -122,6 +141,10 @@ export class ProfileComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['/dashboard']);
+  }
+
+  isArray(value: any): boolean {
+    return Array.isArray(value);
   }
 }
 

@@ -1,3 +1,8 @@
+// Neomorphism base colors (must be at top)
+$neo-bg: #1a1a2e;
+$neo-light: rgba(50, 50, 80, 0.5);
+$neo-dark: rgba(5, 5, 15, 0.8);
+
 .landing-container {
   min-height: 100vh;
   background: #0f0f23 !important;
@@ -28,7 +33,7 @@
   &.orb-1 {
     width: 500px;
     height: 500px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #139b55 0%, #2feb77 100%);
     top: -10%;
     right: -10%;
     animation-delay: 0s;
@@ -37,7 +42,7 @@
   &.orb-2 {
     width: 400px;
     height: 400px;
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #1ba258 0%, #f5576c 100%);
     bottom: -10%;
     left: -5%;
     animation-delay: 7s;
@@ -66,9 +71,14 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  background: rgba(15, 15, 35, 0.8);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: $neo-bg;
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  // Neomorphism navbar
+  box-shadow: 
+    0 8px 20px $neo-dark,
+    0 -2px 10px $neo-light,
+    inset 0 1px 1px rgba(255, 255, 255, 0.03);
   
   .nav-content {
     max-width: 1400px;
@@ -111,17 +121,33 @@
   
   .btn-nav-primary {
     padding: 0.625rem 1.5rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 8px;
+    background: linear-gradient(135deg, #2b409f 0%, #0fa854 100%);
+    border-radius: 12px;
     color: white;
     text-decoration: none;
     font-weight: 600;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
+    // Neomorphism button
+    box-shadow: 
+      6px 6px 14px $neo-dark,
+      -4px -4px 10px $neo-light,
+      inset 1px 1px 2px rgba(255, 255, 255, 0.2);
     
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+      box-shadow: 
+        10px 10px 20px $neo-dark,
+        -6px -6px 16px $neo-light,
+        inset 1px 1px 2px rgba(255, 255, 255, 0.3),
+        0 0 30px rgba(102, 126, 234, 0.5);
+    }
+    
+    &:active {
+      transform: translateY(1px);
+      box-shadow: 
+        inset 4px 4px 8px $neo-dark,
+        inset -2px -2px 6px $neo-light;
     }
   }
 }
@@ -145,13 +171,18 @@
   .badge {
     display: inline-block;
     padding: 0.5rem 1.25rem;
-    background: rgba(102, 126, 234, 0.2);
-    border: 1px solid rgba(102, 126, 234, 0.3);
+    background: $neo-bg;
+    border: 1px solid rgba(102, 126, 234, 0.2);
     border-radius: 50px;
     font-size: 0.875rem;
     font-weight: 600;
     margin-bottom: 2rem;
     animation: fadeInDown 0.8s ease-out;
+    // Neomorphism pill
+    box-shadow: 
+      6px 6px 14px $neo-dark,
+      -4px -4px 10px $neo-light,
+      inset 1px 1px 2px rgba(255, 255, 255, 0.05);
   }
   
   .hero-title {
@@ -167,7 +198,7 @@
   }
   
   .gradient-text {
-    background: linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5576c 100%);
+    background: linear-gradient(135deg, #667eea 0%, #1a9c49 50%, #f5576c 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -199,26 +230,41 @@
     align-items: center;
     gap: 0.5rem;
     padding: 1rem 2rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 12px;
+    background: linear-gradient(135deg, #2ba57e 0%, #18a158 100%);
+    border-radius: 16px;
     color: white;
     text-decoration: none;
     font-weight: 600;
     font-size: 1.1rem;
-    transition: transform 0.3s, box-shadow 0.3s;
-    box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    // Neomorphism button
+    box-shadow: 
+      10px 10px 24px $neo-dark,
+      -6px -6px 16px $neo-light,
+      inset 1px 1px 3px rgba(255, 255, 255, 0.2);
     
     .arrow {
       transition: transform 0.3s;
     }
     
     &:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 15px 50px rgba(102, 126, 234, 0.5);
+      transform: translateY(-4px);
+      box-shadow: 
+        16px 16px 32px $neo-dark,
+        -10px -10px 24px $neo-light,
+        inset 2px 2px 4px rgba(255, 255, 255, 0.25),
+        0 0 50px rgba(102, 126, 234, 0.4);
       
       .arrow {
         transform: translateX(5px);
       }
+    }
+    
+    &:active {
+      transform: translateY(1px);
+      box-shadow: 
+        inset 6px 6px 12px $neo-dark,
+        inset -4px -4px 8px $neo-light;
     }
   }
   
@@ -227,23 +273,38 @@
     align-items: center;
     gap: 0.5rem;
     padding: 1rem 2rem;
-    background: rgba(255, 255, 255, 0.1);
+    background: $neo-bg;
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
     color: white;
     text-decoration: none;
     font-weight: 600;
     font-size: 1.1rem;
-    transition: all 0.3s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    // Neomorphism button
+    box-shadow: 
+      10px 10px 24px $neo-dark,
+      -6px -6px 16px $neo-light,
+      inset 1px 1px 2px rgba(255, 255, 255, 0.05);
     
     .play-icon {
       font-size: 0.875rem;
     }
     
     &:hover {
-      background: rgba(255, 255, 255, 0.2);
-      border-color: rgba(255, 255, 255, 0.3);
+      background: lighten($neo-bg, 5%);
+      box-shadow: 
+        14px 14px 28px $neo-dark,
+        -8px -8px 20px $neo-light,
+        inset 2px 2px 4px rgba(255, 255, 255, 0.08),
+        0 0 30px rgba(102, 126, 234, 0.2);
+    }
+    
+    &:active {
+      box-shadow: 
+        inset 6px 6px 12px $neo-dark,
+        inset -4px -4px 8px $neo-light;
     }
   }
   
@@ -254,11 +315,16 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 2rem;
-    background: rgba(255, 255, 255, 0.05);
+    background: $neo-bg;
     backdrop-filter: blur(10px);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
     animation: fadeInUp 0.8s ease-out 0.8s both;
+    // Neomorphism shadow
+    box-shadow: 
+      12px 12px 24px rgba(5, 5, 15, 0.8),
+      -8px -8px 20px rgba(50, 50, 80, 0.5),
+      inset 1px 1px 2px rgba(255, 255, 255, 0.05);
   }
   
   .stat-item {
@@ -273,7 +339,7 @@
   .stat-value {
     font-size: 2rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
+    background: linear-gradient(135deg, #41ad90 0%, #1ea056 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -306,15 +372,19 @@
   }
   
   .feature-card {
-    background: linear-gradient(145deg, rgba(30, 30, 60, 0.95) 0%, rgba(20, 20, 40, 0.98) 100%);
+    background: $neo-bg;
     backdrop-filter: blur(30px);
     border-radius: 28px;
-    border: 2px solid rgba(102, 126, 234, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     overflow: hidden;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     animation: fadeInUp 0.8s ease-out both;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    // Neomorphism shadow - soft outer shadows
+    box-shadow: 
+      12px 12px 24px $neo-dark,
+      -8px -8px 20px $neo-light,
+      inset 1px 1px 2px rgba(255, 255, 255, 0.05);
     
     &::before {
       content: '';
@@ -322,7 +392,7 @@
       inset: -2px;
       border-radius: 28px;
       padding: 2px;
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.4), rgba(240, 147, 251, 0.4), rgba(102, 126, 234, 0.4));
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(240, 147, 251, 0.3), rgba(102, 126, 234, 0.3));
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
       mask-composite: exclude;
@@ -331,9 +401,13 @@
     }
     
     &:hover {
-      transform: translateY(-12px);
-      border-color: rgba(102, 126, 234, 0.4);
-      box-shadow: 0 35px 90px rgba(102, 126, 234, 0.5), 0 0 0 1px rgba(102, 126, 234, 0.3) inset;
+      transform: translateY(-8px);
+      // Neomorphism hover - pressed/elevated effect
+      box-shadow: 
+        20px 20px 40px $neo-dark,
+        -12px -12px 30px $neo-light,
+        inset 2px 2px 4px rgba(255, 255, 255, 0.08),
+        0 0 60px rgba(102, 126, 234, 0.2);
       
       &::before {
         opacity: 1;
@@ -413,6 +487,10 @@
     object-fit: cover;
     transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 28px;
+    // Neomorphism for image container
+    box-shadow: 
+      inset 4px 4px 10px rgba(0, 0, 0, 0.3),
+      inset -2px -2px 6px rgba(255, 255, 255, 0.05);
   }
   
   .feature-content-overlay {
@@ -435,7 +513,7 @@
   .feature-badge {
     display: inline-block;
     padding: 0.6rem 1.25rem;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(240, 147, 251, 0.9) 100%);
+    background: linear-gradient(135deg, rgba(79, 189, 145, 0.9) 0%, rgba(36, 168, 76, 0.9) 100%);
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 50px;
     font-size: 0.7rem;
@@ -444,13 +522,13 @@
     letter-spacing: 1.5px;
     width: fit-content;
     margin-bottom: 1.5rem;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.5);
+    box-shadow: 0 4px 15px rgba(102, 234, 203, 0.5);
   }
   
   .feature-icon-large {
     font-size: 4.5rem;
     margin-bottom: 1rem;
-    filter: drop-shadow(0 0 30px rgba(102, 126, 234, 1));
+    filter: drop-shadow(0 0 30px rgb(102, 234, 203));
   }
   
   .feature-title-large {
@@ -486,7 +564,7 @@
         color: #ffffff;
         line-height: 1;
         margin-bottom: 0.5rem;
-        text-shadow: 0 2px 10px rgba(102, 126, 234, 0.8);
+        text-shadow: 0 2px 10px rgba(102, 234, 203, 0.8);
       }
       
       .stat-label {
@@ -504,8 +582,8 @@
     align-items: center;
     gap: 0.75rem;
     padding: 1rem 2.5rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 14px;
+    background: linear-gradient(135deg, #66eacd 0%, #2ba761 100%);
+    border-radius: 16px;
     color: white;
     font-weight: 700;
     font-size: 1.05rem;
@@ -514,12 +592,26 @@
     width: fit-content;
     border: none;
     text-decoration: none;
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+    // Neomorphism button
+    box-shadow: 
+      8px 8px 18px $neo-dark,
+      -5px -5px 12px $neo-light,
+      inset 1px 1px 2px rgba(255, 255, 255, 0.2);
     
     &:hover {
       transform: translateX(8px);
-      box-shadow: 0 12px 35px rgba(102, 126, 234, 0.8);
-      background: linear-gradient(135deg, #7688f5 0%, #8558b3 100%);
+      box-shadow: 
+        12px 12px 24px $neo-dark,
+        -8px -8px 18px $neo-light,
+        inset 2px 2px 4px rgba(255, 255, 255, 0.25),
+        0 0 40px rgba(102, 126, 234, 0.5);
+      background: linear-gradient(135deg, #51bead 0%, #30a86c 100%);
+    }
+    
+    &:active {
+      box-shadow: 
+        inset 5px 5px 10px $neo-dark,
+        inset -3px -3px 8px $neo-light;
     }
   }
   
@@ -532,6 +624,10 @@
     object-fit: cover;
     transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 28px;
+    // Neomorphism for image container
+    box-shadow: 
+      inset 4px 4px 10px rgba(0, 0, 0, 0.3),
+      inset -2px -2px 6px rgba(255, 255, 255, 0.05);
   }
   
   .feature-compact-overlay {
@@ -552,7 +648,7 @@
   .feature-icon-compact {
     font-size: 3.5rem;
     margin-bottom: 1rem;
-    filter: drop-shadow(0 0 25px rgba(102, 126, 234, 0.9));
+    filter: drop-shadow(0 0 25px rgba(77, 203, 172, 0.9));
   }
   
   .feature-title-compact {
@@ -576,19 +672,33 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 1.75rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 10px;
+    background: linear-gradient(135deg, #4ebeb1 0%, #38bf70 100%);
+    border-radius: 12px;
     color: white;
     font-weight: 600;
     font-size: 0.95rem;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     text-decoration: none;
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    // Neomorphism button
+    box-shadow: 
+      6px 6px 14px $neo-dark,
+      -4px -4px 10px $neo-light,
+      inset 1px 1px 2px rgba(255, 255, 255, 0.15);
     
     &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.7);
+      transform: translateY(-3px);
+      box-shadow: 
+        10px 10px 20px $neo-dark,
+        -6px -6px 16px $neo-light,
+        inset 2px 2px 4px rgba(255, 255, 255, 0.2),
+        0 0 30px rgba(102, 126, 234, 0.4);
+    }
+    
+    &:active {
+      box-shadow: 
+        inset 4px 4px 8px $neo-dark,
+        inset -2px -2px 6px $neo-light;
     }
   }
 }
@@ -606,8 +716,8 @@
   .section-badge {
     display: inline-block;
     padding: 0.9rem 2.25rem;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.35) 0%, rgba(118, 75, 162, 0.3) 100%);
-    border: 1.5px solid rgba(102, 126, 234, 0.6);
+    background: $neo-bg;
+    border: 1px solid rgba(102, 126, 234, 0.3);
     border-radius: 50px;
     font-size: 1.05rem;
     font-weight: 600;
@@ -615,12 +725,20 @@
     color: #ffffff !important;
     letter-spacing: 1.2px;
     text-transform: uppercase;
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.25);
     transition: all 0.3s ease;
+    // Neomorphism pill
+    box-shadow: 
+      8px 8px 18px $neo-dark,
+      -5px -5px 12px $neo-light,
+      inset 1px 1px 2px rgba(255, 255, 255, 0.05);
     
     &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.35);
+      transform: translateY(-3px);
+      box-shadow: 
+        12px 12px 24px $neo-dark,
+        -8px -8px 18px $neo-light,
+        inset 2px 2px 4px rgba(255, 255, 255, 0.08),
+        0 0 25px rgba(102, 126, 234, 0.2);
     }
   }
   
@@ -680,23 +798,33 @@
     flex: 1;
     min-width: 250px;
     padding: 2.5rem;
-    background: rgba(20, 20, 40, 0.6);
+    background: $neo-bg;
     backdrop-filter: blur(10px);
-    border-radius: 20px;
-    border: 1px solid rgba(102, 126, 234, 0.2);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
     text-align: center;
-    transition: all 0.4s;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    // Neomorphism shadow
+    box-shadow: 
+      10px 10px 20px $neo-dark,
+      -6px -6px 16px $neo-light,
+      inset 1px 1px 2px rgba(255, 255, 255, 0.05);
     
     &:hover {
-      transform: scale(1.05);
-      border-color: rgba(102, 126, 234, 0.5);
+      transform: scale(1.03) translateY(-5px);
+      // Neomorphism hover - elevated effect
+      box-shadow: 
+        16px 16px 32px $neo-dark,
+        -10px -10px 24px $neo-light,
+        inset 2px 2px 4px rgba(255, 255, 255, 0.08),
+        0 0 40px rgba(102, 126, 234, 0.15);
     }
   }
   
   .step-number {
     font-size: 3rem;
     font-weight: 800;
-    background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
+    background: linear-gradient(135deg, #3eab98 0%, #2aa959 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -722,7 +850,7 @@
   .step-connector {
     width: 60px;
     height: 2px;
-    background: linear-gradient(90deg, rgba(102, 126, 234, 0.5) 0%, rgba(240, 147, 251, 0.5) 100%);
+    background: linear-gradient(90deg, rgba(56, 172, 164, 0.5) 0%, rgba(38, 163, 96, 0.5) 100%);
     position: relative;
     
     &::after {
@@ -757,16 +885,25 @@
   
   .testimonial-card {
     padding: 2rem;
-    background: rgba(20, 20, 40, 0.6);
+    background: $neo-bg;
     backdrop-filter: blur(10px);
-    border-radius: 20px;
-    border: 1px solid rgba(102, 126, 234, 0.2);
-    transition: all 0.4s;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    // Neomorphism shadow
+    box-shadow: 
+      10px 10px 20px $neo-dark,
+      -6px -6px 16px $neo-light,
+      inset 1px 1px 2px rgba(255, 255, 255, 0.05);
     
     &:hover {
-      transform: translateY(-5px);
-      border-color: rgba(102, 126, 234, 0.5);
-      box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+      transform: translateY(-8px);
+      // Neomorphism hover - elevated effect
+      box-shadow: 
+        16px 16px 32px $neo-dark,
+        -10px -10px 24px $neo-light,
+        inset 2px 2px 4px rgba(255, 255, 255, 0.08),
+        0 0 40px rgba(102, 126, 234, 0.15);
     }
   }
   
@@ -780,12 +917,17 @@
   .avatar {
     width: 50px;
     height: 50px;
-    background: rgba(102, 126, 234, 0.2);
+    background: linear-gradient(145deg, #1e1e3a, #16162a);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
+    // Neomorphism circle
+    box-shadow: 
+      4px 4px 8px $neo-dark,
+      -3px -3px 6px $neo-light,
+      inset 1px 1px 2px rgba(255, 255, 255, 0.05);
   }
   
   .testimonial-info {
@@ -824,13 +966,18 @@
     max-width: 900px;
     margin: 0 auto;
     padding: 5rem 4rem;
-    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    background: linear-gradient(145deg, #f0f0f5 0%, #e8e8f0 100%);
     border-radius: 32px;
     border: none;
     text-align: center;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.15);
+    // Light neomorphism for the white card
+    box-shadow: 
+      20px 20px 50px rgba(163, 163, 180, 0.5),
+      -15px -15px 40px rgba(255, 255, 255, 0.8),
+      inset 2px 2px 4px rgba(255, 255, 255, 0.9),
+      inset -2px -2px 4px rgba(163, 163, 180, 0.2);
     
     &::before {
       content: '';
@@ -839,7 +986,7 @@
       left: 0;
       right: 0;
       height: 6px;
-      background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      background: linear-gradient(90deg, #31aeaa 0%, #1d7d42 50%, #14a860 100%);
     }
     
     @media (max-width: 768px) {
@@ -895,15 +1042,19 @@
     align-items: center;
     gap: 0.75rem;
     padding: 1.5rem 3.5rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 14px;
+    background: linear-gradient(135deg, #2e9b8d 0%, #32a966 100%);
+    border-radius: 18px;
     color: white;
     text-decoration: none;
     font-weight: 700;
     font-size: 1.25rem;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 12px 35px rgba(102, 126, 234, 0.35);
     margin-bottom: 1.5rem;
+    // Light neomorphism for CTA button (on light background)
+    box-shadow: 
+      8px 8px 20px rgba(120, 120, 150, 0.4),
+      -6px -6px 16px rgba(255, 255, 255, 0.9),
+      inset 1px 1px 3px rgba(255, 255, 255, 0.4);
     
     .arrow {
       transition: transform 0.3s;
@@ -912,12 +1063,23 @@
     
     &:hover {
       transform: translateY(-4px);
-      box-shadow: 0 18px 50px rgba(102, 126, 234, 0.5);
-      background: linear-gradient(135deg, #7688f5 0%, #8558b3 100%);
+      background: linear-gradient(135deg, #2aa792 0%, #188b55 100%);
+      box-shadow: 
+        12px 12px 28px rgba(120, 120, 150, 0.5),
+        -8px -8px 20px rgba(255, 255, 255, 1),
+        inset 2px 2px 4px rgba(255, 255, 255, 0.5),
+        0 0 40px rgba(102, 126, 234, 0.4);
       
       .arrow {
         transform: translateX(6px);
       }
+    }
+    
+    &:active {
+      transform: translateY(1px);
+      box-shadow: 
+        inset 6px 6px 14px rgba(90, 90, 120, 0.4),
+        inset -4px -4px 10px rgba(255, 255, 255, 0.6);
     }
     
     @media (max-width: 768px) {
@@ -1184,8 +1346,8 @@
 .cta-section {
   padding: 80px 20px;
   text-align: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, #258f84 0%, #1f9956 100%);
+  color: rgb(200, 17, 35);
   
   .cta-title {
     font-size: 2.5rem;
@@ -1216,7 +1378,7 @@
   cursor: pointer;
   
   &-primary {
-    background: white;
+    background: rgb(201, 10, 10);
     color: #667eea;
     
     &:hover {
@@ -1227,11 +1389,11 @@
   
   &-secondary {
     background: transparent;
-    color: white;
-    border-color: white;
+    color: rgb(220, 13, 13);
+    border-color: rgb(215, 9, 9);
     
     &:hover {
-      background: white;
+      background: rgb(191, 14, 14);
       color: #667eea;
     }
   }

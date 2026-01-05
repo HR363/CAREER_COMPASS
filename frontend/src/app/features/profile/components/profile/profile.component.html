@@ -115,16 +115,21 @@
       </button>
 
       <!-- Recommendations Display -->
-      <div *ngIf="recommendations" class="recommendations-list">
+      <div *ngIf="recommendations && recommendations.length > 0" class="recommendations-list">
         <h4 class="recommendations-title">Suggested Career Paths</h4>
         <div class="career-cards">
-          <div *ngFor="let career of recommendations.suggestedCareers" class="career-card">
+          <div *ngFor="let career of recommendations" class="career-card">
             <h5 class="career-title">{{ career.title }}</h5>
             <p class="career-description">{{ career.description }}</p>
             <div class="career-details">
-              <p><strong>Skills:</strong> {{ career.requiredSkills }}</p>
-              <p><strong>Salary:</strong> {{ career.salaryRange }}</p>
-              <p><strong>Why this fits:</strong> {{ career.matchReason }}</p>
+              <div class="career-skills" *ngIf="career.requiredSkills">
+                <strong>Skills:</strong>
+                <span *ngIf="isArray(career.requiredSkills)">{{ career.requiredSkills.join(', ') }}</span>
+                <span *ngIf="!isArray(career.requiredSkills)">{{ career.requiredSkills }}</span>
+              </div>
+              <p *ngIf="career.salaryRange"><strong>Salary:</strong> {{ career.salaryRange }}</p>
+              <p *ngIf="career.growthProspects"><strong>Growth:</strong> {{ career.growthProspects }}</p>
+              <p *ngIf="career.matchReason"><strong>Why this fits:</strong> {{ career.matchReason }}</p>
             </div>
           </div>
         </div>

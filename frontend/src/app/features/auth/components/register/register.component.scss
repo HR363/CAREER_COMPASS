@@ -1,4 +1,10 @@
-// Register Component Styles - Dark Theme
+// Register Component Styles - Dark Theme with Neomorphism
+
+// Neomorphism base colors
+$neo-bg: #1a1a2e;
+$neo-light: rgba(50, 50, 80, 0.5);
+$neo-dark: rgba(5, 5, 15, 0.8);
+
 .auth-container {
   min-height: 100vh;
   background: #0f0f23;
@@ -59,17 +65,25 @@
 }
 
 .auth-card {
-  background: rgba(255, 255, 255, 0.03);
+  background: $neo-bg;
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 2rem;
   padding: 3rem;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  // Neomorphism card
+  box-shadow: 
+    20px 20px 50px $neo-dark,
+    -15px -15px 40px $neo-light,
+    inset 1px 1px 2px rgba(255, 255, 255, 0.05);
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
+    transform: translateY(-8px);
+    box-shadow: 
+      28px 28px 60px $neo-dark,
+      -20px -20px 50px $neo-light,
+      inset 2px 2px 4px rgba(255, 255, 255, 0.08),
+      0 0 60px rgba(102, 126, 234, 0.15);
   }
 }
 
@@ -123,12 +137,16 @@
     input, select {
       width: 100%;
       padding: 0.875rem 1rem;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 0.75rem;
+      background: darken($neo-bg, 3%);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 1rem;
       color: #ffffff;
       font-size: 1rem;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      // Neomorphism inset input
+      box-shadow: 
+        inset 4px 4px 8px $neo-dark,
+        inset -3px -3px 6px $neo-light;
 
       &::placeholder {
         color: rgba(255, 255, 255, 0.3);
@@ -136,13 +154,16 @@
 
       &:focus {
         outline: none;
-        background: rgba(255, 255, 255, 0.08);
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        background: darken($neo-bg, 2%);
+        border-color: rgba(102, 126, 234, 0.4);
+        box-shadow: 
+          inset 4px 4px 8px $neo-dark,
+          inset -3px -3px 6px $neo-light,
+          0 0 20px rgba(102, 126, 234, 0.2);
       }
 
       &:hover {
-        border-color: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.1);
       }
     }
 
@@ -154,6 +175,7 @@
       background-position: right 0.75rem center;
       background-size: 1.25rem;
       padding-right: 2.5rem;
+      background-color: darken($neo-bg, 3%);
     }
 
     .error-message {
@@ -165,13 +187,17 @@
 
   .alert-error {
     padding: 1rem;
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    border-radius: 0.75rem;
+    background: darken($neo-bg, 2%);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 1rem;
     color: #fca5a5;
     font-size: 0.875rem;
     margin-bottom: 1.5rem;
     text-align: center;
+    // Neomorphism error box
+    box-shadow: 
+      inset 3px 3px 6px $neo-dark,
+      inset -2px -2px 4px $neo-light;
   }
 
   .btn-primary {
@@ -179,25 +205,36 @@
     padding: 1rem;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border: none;
-    border-radius: 0.75rem;
+    border-radius: 1rem;
     color: #ffffff;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    // Neomorphism button
+    box-shadow: 
+      8px 8px 18px $neo-dark,
+      -5px -5px 12px $neo-light,
+      inset 1px 1px 2px rgba(255, 255, 255, 0.2);
 
     &:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+      transform: translateY(-3px);
+      box-shadow: 
+        12px 12px 24px $neo-dark,
+        -8px -8px 18px $neo-light,
+        inset 2px 2px 4px rgba(255, 255, 255, 0.25),
+        0 0 40px rgba(102, 126, 234, 0.4);
     }
 
     &:active:not(:disabled) {
-      transform: translateY(0);
+      transform: translateY(1px);
+      box-shadow: 
+        inset 6px 6px 12px $neo-dark,
+        inset -4px -4px 8px $neo-light;
     }
 
     &:disabled {

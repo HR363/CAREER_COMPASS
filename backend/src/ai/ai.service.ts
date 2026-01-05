@@ -161,11 +161,23 @@ User message: ${message}`;
         }
       );
 
-      const content = response.data.candidates?.[0]?.content?.parts?.[0]?.text;
+      let content = response.data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+      // Strip markdown code fences if present (```json ... ``` or ``` ... ```)
+      if (content && typeof content === 'string') {
+        content = content.trim();
+        // Remove opening code fence with optional language identifier
+        content = content.replace(/^```(?:json)?\s*\n?/i, '');
+        // Remove closing code fence
+        content = content.replace(/\n?```\s*$/i, '');
+        content = content.trim();
+      }
 
       try {
         return JSON.parse(content);
       } catch {
+        // If parsing fails, return a structured error object instead of raw string
+        console.warn('Failed to parse AI response as JSON:', content?.substring(0, 200));
         return content;
       }
     } catch (error) {

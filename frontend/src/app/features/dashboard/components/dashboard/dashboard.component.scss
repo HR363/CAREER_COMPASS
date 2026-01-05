@@ -1,4 +1,10 @@
-// Dashboard Component Styles - Stunning Dark Theme
+// Dashboard Component Styles - Stunning Dark Theme with Neomorphism
+
+// Neomorphism base colors
+$neo-bg: #1a1a2e;
+$neo-light: rgba(50, 50, 80, 0.5);
+$neo-dark: rgba(5, 5, 15, 0.8);
+
 .dashboard-container {
   min-height: 100vh;
   background: #0f0f23;
@@ -61,12 +67,17 @@
 
 // Navigation
 .nav-bar {
-  background: rgba(15, 15, 35, 0.8);
+  background: $neo-bg;
   backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   position: sticky;
   top: 0;
   z-index: 100;
+  // Neomorphism navbar
+  box-shadow: 
+    0 8px 24px $neo-dark,
+    0 -2px 10px $neo-light,
+    inset 0 1px 1px rgba(255, 255, 255, 0.03);
 
   .nav-content {
     max-width: 1400px;
@@ -136,26 +147,28 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       backdrop-filter: blur(10px);
+      // Neomorphism badge
+      box-shadow: 
+        4px 4px 10px $neo-dark,
+        -3px -3px 8px $neo-light,
+        inset 1px 1px 2px rgba(255, 255, 255, 0.05);
 
       &.admin {
-        background: rgba(239, 68, 68, 0.15);
+        background: $neo-bg;
         color: #fca5a5;
-        border: 1px solid rgba(239, 68, 68, 0.3);
-        box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+        border: 1px solid rgba(239, 68, 68, 0.2);
       }
 
       &.mentor {
-        background: rgba(139, 92, 246, 0.15);
+        background: $neo-bg;
         color: #c4b5fd;
-        border: 1px solid rgba(139, 92, 246, 0.3);
-        box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+        border: 1px solid rgba(139, 92, 246, 0.2);
       }
 
       &.student {
-        background: rgba(59, 130, 246, 0.15);
+        background: $neo-bg;
         color: #93c5fd;
-        border: 1px solid rgba(59, 130, 246, 0.3);
-        box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+        border: 1px solid rgba(59, 130, 246, 0.2);
       }
     }
 
@@ -166,12 +179,17 @@
       color: rgba(255, 255, 255, 0.7);
       font-size: 0.95rem;
       font-weight: 500;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: $neo-bg;
+      border: 1px solid rgba(255, 255, 255, 0.05);
       padding: 0.625rem 1.25rem;
-      border-radius: 0.75rem;
+      border-radius: 1rem;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      // Neomorphism button
+      box-shadow: 
+        6px 6px 14px $neo-dark,
+        -4px -4px 10px $neo-light,
+        inset 1px 1px 2px rgba(255, 255, 255, 0.05);
 
       svg {
         width: 18px;
@@ -179,10 +197,21 @@
       }
 
       &:hover {
-        background: rgba(255, 255, 255, 0.1);
-        border-color: rgba(255, 255, 255, 0.2);
+        background: lighten($neo-bg, 3%);
         color: #ffffff;
-        transform: translateY(-1px);
+        transform: translateY(-2px);
+        box-shadow: 
+          10px 10px 20px $neo-dark,
+          -6px -6px 16px $neo-light,
+          inset 1px 1px 2px rgba(255, 255, 255, 0.08),
+          0 0 20px rgba(239, 68, 68, 0.15);
+      }
+      
+      &:active {
+        transform: translateY(1px);
+        box-shadow: 
+          inset 4px 4px 8px $neo-dark,
+          inset -3px -3px 6px $neo-light;
       }
     }
   }
@@ -230,18 +259,21 @@
   .action-card {
     position: relative;
     cursor: pointer;
-    transition: transform 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
     &:hover {
-      transform: translateY(-5px);
+      transform: translateY(-8px);
 
       .card-glow {
         opacity: 1;
       }
 
       .card-inner {
-        border-color: rgba(255, 255, 255, 0.2);
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        box-shadow: 
+          20px 20px 40px $neo-dark,
+          -12px -12px 30px $neo-light,
+          inset 2px 2px 4px rgba(255, 255, 255, 0.08),
+          0 0 50px rgba(102, 126, 234, 0.2);
       }
     }
 
@@ -252,25 +284,30 @@
       right: -2px;
       bottom: -2px;
       background: linear-gradient(135deg, rgba(99, 102, 241, 0.5), rgba(139, 92, 246, 0.5));
-      border-radius: 1.25rem;
+      border-radius: 1.5rem;
       opacity: 0;
       transition: opacity 0.3s ease;
       z-index: -1;
-      filter: blur(10px);
+      filter: blur(15px);
     }
 
     .card-inner {
-      background: rgba(255, 255, 255, 0.03);
+      background: $neo-bg;
       backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 1.25rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 1.5rem;
       padding: 2rem;
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      // Neomorphism card
+      box-shadow: 
+        12px 12px 24px $neo-dark,
+        -8px -8px 20px $neo-light,
+        inset 1px 1px 2px rgba(255, 255, 255, 0.05);
 
       .icon-wrapper {
         width: 4rem;
         height: 4rem;
-        border-radius: 1rem;
+        border-radius: 1.25rem;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -282,27 +319,44 @@
         }
 
         &.primary {
-          background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(99, 102, 241, 0.1));
+          background: linear-gradient(145deg, #1e1e3a, #16162a);
           color: #818cf8;
-          box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+          // Neomorphism icon
+          box-shadow: 
+            6px 6px 14px $neo-dark,
+            -4px -4px 10px $neo-light,
+            inset 1px 1px 2px rgba(99, 102, 241, 0.2),
+            0 0 20px rgba(99, 102, 241, 0.2);
         }
 
         &.green {
-          background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1));
+          background: linear-gradient(145deg, #1e1e3a, #16162a);
           color: #34d399;
-          box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+          box-shadow: 
+            6px 6px 14px $neo-dark,
+            -4px -4px 10px $neo-light,
+            inset 1px 1px 2px rgba(16, 185, 129, 0.2),
+            0 0 20px rgba(16, 185, 129, 0.2);
         }
 
         &.purple {
-          background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.1));
+          background: linear-gradient(145deg, #1e1e3a, #16162a);
           color: #a78bfa;
-          box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+          box-shadow: 
+            6px 6px 14px $neo-dark,
+            -4px -4px 10px $neo-light,
+            inset 1px 1px 2px rgba(139, 92, 246, 0.2),
+            0 0 20px rgba(139, 92, 246, 0.2);
         }
 
         &.orange {
-          background: linear-gradient(135deg, rgba(251, 146, 60, 0.2), rgba(251, 146, 60, 0.1));
+          background: linear-gradient(145deg, #1e1e3a, #16162a);
           color: #fb923c;
-          box-shadow: 0 0 30px rgba(251, 146, 60, 0.3);
+          box-shadow: 
+            6px 6px 14px $neo-dark,
+            -4px -4px 10px $neo-light,
+            inset 1px 1px 2px rgba(251, 146, 60, 0.2),
+            0 0 20px rgba(251, 146, 60, 0.2);
         }
       }
 
@@ -339,14 +393,19 @@
     gap: 2rem;
 
     .stat-card {
-      background: rgba(255, 255, 255, 0.03);
+      background: $neo-bg;
       backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 1.25rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 1.5rem;
       padding: 2rem;
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       overflow: hidden;
+      // Neomorphism card
+      box-shadow: 
+        12px 12px 24px $neo-dark,
+        -8px -8px 20px $neo-light,
+        inset 1px 1px 2px rgba(255, 255, 255, 0.05);
 
       &::before {
         content: '';
@@ -361,9 +420,12 @@
       }
 
       &:hover {
-        border-color: rgba(255, 255, 255, 0.2);
-        transform: translateY(-3px);
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        transform: translateY(-6px);
+        box-shadow: 
+          18px 18px 36px $neo-dark,
+          -12px -12px 28px $neo-light,
+          inset 2px 2px 4px rgba(255, 255, 255, 0.08),
+          0 0 40px rgba(102, 126, 234, 0.15);
 
         &::before {
           opacity: 1;
@@ -371,15 +433,20 @@
       }
 
       .stat-icon {
-        width: 3rem;
-        height: 3rem;
-        border-radius: 0.75rem;
+        width: 3.5rem;
+        height: 3.5rem;
+        border-radius: 1rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(99, 102, 241, 0.1));
+        background: linear-gradient(145deg, #1e1e3a, #16162a);
         color: #818cf8;
         margin-bottom: 1.5rem;
+        // Neomorphism icon
+        box-shadow: 
+          5px 5px 12px $neo-dark,
+          -3px -3px 8px $neo-light,
+          inset 1px 1px 2px rgba(99, 102, 241, 0.15);
 
         svg {
           width: 1.75rem;
@@ -387,18 +454,30 @@
         }
 
         &.green {
-          background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1));
+          background: linear-gradient(145deg, #1e1e3a, #16162a);
           color: #34d399;
+          box-shadow: 
+            5px 5px 12px $neo-dark,
+            -3px -3px 8px $neo-light,
+            inset 1px 1px 2px rgba(16, 185, 129, 0.15);
         }
 
         &.purple {
-          background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.1));
+          background: linear-gradient(145deg, #1e1e3a, #16162a);
           color: #a78bfa;
+          box-shadow: 
+            5px 5px 12px $neo-dark,
+            -3px -3px 8px $neo-light,
+            inset 1px 1px 2px rgba(139, 92, 246, 0.15);
         }
 
         &.orange {
-          background: linear-gradient(135deg, rgba(251, 146, 60, 0.2), rgba(251, 146, 60, 0.1));
+          background: linear-gradient(145deg, #1e1e3a, #16162a);
           color: #fb923c;
+          box-shadow: 
+            5px 5px 12px $neo-dark,
+            -3px -3px 8px $neo-light,
+            inset 1px 1px 2px rgba(251, 146, 60, 0.15);
         }
       }
 
@@ -420,17 +499,21 @@
 
       .stat-progress {
         margin-top: 1.5rem;
-        height: 6px;
-        background: rgba(255, 255, 255, 0.1);
+        height: 8px;
+        background: darken($neo-bg, 3%);
         border-radius: 10px;
         overflow: hidden;
+        // Neomorphism inset progress bar
+        box-shadow: 
+          inset 3px 3px 6px $neo-dark,
+          inset -2px -2px 4px $neo-light;
 
         .progress-bar {
           height: 100%;
           background: linear-gradient(90deg, #667eea, #8b5cf6);
           border-radius: 10px;
           transition: width 1s ease;
-          box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+          box-shadow: 0 0 15px rgba(139, 92, 246, 0.6);
         }
       }
     }
@@ -448,11 +531,16 @@
   }
 
   .activity-container {
-    background: rgba(255, 255, 255, 0.03);
+    background: $neo-bg;
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1.5rem;
     padding: 2rem;
+    // Neomorphism container
+    box-shadow: 
+      14px 14px 28px $neo-dark,
+      -10px -10px 24px $neo-light,
+      inset 1px 1px 2px rgba(255, 255, 255, 0.05);
 
     .activity-list {
       display: flex;
@@ -464,27 +552,39 @@
         align-items: center;
         gap: 1.5rem;
         padding: 1.5rem;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 1rem;
-        transition: all 0.3s ease;
+        background: darken($neo-bg, 2%);
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        border-radius: 1.25rem;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        // Neomorphism item
+        box-shadow: 
+          inset 3px 3px 6px $neo-dark,
+          inset -2px -2px 4px $neo-light;
 
         &:hover {
-          background: rgba(255, 255, 255, 0.05);
-          border-color: rgba(255, 255, 255, 0.2);
-          transform: translateX(5px);
+          background: darken($neo-bg, 1%);
+          transform: translateX(8px);
+          box-shadow: 
+            8px 8px 18px $neo-dark,
+            -5px -5px 12px $neo-light,
+            inset 1px 1px 2px rgba(255, 255, 255, 0.05);
         }
 
         .activity-icon {
           width: 3rem;
           height: 3rem;
-          border-radius: 0.75rem;
+          border-radius: 1rem;
           display: flex;
           align-items: center;
           justify-content: center;
-          background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.1));
+          background: linear-gradient(145deg, #1e1e3a, #16162a);
           color: #a78bfa;
           flex-shrink: 0;
+          // Neomorphism icon
+          box-shadow: 
+            4px 4px 10px $neo-dark,
+            -3px -3px 8px $neo-light,
+            inset 1px 1px 2px rgba(139, 92, 246, 0.15);
 
           svg {
             width: 1.5rem;
@@ -515,29 +615,34 @@
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.05em;
+          // Neomorphism status badge
+          box-shadow: 
+            3px 3px 8px $neo-dark,
+            -2px -2px 6px $neo-light,
+            inset 1px 1px 2px rgba(255, 255, 255, 0.05);
 
           &.scheduled {
-            background: rgba(251, 191, 36, 0.15);
+            background: $neo-bg;
             color: #fbbf24;
-            border: 1px solid rgba(251, 191, 36, 0.3);
+            border: 1px solid rgba(251, 191, 36, 0.2);
           }
 
           &.in-progress {
-            background: rgba(59, 130, 246, 0.15);
+            background: $neo-bg;
             color: #60a5fa;
-            border: 1px solid rgba(59, 130, 246, 0.3);
+            border: 1px solid rgba(59, 130, 246, 0.2);
           }
 
           &.completed {
-            background: rgba(16, 185, 129, 0.15);
+            background: $neo-bg;
             color: #34d399;
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            border: 1px solid rgba(16, 185, 129, 0.2);
           }
 
           &.cancelled {
-            background: rgba(239, 68, 68, 0.15);
+            background: $neo-bg;
             color: #f87171;
-            border: 1px solid rgba(239, 68, 68, 0.3);
+            border: 1px solid rgba(239, 68, 68, 0.2);
           }
         }
       }
@@ -551,12 +656,18 @@
         width: 5rem;
         height: 5rem;
         margin: 0 auto 1.5rem;
-        border-radius: 1rem;
+        border-radius: 1.25rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(99, 102, 241, 0.1));
+        background: linear-gradient(145deg, #1e1e3a, #16162a);
         color: #818cf8;
+        // Neomorphism icon
+        box-shadow: 
+          8px 8px 18px $neo-dark,
+          -5px -5px 12px $neo-light,
+          inset 1px 1px 2px rgba(99, 102, 241, 0.15),
+          0 0 25px rgba(99, 102, 241, 0.15);
 
         svg {
           width: 2.5rem;
@@ -585,14 +696,29 @@
         font-weight: 600;
         padding: 1rem 2rem;
         border: none;
-        border-radius: 0.75rem;
+        border-radius: 1rem;
         cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        // Neomorphism button
+        box-shadow: 
+          8px 8px 18px $neo-dark,
+          -5px -5px 12px $neo-light,
+          inset 1px 1px 2px rgba(255, 255, 255, 0.2);
 
         &:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 15px 40px rgba(139, 92, 246, 0.4);
+          transform: translateY(-3px);
+          box-shadow: 
+            12px 12px 24px $neo-dark,
+            -8px -8px 18px $neo-light,
+            inset 2px 2px 4px rgba(255, 255, 255, 0.25),
+            0 0 40px rgba(139, 92, 246, 0.4);
+        }
+        
+        &:active {
+          transform: translateY(1px);
+          box-shadow: 
+            inset 6px 6px 12px $neo-dark,
+            inset -4px -4px 8px $neo-light;
         }
       }
     }
