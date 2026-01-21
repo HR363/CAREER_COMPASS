@@ -13,7 +13,7 @@ export class LandingComponent {
   features = [
     {
       icon: '🎯',
-      title: 'AI-Powered Insights',
+      title: 'AI-Powered Insights', 
       description: 'Leverage cutting-edge AI technology to discover career paths tailored to your unique skills and aspirations',
       gradient: 'from-purple-500 to-pink-500',
       image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&auto=format&fit=crop&q=80'

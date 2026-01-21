@@ -54,13 +54,14 @@ export class MentorshipComponent implements OnInit {
   }
 
   loadMentors(): void {
-    // This would typically load from a mentors API endpoint
-    // For now, we'll use a mock list
-    this.mentors = [
-      { id: '1', name: 'John Smith', profile: { education: 'Software Engineering' } },
-      { id: '2', name: 'Sarah Johnson', profile: { education: 'Data Science' } },
-      { id: '3', name: 'Mike Wilson', profile: { education: 'Product Management' } }
-    ];
+    this.mentorshipService.getMentors().subscribe({
+      next: (mentors) => {
+        this.mentors = mentors;
+      },
+      error: (error) => {
+        console.error('Error loading mentors:', error);
+      }
+    });
   }
 
   scheduleSession(): void {

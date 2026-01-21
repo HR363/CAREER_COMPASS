@@ -6,7 +6,7 @@ skinparam actorStyle awesome
 skinparam usecase {
     BackgroundColor #E8F4FD
     BorderColor #667eea
-    ArrowColor #764ba2
+    ArrowColor #764ba2EXTREMELY FAST BUOY
 }
 skinparam actor {
     BackgroundColor #667eea

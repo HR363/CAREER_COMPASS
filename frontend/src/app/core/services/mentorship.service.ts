@@ -35,6 +35,10 @@ export class MentorshipService {
     return this.http.get<Session[]>(`${environment.apiUrl}/mentorship/sessions`);
   }
 
+  getMentors(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/users/mentors`);
+  }
+
   getSession(sessionId: string): Observable<Session> {
     return this.http.get<Session>(`${environment.apiUrl}/mentorship/sessions/${sessionId}`);
   }

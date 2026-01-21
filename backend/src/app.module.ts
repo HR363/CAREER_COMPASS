@@ -13,7 +13,6 @@ import { AgoraModule } from './agora/agora.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: 'config.env',
     }),
     PrismaModule,
     AgoraModule,

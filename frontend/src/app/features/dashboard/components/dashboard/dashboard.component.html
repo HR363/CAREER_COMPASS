@@ -51,7 +51,7 @@
       </div>
 
       <div class="nav-end">
-        <div class="user-avatar" [style.background]="'linear-gradient(135deg, #667eea, #764ba2)'">
+        <div class="user-avatar" [style.background]="'linear-gradient(135deg, #10b981, #14b8a6)'">
           {{ currentUser?.name?.charAt(0) || 'U' }}
         </div>
         <button class="logout-pill" (click)="logout()">
@@ -76,9 +76,11 @@
         </div>
         <h1 class="hero-title">
           <span class="title-line">Welcome back,</span>
-          <span class="title-name">{{ currentUser?.name || 'Student' }}</span>
+          <span class="title-name">{{ currentUser?.name || currentUser?.role || 'User' }}</span>
         </h1>
-        <p class="hero-subtitle">Your personalized career journey awaits. Let's make progress today.</p>
+        <p class="hero-subtitle" *ngIf="currentUser?.role === 'STUDENT' || !currentUser?.role">Your personalized career journey awaits. Let's make progress today.</p>
+        <p class="hero-subtitle" *ngIf="currentUser?.role === 'MENTOR'">Thank you for guiding the next generation of talent.</p>
+        <p class="hero-subtitle" *ngIf="currentUser?.role === 'ADMIN'">Platform Overview & Management</p>
       </div>
       <div class="hero-visual">
         <div class="orbit-ring ring-1"></div>
@@ -96,8 +98,8 @@
 
     <!-- Bento Grid -->
     <section class="bento-grid">
-      <!-- Profile Completion - Large Card -->
-      <div class="bento-card profile-card" (click)="navigateTo('/profile')">
+      <!-- Profile Completion - Large Card (Student Only) -->
+      <div class="bento-card profile-card" (click)="navigateTo('/profile')" *ngIf="currentUser?.role === 'STUDENT' || !currentUser?.role">
         <div class="card-blur"></div>
         <div class="card-content">
           <div class="card-header">
@@ -125,13 +127,13 @@
           
           <div class="card-footer">
             <span class="completion-label">Profile Completion</span>
-            <span class="card-action">Update u2192</span>
+            <span class="card-action">Update →</span>
           </div>
         </div>
       </div>
 
-      <!-- AI Assistant - Wide Card -->
-      <div class="bento-card ai-card" (click)="navigateTo('/chat')">
+      <!-- AI Assistant - Wide Card (Student Only) -->
+      <div class="bento-card ai-card" (click)="navigateTo('/chat')" *ngIf="currentUser?.role === 'STUDENT' || !currentUser?.role">
         <div class="card-blur"></div>
         <div class="ai-waves">
           <div class="wave wave-1"></div>
@@ -200,7 +202,7 @@
           </div>
           <div class="stat-value">{{ recommendations?.length || 0 }}</div>
           <div class="stat-label">Recommendations</div>
-          <div class="stat-sparkle">u2728</div>
+          <div class="stat-sparkle">✨</div>
         </div>
       </div>
 
@@ -243,10 +245,12 @@
               <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
             </svg>
           </div>
-          <h3 class="mentorship-title">Connect with Mentors</h3>
-          <p class="mentorship-description">Schedule 1-on-1 video calls with industry experts.</p>
+          <h3 class="mentorship-title">{{ currentUser?.role === 'MENTOR' ? 'My Sessions' : 'Connect with Mentors' }}</h3>
+          <p class="mentorship-description">
+            {{ currentUser?.role === 'MENTOR' ? 'Manage your upcoming sessions and requests.' : 'Schedule 1-on-1 video calls with industry experts.' }}
+          </p>
           <button class="mentorship-btn">
-            <span>Find Mentors</span>
+            <span>{{ currentUser?.role === 'MENTOR' ? 'Go to Sessions' : 'Find Mentors' }}</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="5" y1="12" x2="19" y2="12"/>
               <polyline points="12 5 19 12 12 19"/>
@@ -276,7 +280,7 @@
     <section class="activity-section">
       <div class="section-header">
         <h2 class="section-title">
-          <span class="title-icon">u{1F4C5}</span>
+          <span class="title-icon">📅</span>
           Recent Sessions
         </h2>
         <button class="view-all-btn" (click)="navigateTo('/mentorship')">
@@ -302,7 +306,7 @@
           </div>
           <div class="activity-info">
             <h4>Mentorship Session</h4>
-            <p>{{ session.scheduledFor | date:'MMM d, y u2022 h:mm a' }}</p>
+            <p>{{ session.scheduledFor | date:'MMM d, y • h:mm a' }}</p>
           </div>
           <div class="activity-status" [ngClass]="{
             'scheduled': session.status === 'SCHEDULED',
