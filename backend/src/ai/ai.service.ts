@@ -7,7 +7,7 @@ import { LearningPathDto } from './dto/learning-path.dto';
 @Injectable()
 export class AiService {
   // ✅ Use the latest stable API version and valid model name
-  private readonly geminiApiUrl = 'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent';
+  private readonly geminiApiUrl = 'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent';
   private readonly apiKey = process.env.GEMINI_API_KEY;
 
   constructor(private prisma: PrismaService) {}

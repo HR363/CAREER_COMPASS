@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router } from '@angular/router';
 import { AuthService, User } from '../../../../core/services/auth.service';
 import { AiService } from '../../../../core/services/ai.service';
+import { ProfileService } from '../../../../core/services/profile.service';
 
 @Component({
   selector: 'app-profile',
@@ -18,11 +19,17 @@ export class ProfileComponent implements OnInit {
   isUpdating = false;
   isGeneratingRecommendations = false;
   recommendations: any[] = [];
+  
+  // Roadmap State
+  isGeneratingRoadmap = false;
+  activeRoadmapCareer: string | null = null;
+  selectedRoadmap: any = null;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private aiService: AiService,
+    private profileService: ProfileService,
     private router: Router
   ) {
     this.profileForm = this.fb.group({
@@ -61,19 +68,24 @@ export class ProfileComponent implements OnInit {
         interests: formData.interests ? JSON.stringify(formData.interests.split(',').map((s: string) => s.trim())) : '[]',
         goals: formData.goals
       };
-
-      // Here you would typically call a profile update service
-      // For now, we'll simulate the update
-      setTimeout(() => {
-        this.isUpdating = false;
-        // Update local user data
-        if (this.currentUser) {
-          this.currentUser.profile = {
-            ...this.currentUser.profile,
-            ...profileData
-          };
+this.profileService.updateProfile(profileData).subscribe({
+        next: (updatedProfile) => {
+          this.isUpdating = false;
+          // Update local user data
+          if (this.currentUser) {
+            this.currentUser.profile = updatedProfile;
+            // Update storage to persist changes
+            localStorage.setItem('user', JSON.stringify(this.currentUser));
+          }
+          console.log('Profile updated:', updatedProfile);
+          alert('Profile updated successfully!');
+        },
+        error: (error) => {
+          this.isUpdating = false;
+          console.error('Error updating profile:', error);
+          alert('Failed to update profile. Please try again.');
         }
-        console.log('Profile updated:', profileData);
+      }le.log('Profile updated:', profileData);
       }, 1000);
     }
   }
@@ -85,6 +97,9 @@ export class ProfileComponent implements OnInit {
     }
 
     this.isGeneratingRecommendations = true;
+    // Reset roadmap state when generating new recommendations
+    this.activeRoadmapCareer = null;
+    this.selectedRoadmap = null;
 
     const formData = this.profileForm.value;
     const requestData = {
@@ -123,7 +138,64 @@ export class ProfileComponent implements OnInit {
         console.error('Error getting recommendations:', error);
         alert('Failed to generate recommendations. Please try again.');
       }
+    nerateRoadmap(career: any): void {
+    const careerTitle = career.title;
+    
+    // If clicking same career, toggle visibility
+    if (this.activeRoadmapCareer === careerTitle && this.selectedRoadmap) {
+      this.activeRoadmapCareer = null;
+      return;
+    }
+
+    this.activeRoadmapCareer = careerTitle;
+    this.selectedRoadmap = null;
+    this.isGeneratingRoadmap = true;
+
+    const request = {
+      careerPath: careerTitle,
+      currentSkills: this.profileForm.get('skills')?.value || '',
+      timeframe: '6 months'
+    };
+
+    this.aiService.getLearningPath(request).subscribe({
+      next: (response: any) => {
+        this.isGeneratingRoadmap = false;
+        
+
+  // Helper to safely get phases if it's nested or direct
+  getRoadmapPhases(): any[] {
+    if (!this.selectedRoadmap) return [];
+    if (Array.isArray(this.selectedRoadmap)) return this.selectedRoadmap; // If it's just the array
+    if (this.selectedRoadmap.phases && Array.isArray(this.selectedRoadmap.phases)) return this.selectedRoadmap.phases;
+    // Walkaround if it's wrapped differently
+    return [];
+  }
+        let roadmap = response?.learningPath || response;
+        if (typeof roadmap === 'string') {
+          try {
+            let cleaned = roadmap.trim();
+            cleaned = cleaned.replace(/^```(?:json)?\s*\n?/i, '');
+            cleaned = cleaned.replace(/\n?```\s*$/i, '');
+            roadmap = JSON.parse(cleaned);
+          } catch (e) {
+            console.error('Failed to parse roadmap:', e);
+            roadmap = null;
+          }
+        }
+        
+        this.selectedRoadmap = roadmap;
+        console.log('Generated Roadmap:', this.selectedRoadmap);
+      },
+      error: (err) => {
+        this.isGeneratingRoadmap = false;
+        console.error('Error generating roadmap:', err);
+        alert('Failed to generate learning path. Please try again.');
+        this.activeRoadmapCareer = null;
+      }
     });
+  }
+
+  ge});
   }
 
   getRoleBadgeClass(role?: string): string {
