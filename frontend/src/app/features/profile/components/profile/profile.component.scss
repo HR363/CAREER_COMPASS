@@ -517,3 +517,13 @@ $neo-dark: rgba(5, 5, 15, 0.8);
     }
   }
 }
+
+// Fade In Animation
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out forwards;
+}

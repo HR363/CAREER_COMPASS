@@ -35,7 +35,7 @@ export class ProfileComponent implements OnInit {
         display: true,
         position: 'right',
         labels: {
-          color: '#334155' // Slate-700 text for white card background
+          color: '#e2e8f0' // Light text for dark background
         }
       }
     }
