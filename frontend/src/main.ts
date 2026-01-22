@@ -5,14 +5,17 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app/app.routes';
 import { authInterceptor } from './app/core/interceptors/auth.interceptor';
-import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { Chart, registerables } from 'chart.js';
+
+// Register Chart.js components globally
+Chart.register(...registerables);
 
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
-    provideAnimations(),
-    provideCharts(withDefaultRegisterables())
+    provideAnimations()
   ]
 }).catch(err => console.error(err));
+
 

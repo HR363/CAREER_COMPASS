@@ -5,13 +5,13 @@ import { Router } from '@angular/router';
 import { AuthService, User } from '../../../../core/services/auth.service';
 import { AiService } from '../../../../core/services/ai.service';
 import { ProfileService } from '../../../../core/services/profile.service';
-import { BaseChartDirective } from 'ng2-charts';
+import { NgChartsModule } from 'ng2-charts';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, BaseChartDirective],
+  imports: [CommonModule, ReactiveFormsModule, NgChartsModule],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
