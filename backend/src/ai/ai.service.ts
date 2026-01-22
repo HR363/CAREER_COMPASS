@@ -6,8 +6,8 @@ import { LearningPathDto } from './dto/learning-path.dto';
 
 @Injectable()
 export class AiService {
-  // ✅ Use the latest stable API version and valid model name
-  private readonly geminiApiUrl = 'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent';
+  // ✅ Use gemini-flash-latest which acts as a stable alias for the currently available Flash model
+  private readonly geminiApiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent';
   private readonly apiKey = process.env.GEMINI_API_KEY;
 
   constructor(private prisma: PrismaService) {}
@@ -151,7 +151,8 @@ User message: ${message}`;
             temperature: 0.7,
             topK: 40,
             topP: 0.95,
-            maxOutputTokens: 2048,
+            maxOutputTokens: 8192,
+            responseMimeType: 'application/json',
           },
         },
         {
