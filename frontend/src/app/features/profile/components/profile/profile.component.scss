@@ -1,529 +1,99 @@
-// Profile Component Styles - Dark Theme with Neomorphism
+// Sleek Modern Bento Design - COSMIC GLASS THEME
 
-// Neomorphism base colors
-$neo-bg: #1a1a2e;
-$neo-light: rgba(50, 50, 80, 0.5);
-$neo-dark: rgba(5, 5, 15, 0.8);
+// Variables and Mixins
+$glass-bg: rgba(255, 255, 255, 0.03);
+$glass-border: rgba(255, 255, 255, 0.08);
+$glass-highlight: rgba(255, 255, 255, 0.1);
+$blur-amt: 24px;
 
-.profile-container {
-  min-height: 100vh;
-  background: #0f0f23;
-  position: relative;
-  overflow-x: hidden;
+@mixin glass-panel {
+  background: $glass-bg;
+  backdrop-filter: blur($blur-amt);
+  -webkit-backdrop-filter: blur($blur-amt);
+  border: 1px solid $glass-border;
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
 }
 
-// Animated Background
-.animated-bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  overflow: hidden;
-
-  .gradient-orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.3;
-    animation: float 25s ease-in-out infinite;
-
-    &.orb-1 {
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, transparent 70%);
-      top: -150px;
-      right: -150px;
-    }
-
-    &.orb-2 {
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
-      bottom: -150px;
-      left: -150px;
-      animation-delay: 12s;
-    }
-  }
-}
-
-@keyframes float {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(40px, -40px) scale(1.1); }
-}
-
-// Navigation
-.profile-nav {
-  position: relative;
-  z-index: 10;
-  background: $neo-bg;
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  // Neomorphism navbar
-  box-shadow: 
-    0 8px 24px $neo-dark,
-    0 -2px 10px $neo-light,
-    inset 0 1px 1px rgba(255, 255, 255, 0.03);
-
-  .nav-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .nav-left {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .back-btn {
-    padding: 0.5rem;
-    background: $neo-bg;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 0.75rem;
-    color: rgba(255, 255, 255, 0.7);
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    // Neomorphism button
-    box-shadow: 
-      5px 5px 12px $neo-dark,
-      -3px -3px 8px $neo-light,
-      inset 1px 1px 2px rgba(255, 255, 255, 0.05);
-
-    &:hover {
-      background: lighten($neo-bg, 3%);
-      color: #ffffff;
-      transform: translateX(-3px);
-      box-shadow: 
-        8px 8px 18px $neo-dark,
-        -5px -5px 12px $neo-light,
-        inset 1px 1px 2px rgba(255, 255, 255, 0.08);
-    }
-    
-    &:active {
-      box-shadow: 
-        inset 4px 4px 8px $neo-dark,
-        inset -2px -2px 6px $neo-light;
-    }
-  }
-
-  .nav-title {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: #ffffff;
-  }
-
-  .user-name {
-    font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.7);
-  }
-}
-
-// Content
-.profile-content {
-  position: relative;
-  z-index: 1;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-// Profile Header Card
-.profile-header-card {
-  background: $neo-bg;
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 2rem;
-  padding: 2.5rem;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  // Neomorphism card
-  box-shadow: 
-    16px 16px 32px $neo-dark,
-    -10px -10px 24px $neo-light,
-    inset 1px 1px 2px rgba(255, 255, 255, 0.05);
-
-  &:hover {
-    transform: translateY(-8px);
-    box-shadow: 
-      24px 24px 48px $neo-dark,
-      -16px -16px 36px $neo-light,
-      inset 2px 2px 4px rgba(255, 255, 255, 0.08),
-      0 0 50px rgba(102, 126, 234, 0.1);
-  }
-}
-
-.avatar-section {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
-
-.avatar {
-  width: 6rem;
-  height: 6rem;
-  background: linear-gradient(145deg, #1e1e3a, #16162a);
-  border: 2px solid rgba(99, 102, 241, 0.3);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  // Neomorphism avatar
-  box-shadow: 
-    10px 10px 24px $neo-dark,
-    -6px -6px 16px $neo-light,
-    inset 2px 2px 4px rgba(99, 102, 241, 0.2),
-    0 0 30px rgba(99, 102, 241, 0.2);
-}
-
-.avatar-icon {
-  width: 3rem;
-  height: 3rem;
-  color: #818cf8;
-}
-
-.user-info {
-  flex: 1;
-}
-
-.user-name-large {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #ffffff;
-  margin-bottom: 0.5rem;
-}
-
-.user-email {
-  color: rgba(255, 255, 255, 0.6);
-  margin-bottom: 0.75rem;
-}
-
-.role-badge {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  border-radius: 2rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  // Neomorphism badge
-  box-shadow: 
-    4px 4px 10px $neo-dark,
-    -3px -3px 8px $neo-light,
-    inset 1px 1px 2px rgba(255, 255, 255, 0.05);
-
-  &.badge-ADMIN {
-    background: $neo-bg;
-    color: #fca5a5;
-    border: 1px solid rgba(239, 68, 68, 0.3);
-  }
-
-  &.badge-MENTOR {
-    background: $neo-bg;
-    color: #c4b5fd;
-    border: 1px solid rgba(168, 85, 247, 0.3);
-  }
-
-  &.badge-STUDENT {
-    background: $neo-bg;
-    color: #93c5fd;
-    border: 1px solid rgba(59, 130, 246, 0.3);
-  }
-}
-
-// Form Card
-.form-card, .recommendations-card {
-  background: $neo-bg;
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 2rem;
-  padding: 2.5rem;
-  // Neomorphism card
-  box-shadow: 
-    16px 16px 32px $neo-dark,
-    -10px -10px 24px $neo-light,
-    inset 1px 1px 2px rgba(255, 255, 255, 0.05);
-}
-
-.card-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #ffffff;
-  margin-bottom: 1.5rem;
-}
-
-.card-description {
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 1.5rem;
-  line-height: 1.6;
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-label {
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.form-input, .form-textarea {
-  width: 100%;
-  padding: 0.875rem 1rem;
-  background: darken($neo-bg, 3%);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 1rem;
-  color: #ffffff;
-  font-size: 1rem;
+@mixin hover-glow {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  font-family: inherit;
-  // Neomorphism inset input
-  box-shadow: 
-    inset 4px 4px 8px $neo-dark,
-    inset -3px -3px 6px $neo-light;
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.3), 
+                0 0 15px rgba(99, 102, 241, 0.2);
+  }
+}
+
+// Global Layout Overrides
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+// Custom Scrollbar
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 100vh;
+  &:hover { background: rgba(255, 255, 255, 0.2); }
+}
+
+// Animations
+@keyframes blob-float {
+  0% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+.animate-blob {
+  animation: blob-float 10s infinite;
+}
+
+.animation-delay-2000 { animation-delay: 2s; }
+.animation-delay-4000 { animation-delay: 4s; }
+
+// Component Styles
+.bento-card {
+  @include glass-panel;
+  @include hover-glow;
+  border-radius: 1.5rem;
+  overflow: hidden;
+}
+
+.input-glass {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  transition: all 0.2s;
+  
+  &:focus {
+    background: rgba(0, 0, 0, 0.4);
+    border-color: #818cf8;
+    box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.2);
+    outline: none;
+  }
 
   &::placeholder {
     color: rgba(255, 255, 255, 0.3);
   }
-
-  &:focus {
-    outline: none;
-    background: darken($neo-bg, 2%);
-    border-color: rgba(102, 126, 234, 0.4);
-    box-shadow: 
-      inset 4px 4px 8px $neo-dark,
-      inset -3px -3px 6px $neo-light,
-      0 0 20px rgba(102, 126, 234, 0.2);
-  }
 }
 
-.form-textarea {
-  resize: vertical;
-  min-height: 100px;
-}
+// Role Badge Gradients
+.badge-ADMIN { @apply bg-gradient-to-r from-red-500/20 to-orange-500/20 text-red-300 border-red-500/30; }
+.badge-MENTOR { @apply bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-300 border-purple-500/30; }
+.badge-STUDENT { @apply bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-300 border-cyan-500/30; }
 
-.form-hint {
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.5);
-  margin-top: 0.5rem;
-}
-
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 2rem;
-}
-
-.btn-primary, .btn-secondary {
-  padding: 0.875rem 1.75rem;
-  border-radius: 1rem;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border: none;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #ffffff;
-  // Neomorphism button
-  box-shadow: 
-    8px 8px 18px $neo-dark,
-    -5px -5px 12px $neo-light,
-    inset 1px 1px 2px rgba(255, 255, 255, 0.2);
-
-  &:hover:not(:disabled) {
-    transform: translateY(-3px);
-    box-shadow: 
-      12px 12px 24px $neo-dark,
-      -8px -8px 18px $neo-light,
-      inset 2px 2px 4px rgba(255, 255, 255, 0.25),
-      0 0 40px rgba(102, 126, 234, 0.4);
-  }
-  
-  &:active:not(:disabled) {
-    transform: translateY(1px);
-    box-shadow: 
-      inset 6px 6px 12px $neo-dark,
-      inset -4px -4px 8px $neo-light;
-  }
-}
-
-.btn-secondary {
-  background: $neo-bg;
-  color: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  // Neomorphism button
-  box-shadow: 
-    6px 6px 14px $neo-dark,
-    -4px -4px 10px $neo-light,
-    inset 1px 1px 2px rgba(255, 255, 255, 0.05);
-
-  &:hover {
-    background: lighten($neo-bg, 3%);
-    box-shadow: 
-      10px 10px 20px $neo-dark,
-      -6px -6px 16px $neo-light,
-      inset 1px 1px 2px rgba(255, 255, 255, 0.08);
-  }
-  
-  &:active {
-    box-shadow: 
-      inset 4px 4px 8px $neo-dark,
-      inset -3px -3px 6px $neo-light;
-  }
-}
-
-.spinner {
-  width: 1rem;
-  height: 1rem;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #ffffff;
-  border-radius: 50%;
-  animation: spin 0.6s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-// Recommendations
-.recommendations-list {
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.recommendations-title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #ffffff;
-  margin-bottom: 1.5rem;
-}
-
-.career-cards {
-  display: grid;
-  gap: 1.5rem;
-}
-
-.career-card {
-  background: darken($neo-bg, 2%);
-  border: 1px solid rgba(255, 255, 255, 0.03);
-  border-radius: 1.25rem;
-  padding: 1.5rem;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  // Neomorphism inset card
-  box-shadow: 
-    inset 3px 3px 6px $neo-dark,
-    inset -2px -2px 4px $neo-light;
-
-  &:hover {
-    background: darken($neo-bg, 1%);
-    transform: translateX(8px);
-    box-shadow: 
-      8px 8px 18px $neo-dark,
-      -5px -5px 12px $neo-light,
-      inset 1px 1px 2px rgba(255, 255, 255, 0.05);
-  }
-}
-
-.career-title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #ffffff;
-  margin-bottom: 0.5rem;
-}
-
-.career-description {
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 1rem;
-  line-height: 1.6;
-}
-
-.career-details {
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.6);
-  line-height: 1.8;
-
-  strong {
-    color: #a78bfa;
-    font-weight: 600;
-  }
-
-  p {
-    margin-bottom: 0.5rem;
-  }
-}
-
-// Responsive
-@media (max-width: 768px) {
-  .profile-content {
-    padding: 1rem;
-  }
-
-  .profile-header-card, .form-card, .recommendations-card {
-    padding: 1.5rem;
-  }
-
-  .avatar-section {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .user-name-large {
-    font-size: 1.5rem;
-  }
-
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .form-actions {
-    flex-direction: column;
-
-    button {
-      width: 100%;
-    }
-  }
-}
-
-// Fade In Animation
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.animate-fadeIn {
-  animation: fadeIn 0.5s ease-out forwards;
+// Timeline Connector Gradient
+.timeline-line {
+  background: linear-gradient(to bottom, #6366f1 0%, rgba(99, 102, 241, 0.2) 100%);
 }

@@ -1,255 +1,282 @@
-<div class="profile-container">
-  <!-- Animated Background -->
-  <div class="animated-bg">
-    <div class="gradient-orb orb-1"></div>
-    <div class="gradient-orb orb-2"></div>
+
+<div class="min-h-screen bg-[#050505] text-white relative overflow-hidden selection:bg-indigo-500/30">
+  
+  <!-- Ambient Space Background -->
+  <div class="fixed inset-0 z-0 pointer-events-none">
+    <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px] animate-blob"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-[140px] animate-blob animation-delay-2000"></div>
+    <div class="absolute top-[20%] right-[30%] w-[300px] h-[300px] bg-cyan-500/10 rounded-full blur-[100px] animate-blob animation-delay-4000"></div>
   </div>
 
-  <!-- Navigation -->
-  <nav class="profile-nav">
-    <div class="nav-content">
-      <div class="nav-left">
-        <button (click)="goBack()" class="back-btn">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+  <!-- Main Container -->
+  <div class="relative z-10 w-full max-w-[1600px] mx-auto px-4 py-6 md:p-8">
+    
+    <!-- Top Nav / Breadcrumb -->
+    <header class="mb-10 flex flex-wrap justify-between items-center gap-4">
+      <div class="flex items-center gap-4">
+        <button (click)="goBack()" 
+          class="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+          <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
           </svg>
         </button>
-        <h1 class="nav-title">👤 Profile</h1>
-      </div>
-      <div class="nav-right">
-        <span class="user-name">{{ currentUser?.name }}</span>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Content -->
-  <div class="profile-content">
-    <!-- Profile Header Card -->
-    <div class="profile-header-card">
-      <div class="avatar-section">
-        <div class="avatar">
-          <svg class="avatar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-          </svg>
+        <div>
+           <nav class="text-xs text-gray-500 font-medium mb-1 uppercase tracking-widest">Dashboard / Profile</nav>
+           <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">Career Profile</h1>
         </div>
-        <div class="user-info">
-          <h2 class="user-name-large">{{ currentUser?.name }}</h2>
-          <p class="user-email">{{ currentUser?.email }}</p>
-          <span class="role-badge" [ngClass]="'badge-' + currentUser?.role">
+      </div>
+      <div>
+        <span class="px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-sm font-medium text-gray-300 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+          Active Session
+        </span>
+      </div>
+    </header>
+
+    <!-- Bento Grid Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 pb-20">
+      
+      <!-- LEFT COLUMN: Identity & Core Info -->
+      <aside class="col-span-12 lg:col-span-4 xl:col-span-3 space-y-6">
+        
+        <!-- Profile Identify Card -->
+        <div class="bento-card p-8 flex flex-col items-center text-center relative overflow-hidden group">
+          <div class="absolute inset-0 bg-gradient-to-b from-indigo-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          
+          <div class="relative mb-6">
+             <div class="w-32 h-32 rounded-full bg-gradient-to-br from-gray-800 to-gray-900 border-4 border-[#1a1a2e] shadow-2xl flex items-center justify-center relative z-10">
+                <svg class="w-16 h-16 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+             </div>
+             <div class="absolute inset-0 rounded-full bg-indigo-500 blur-xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
+          </div>
+          
+          <h2 class="text-2xl font-bold text-white mb-2">{{ currentUser?.name }}</h2>
+          <p class="text-gray-400 mb-4">{{ currentUser?.email }}</p>
+          
+          <span class="px-4 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase border" 
+                [ngClass]="'badge-' + currentUser?.role">
             {{ currentUser?.role }}
           </span>
-        </div>
-      </div>
-    </div>
 
-    <!-- Profile Form Card -->
-    <div class="form-card">
-      <h3 class="card-title">✏️ Profile Information</h3>
-      
-      <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
-        <div class="form-grid">
-          <div class="form-group">
-            <label class="form-label">Education</label>
-            <input type="text" 
-                   formControlName="education" 
-                   placeholder="e.g., Bachelor's in Computer Science"
-                   class="form-input">
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Career Goals</label>
-            <input type="text" 
-                   formControlName="goals" 
-                   placeholder="e.g., Become a Senior Software Engineer"
-                   class="form-input">
+          <div class="mt-8 w-full pt-8 border-t border-white/5 flex justify-between text-sm">
+             <div class="text-center">
+               <span class="block text-xl font-bold text-white">4</span>
+               <span class="text-gray-500 text-xs uppercase">Projects</span>
+             </div>
+             <div class="text-center">
+               <span class="block text-xl font-bold text-white">12</span>
+               <span class="text-gray-500 text-xs uppercase">Skills</span>
+             </div>
+             <div class="text-center">
+               <span class="block text-xl font-bold text-white">85%</span>
+               <span class="text-gray-500 text-xs uppercase">Progress</span>
+             </div>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Skills</label>
-          <textarea formControlName="skills" 
-                    rows="3" 
-                    placeholder="Enter your skills (comma-separated): JavaScript, React, Node.js, Python..."
-                    class="form-textarea"></textarea>
-          <p class="form-hint">Separate skills with commas</p>
+        <!-- Quick Actions / Status -->
+        <div class="bento-card p-6">
+           <h3 class="text-gray-400 text-xs font-bold uppercase tracking-widest mb-4">Account Status</h3>
+           <div class="space-y-4">
+             <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                <div class="flex items-center gap-3">
+                   <div class="w-8 h-8 rounded-md bg-green-500/20 flex items-center justify-center text-green-400 font-bold">%</div>
+                   <div class="text-sm">
+                      <div class="text-white font-medium">Profile Completion</div>
+                      <div class="text-gray-500 text-xs">Looking good!</div>
+                   </div>
+                </div>
+                <div class="w-12 h-12 relative flex items-center justify-center">
+                   <svg class="w-full h-full transform -rotate-90">
+                     <circle cx="24" cy="24" r="18" stroke="currentColor" stroke-width="4" fill="transparent" class="text-gray-800" />
+                     <circle cx="24" cy="24" r="18" stroke="currentColor" stroke-width="4" fill="transparent" :stroke-dasharray="113" :stroke-dashoffset="20" class="text-green-500" />
+                   </svg>
+                </div>
+             </div>
+           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Interests</label>
-          <textarea formControlName="interests" 
-                    rows="3" 
-                    placeholder="Enter your interests (comma-separated): Web Development, AI, Data Science..."
-                    class="form-textarea"></textarea>
-          <p class="form-hint">Separate interests with commas</p>
-        </div>
+      </aside>
 
-        <div class="form-actions">
-          <button type="button" 
-                  (click)="goBack()"
-                  class="btn-secondary">
-            Cancel
-          </button>
-          <button type="submit" 
-                  [disabled]="profileForm.invalid || isUpdating"
-                  class="btn-primary">
-            <span *ngIf="isUpdating" class="spinner"></span>
-            {{ isUpdating ? 'Updating...' : 'Update Profile' }}
-          </button>
-        </div>
-      </form>
-    </div>
+      <!-- RIGHT COLUMN: Main Content -->
+      <main class="col-span-12 lg:col-span-8 xl:col-span-9 flex flex-col gap-6">
 
-    <!-- Career Recommendations Card -->
-    <div class="recommendations-card" *ngIf="currentUser?.role === 'STUDENT'">
-      <h3 class="card-title">🚀 Career Recommendations</h3>
-      <p class="card-description">
-        Based on your profile, we can suggest personalized career paths and learning roadmaps.
-      </p>
-      
-      <button (click)="getCareerRecommendations()" 
-              [disabled]="isGeneratingRecommendations"
-              class="btn-primary">
-        <span *ngIf="isGeneratingRecommendations" class="spinner"></span>
-        {{ isGeneratingRecommendations ? 'Generating...' : 'Get Recommendations' }}
-      </button>
-
-      <!-- Recommendations Display -->
-      <div *ngIf="recommendations && recommendations.length > 0" class="recommendations-list">
-        <h4 class="recommendations-title">Suggested Career Paths</h4>
-        <div class="career-cards">
-          <div *ngFor="let career of recommendations" class="career-card">
-            <h5 class="career-title">{{ career.title }}</h5>
-            <p class="career-description">{{ career.description }}</p>
-            <div class="career-details">
-              <div class="career-skills" *ngIf="career.requiredSkills">
-                <strong>Skills:</strong>
-                <span *ngIf="isArray(career.requiredSkills)">{{ career.requiredSkills.join(', ') }}</span>
-                <span *ngIf="!isArray(career.requiredSkills)">{{ career.requiredSkills }}</span>
+        <!-- Form / Stats Section -->
+        <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+           <!-- Education Card -->
+           <div class="bento-card p-6 md:p-8 relative group">
+              <div class="absolute top-4 right-4 text-indigo-500/20 group-hover:text-indigo-500/40 transition-colors">
+                 <svg class="w-24 h-24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
               </div>
-              <p *ngIf="career.salaryRange"><strong>Salary:</strong> {{ career.salaryRange }}</p>
-              <p *ngIf="career.growthProspects"><strong>Growth:</strong> {{ career.growthProspects }}</p>
-              <p *ngIf="career.matchReason"><strong>Why this fits:</strong> {{ career.matchReason }}</p>
-            </div>
+              
+              <label class="block text-indigo-300 text-xs font-bold uppercase tracking-widest mb-4">Academic Background</label>
+              <textarea formControlName="education" 
+                  class="w-full bg-transparent border-none text-2xl md:text-3xl font-bold text-white placeholder-gray-700/50 focus:ring-0 p-0 resize-none resize-y"
+                  rows="2"
+                  placeholder="What are you studying?"></textarea>
+              <p class="text-gray-500 text-sm mt-2">Your educational foundation shapes your path.</p>
+           </div>
 
-            <div class="mt-4 pt-4 border-t border-white/10">
-              <button 
-                class="w-full sm:w-auto px-4 py-2 bg-indigo-500/10 text-indigo-300 rounded-lg hover:bg-indigo-500/20 transition-colors duration-200 flex items-center justify-center gap-2 text-sm font-medium border border-indigo-500/20 hover:border-indigo-500/40"
-                (click)="generateRoadmap(career)"
-                [disabled]="isGeneratingRoadmap && activeRoadmapCareer === career.title">
-                <svg *ngIf="isGeneratingRoadmap && activeRoadmapCareer === career.title" class="animate-spin h-4 w-4 text-indigo-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                {{ (activeRoadmapCareer === career.title && selectedRoadmap) ? 'Hide Roadmap' : 'Generate Learning Roadmap' }}
-              </button>
-            </div>
+           <!-- Goals Card -->
+           <div class="bento-card p-6 md:p-8 relative group">
+             <div class="absolute top-4 right-4 text-purple-500/20 group-hover:text-purple-500/40 transition-colors">
+                 <svg class="w-24 h-24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l-5.5 9h4V22l5.5-9h-4L12 2z"/></svg>
+             </div>
+             
+             <label class="block text-purple-300 text-xs font-bold uppercase tracking-widest mb-4">Career Aspiration</label>
+             <textarea formControlName="goals" 
+                 class="w-full bg-transparent border-none text-2xl md:text-3xl font-bold text-white placeholder-gray-700/50 focus:ring-0 p-0 resize-none resize-y"
+                 rows="2"
+                 placeholder="What's your dream role?"></textarea>
+                 <p class="text-gray-500 text-sm mt-2">We'll help you reach this target.</p>
+           </div>
 
-            <!-- Roadmap Display -->
-            <div *ngIf="activeRoadmapCareer === career.title && selectedRoadmap" class="mt-8 animate-fadeIn">
-               <div class="flex items-center gap-3 mb-6">
-                 <div class="p-2 bg-indigo-500/20 rounded-lg">
-                   <span class="text-2xl">🎓</span>
+           <!-- Skills & Interests (Full Width) -->
+           <div class="bento-card p-6 md:col-span-2">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                 <div class="space-y-3">
+                    <label class="flex items-center gap-2 text-blue-300 text-xs font-bold uppercase tracking-widest">
+                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                       Skills Arsenal
+                    </label>
+                    <input type="text" formControlName="skills" 
+                       class="input-glass w-full rounded-xl px-4 py-3 text-sm" 
+                       placeholder="React, Node.js, Python...">
                  </div>
-                 <h6 class="text-xl font-bold text-white tracking-wide">Learning Roadmap Analysis</h6>
-               </div>
-               
-               <!-- Phase Distribution Chart -->
-               <div class="mb-8 bg-[#1a1a2e] rounded-2xl p-6 shadow-xl border border-gray-700/50 flex flex-col md:flex-row items-center justify-around relative overflow-hidden">
-                  <!-- Decorative blur -->
-                  <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
-                  
-                  <div class="w-full md:w-1/2 max-w-[280px] relative z-10">
-                    <canvas baseChart
-                      [data]="pieChartData"
-                      [type]="pieChartType"
-                      [options]="pieChartOptions">
-                    </canvas>
-                  </div>
-                  <div class="mt-6 md:mt-0 text-sm text-gray-300 bg-[#242442] p-5 rounded-xl border border-gray-700/30 z-10 min-w-[250px]">
-                     <h4 class="font-bold text-white mb-3 border-b border-gray-700 pb-2 text-base">Key Metrics</h4>
-                     <p class="mb-3 flex justify-between gap-4 items-center">
-                       <span class="text-gray-400">Total Phases</span> 
-                       <strong class="text-indigo-400 bg-indigo-400/10 px-2 py-0.5 rounded">{{ getRoadmapPhases().length }}</strong>
-                     </p>
-                     <p class="mb-3 flex justify-between gap-4 items-center">
-                       <span class="text-gray-400">Est. Duration</span> 
-                       <strong class="text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded">{{ selectedRoadmap.timeframe || selectedRoadmap.duration || 'Flexible' }}</strong>
-                     </p>
-                     <p class="flex justify-between gap-4 items-center">
-                       <span class="text-gray-400">Focus</span> 
-                       <strong class="text-purple-400 bg-purple-400/10 px-2 py-0.5 rounded">Skill Acquisition</strong>
-                     </p>
-                  </div>
-               </div>
+                 <div class="space-y-3">
+                    <label class="flex items-center gap-2 text-pink-300 text-xs font-bold uppercase tracking-widest">
+                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                       Passion Areas
+                    </label>
+                    <input type="text" formControlName="interests" 
+                       class="input-glass w-full rounded-xl px-4 py-3 text-sm" 
+                       placeholder="AI, Design, Finance...">
+                 </div>
+              </div>
+              
+              <!-- Update Button Strip -->
+              <div class="mt-6 flex justify-end border-t border-white/5 pt-4">
+                 <button type="submit" [disabled]="profileForm.invalid || isUpdating" 
+                   class="px-6 py-2 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                    <span *ngIf="isUpdating" class="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></span>
+                    {{ isUpdating ? 'Saving...' : 'Save Changes' }}
+                 </button>
+              </div>
+           </div>
+        </form>
 
-               <!-- Timeline -->
-               <div class="space-y-8 relative ml-4 pb-4">
-                  <!-- Vertical Line -->
-                  <div class="absolute left-0 top-6 bottom-0 w-0.5 bg-gradient-to-b from-indigo-500 via-purple-500 to-transparent opacity-30"></div>
-                  
-                  <div *ngFor="let phase of getRoadmapPhases(); let i = index" class="relative pl-10 group/timeline">
-                     <!-- Timeline Dot -->
-                     <div class="absolute left-[-14px] top-6 w-7 h-7 rounded-full bg-[#1a1a2e] border-2 border-indigo-500 text-indigo-400 text-xs flex items-center justify-center font-bold z-10 shadow-[0_0_10px_rgba(99,102,241,0.5)] transition-transform group-hover/timeline:scale-110">
-                        {{ i + 1 }}
-                     </div>
-                     
-                     <!-- Card -->
-                     <div class="bg-[#1a1a2e] hover:bg-[#20203a] transition-all duration-300 rounded-2xl p-6 border border-gray-800 hover:border-indigo-500/30 shadow-lg hover:shadow-indigo-500/10 group">
-                        <div class="flex flex-col md:flex-row md:items-start md:justify-between mb-5 pb-4 border-b border-gray-800">
-                          <div>
-                            <h6 class="font-bold text-white text-xl group-hover:text-indigo-400 transition-colors mb-1">{{ phase.name }}</h6>
-                            <div class="h-1 w-12 bg-indigo-500 rounded-full opacity-50 group-hover:w-20 transition-all duration-500"></div>
-                          </div>
-                          <span class="text-xs font-bold px-3 py-1.5 bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 rounded-full mt-3 md:mt-0 w-fit flex items-center gap-1.5 whitespace-nowrap">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            {{ phase.duration }}
-                          </span>
+        <!-- STUDENT ONLY: AI Career Section -->
+        <section *ngIf="currentUser?.role === 'STUDENT'" class="space-y-6">
+           
+           <div class="flex items-center justify-between">
+              <h3 class="text-xl font-bold text-white flex items-center gap-3">
+                 <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-lg">🚀</span>
+                 AI Career Compass
+              </h3>
+              <button (click)="getCareerRecommendations()" 
+                 [disabled]="isGeneratingRecommendations"
+                 class="px-4 py-2 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 hover:bg-indigo-500/20 text-sm font-bold transition-all flex items-center gap-2 hover:shadow-[0_0_15px_rgba(99,102,241,0.3)]">
+                 <svg *ngIf="!isGeneratingRecommendations" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                 <span *ngIf="isGeneratingRecommendations" class="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></span>
+                 {{ isGeneratingRecommendations ? 'Analyzing Profile...' : 'Generate New Paths' }}
+              </button>
+           </div>
+
+           <!-- Recommendations Grid -->
+           <div *ngIf="recommendations && recommendations.length > 0" class="grid grid-cols-1 gap-6">
+              
+              <div *ngFor="let career of recommendations" class="bento-card p-0 overflow-hidden border-l-4 border-l-indigo-500">
+                 <!-- Header -->
+                 <div class="p-6 md:p-8 border-b border-white/5 bg-gradient-to-r from-indigo-900/10 to-transparent">
+                    <h4 class="text-2xl font-bold text-white mb-2">{{ career.title }}</h4>
+                    <p class="text-gray-400 leading-relaxed max-w-3xl">{{ career.description }}</p>
+                 </div>
+                 
+                 <!-- Details Grid -->
+                 <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/5 border-b border-white/5 bg-black/20">
+                    <div class="p-4 md:p-6 text-center">
+                       <div class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Salary Potential</div>
+                       <div class="text-green-400 font-mono font-bold">{{ career.salaryRange || 'N/A' }}</div>
+                    </div>
+                    <div class="p-4 md:p-6 text-center">
+                       <div class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Market Growth</div>
+                       <div class="text-blue-400 font-mono font-bold">{{ career.growthProspects || 'High' }}</div>
+                    </div>
+                    <div class="p-4 md:p-6 text-center">
+                       <div class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Match Score</div>
+                       <div class="text-purple-400 font-mono font-bold">94% Fit</div>
+                    </div>
+                 </div>
+
+                 <!-- Action Bar -->
+                 <div class="p-4 md:p-6 bg-white/5 flex items-center justify-between">
+                    <div class="text-sm text-gray-400 italic">
+                       <span class="text-indigo-400 not-italic font-bold">Why?</span> {{ career.matchReason }}
+                    </div>
+                    <button (click)="generateRoadmap(career)" 
+                      class="px-5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm transition-all shadow-lg hover:shadow-indigo-500/25 flex items-center gap-2">
+                       {{ (activeRoadmapCareer === career.title && selectedRoadmap) ? 'Hide Roadmap' : 'View Roadmap' }}
+                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </button>
+                 </div>
+
+                 <!-- ROADMAP EXPANSION -->
+                 <div *ngIf="activeRoadmapCareer === career.title && selectedRoadmap" class="border-t border-indigo-500/20 bg-indigo-900/5 p-6 animate-fadeIn">
+                    
+                    <div class="mb-8 flex flex-col md:flex-row gap-8 items-center">
+                        <!-- Chart -->
+                        <div class="w-full md:w-1/3 max-w-[250px]">
+                           <canvas baseChart [data]="pieChartData" [type]="pieChartType" [options]="pieChartOptions"></canvas>
                         </div>
                         
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm">
-                            <!-- Skills -->
-                            <div *ngIf="phase.skills" class="bg-blue-900/10 p-4 rounded-xl border border-blue-500/10 hover:border-blue-500/30 transition-colors">
-                              <span class="font-bold text-blue-400 block mb-2 flex items-center gap-2 text-xs uppercase tracking-wider">
-                                <span class="text-base">⚡</span> Skills
-                              </span>
-                              <p class="text-gray-300 leading-relaxed">{{ isArray(phase.skills) ? phase.skills.join(', ') : phase.skills }}</p>
-                            </div>
-                            
-                            <!-- Learning Resources -->
-                            <div *ngIf="phase.resources" class="bg-emerald-900/10 p-4 rounded-xl border border-emerald-500/10 hover:border-emerald-500/30 transition-colors">
-                              <span class="font-bold text-emerald-400 block mb-2 flex items-center gap-2 text-xs uppercase tracking-wider">
-                                <span class="text-base">📚</span> Resources
-                              </span>
-                              <p class="text-gray-300 leading-relaxed">{{ isArray(phase.resources) ? phase.resources.join(', ') : phase.resources }}</p>
-                            </div>
+                        <!-- Summary -->
+                        <div class="flex-1 space-y-4">
+                           <h5 class="text-xl font-bold text-white">Your Path to {{ career.title }}</h5>
+                           <p class="text-gray-400 text-sm">This AI-generated roadmap breaks down your journey into {{ getRoadmapPhases().length }} key phases over {{ selectedRoadmap.timeframe || 'flexible timing' }}.</p>
                         </div>
+                    </div>
 
-                        <!-- Full Width Items -->
-                        <div class="mt-5 grid grid-cols-1 gap-5 text-sm">
-                            <!-- Milestones -->
-                            <div *ngIf="phase.milestones" class="bg-purple-900/10 p-4 rounded-xl border border-purple-500/10 hover:border-purple-500/30 transition-colors">
-                              <span class="font-bold text-purple-400 block mb-2 flex items-center gap-2 text-xs uppercase tracking-wider">
-                                <span class="text-base">🏆</span> Milestones
-                              </span>
-                              <p class="text-gray-300 leading-relaxed">{{ isArray(phase.milestones) ? phase.milestones.join(', ') : phase.milestones }}</p>
-                            </div>
+                    <!-- Timeline -->
+                    <div class="relative space-y-8 pl-8 md:pl-12">
+                       <div class="absolute left-3.5 top-0 bottom-0 w-0.5 timeline-line opacity-30"></div>
+                       
+                       <div *ngFor="let phase of getRoadmapPhases(); let i = index" class="relative group">
+                          <!-- Node -->
+                          <div class="absolute left-[-2.6rem] md:left-[-3.6rem] top-0 w-8 h-8 rounded-full bg-[#0a0a0a] border-2 border-indigo-500 z-10 flex items-center justify-center text-xs font-bold text-indigo-400 shadow-[0_0_10px_rgba(99,102,241,0.5)]">
+                             {{ i + 1 }}
+                          </div>
 
-                            <!-- Projects -->
-                            <div *ngIf="phase.projects" class="bg-orange-900/10 p-4 rounded-xl border border-orange-500/10 hover:border-orange-500/30 transition-colors">
-                               <span class="font-bold text-orange-400 block mb-2 flex items-center gap-2 text-xs uppercase tracking-wider">
-                                 <span class="text-base">🛠️</span> Hands-on Projects
-                               </span>
-                               <p class="text-gray-300 leading-relaxed">{{ isArray(phase.projects) ? phase.projects.join(', ') : phase.projects }}</p>
-                            </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-          </div>
-        </div>
-      </div>
+                          <!-- Content -->
+                          <div class="bento-card p-6 bg-[#0a0a0a]/50 hover:bg-[#1a1a2e] transition-colors">
+                             <div class="flex flex-wrap justify-between items-start gap-4 mb-4">
+                                <h6 class="text-lg font-bold text-white">{{ phase.name }}</h6>
+                                <span class="px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-300 text-xs font-bold border border-indigo-500/20">{{ phase.duration }}</span>
+                             </div>
+                             
+                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                                <div class="space-y-2">
+                                   <strong class="block text-cyan-400 text-xs uppercase tracking-wider">⚡ Skills to Master</strong>
+                                   <p class="text-gray-400">{{ isArray(phase.skills) ? phase.skills.join(', ') : phase.skills }}</p>
+                                </div>
+                                <div class="space-y-2">
+                                   <strong class="block text-pink-400 text-xs uppercase tracking-wider">🛠️ Projects</strong>
+                                   <p class="text-gray-400">{{ isArray(phase.projects) ? phase.projects.join(', ') : phase.projects }}</p>
+                                </div>
+                             </div>
+                          </div>
+                       </div>
+                    </div>
+
+                 </div>
+
+              </div>
+           </div>
+
+        </section>
+
+      </main>
+
     </div>
   </div>
 </div>
+
