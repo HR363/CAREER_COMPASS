@@ -39,8 +39,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit(): void {
-    // Add welcome message
-    this.addMessage('Hello! I\'m your AI career assistant. I can help you with career guidance, skill development, job search tips, and professional growth strategies. What would you like to know?', false);
+    // Initial welcome state handled by template when messages.length === 0
   }
 
   ngAfterViewChecked(): void {
