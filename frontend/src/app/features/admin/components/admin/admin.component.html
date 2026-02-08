@@ -5,25 +5,14 @@
     <div class="gradient-orb orb-2"></div>
   </div>
 
-  <!-- Navigation -->
-  <nav class="admin-nav">
-    <div class="nav-content">
-      <div class="nav-left">
-        <button (click)="goBack()" class="back-btn">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-          </svg>
-        </button>
-        <h1 class="nav-title">⚙️ Admin Panel</h1>
-      </div>
-      <div class="nav-right">
-        <span class="user-name">{{ currentUser?.name }}</span>
-      </div>
-    </div>
-  </nav>
-
   <!-- Content -->
   <div class="admin-content">
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1 class="page-title">⚙️ Admin Panel</h1>
+      <p class="page-subtitle">Manage users, sessions, and platform settings</p>
+    </div>
+
     <!-- Dashboard Stats -->
     <div class="stats-grid">
       <div class="stat-card stat-users">

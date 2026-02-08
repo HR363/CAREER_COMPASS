@@ -35,6 +35,10 @@ export class AiService {
     return this.http.post(`${environment.apiUrl}/ai/learning-path`, request);
   }
 
+  getMentorRecommendations(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/ai/mentors`);
+  }
+
   chatWithAI(request: ChatRequest): Observable<any> {
     return this.http.post(`${environment.apiUrl}/ai/chat`, request);
   }

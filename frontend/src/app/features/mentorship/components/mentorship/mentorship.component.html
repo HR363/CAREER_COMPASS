@@ -24,6 +24,29 @@
 
   <!-- Content -->
   <div class="mentorship-content">
+    
+    <!-- AI Recommended Mentors -->
+    <div *ngIf="currentUser?.role === 'STUDENT' && recommendedMentors.length > 0" class="schedule-card mb-8" style="margin-bottom: 2rem;">
+      <h2 class="card-title">✨ AI Recommended Mentors</h2>
+      <div *ngIf="isLoadingRecommendations" class="py-4 text-center text-gray-400">
+        Finding the best mentors for you...
+      </div>
+      <div *ngIf="!isLoadingRecommendations" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+        <div *ngFor="let rec of recommendedMentors" class="p-4 rounded-xl bg-white/5 border border-white/10 hover:border-indigo-500/50 transition-all cursor-pointer group"
+             style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 1rem; cursor: pointer;"
+             (click)="scheduleForm.patchValue({mentorId: rec.mentorId})">
+           <div class="flex justify-between items-start mb-3" style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+             <h3 class="text-lg font-semibold text-white" style="color: white; font-weight: 600;">{{ rec.mentorName }}</h3>
+             <span class="px-2 py-1 text-xs font-bold rounded-full bg-indigo-500/20 text-indigo-300" style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 0.25rem 0.5rem; border-radius: 9999px; font-size: 0.75rem;">
+               {{ rec.matchScore }}% Match
+             </span>
+           </div>
+           <p class="text-sm text-gray-400 mb-4" style="color: #94a3b8; font-size: 0.875rem; margin-bottom: 1rem;">{{ rec.reasoning }}</p>
+           <div class="text-xs text-indigo-400 font-medium" style="color: #818cf8;">Click to auto-select for scheduling</div>
+        </div>
+      </div>
+    </div>
+
     <!-- Schedule New Session (for students) -->
     <div *ngIf="currentUser?.role === 'STUDENT'" class="schedule-card">
       <h2 class="card-title">📅 Schedule New Session</h2>

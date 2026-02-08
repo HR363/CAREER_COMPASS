@@ -1,18 +1,26 @@
-// Admin Component Styles - Dark Theme with Neomorphism
+// ============================================
+// ADMIN PAGE - Unified Theme
+// ============================================
 
-// Neomorphism base colors
-$neo-bg: #1a1a2e;
-$neo-light: rgba(50, 50, 80, 0.5);
-$neo-dark: rgba(5, 5, 15, 0.8);
+// Import shared theme variables
+@use '../../../../styles/theme' as theme;
+
+// Local variables using theme
+$bg-primary: theme.$bg-primary;
+$accent-primary: theme.$accent-primary;
+$accent-secondary: theme.$accent-secondary;
+$glass-bg: theme.$glass-bg;
+$glass-border: theme.$glass-border;
 
 .admin-container {
   min-height: 100vh;
-  background: #0f0f23;
+  background: $bg-primary;
   position: relative;
   overflow-x: hidden;
 }
 
 .animated-bg {
+  display: none; // Disabled gradient background
   position: fixed;
   top: 0;
   left: 0;
@@ -31,7 +39,7 @@ $neo-dark: rgba(5, 5, 15, 0.8);
     &.orb-1 {
       width: 600px;
       height: 600px;
-      background: radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba($accent-primary, 0.4) 0%, transparent 70%);
       top: -150px;
       right: -150px;
     }
@@ -39,7 +47,7 @@ $neo-dark: rgba(5, 5, 15, 0.8);
     &.orb-2 {
       width: 500px;
       height: 500px;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba($accent-secondary, 0.3) 0%, transparent 70%);
       bottom: -150px;
       left: -150px;
       animation-delay: 12s;
@@ -52,79 +60,20 @@ $neo-dark: rgba(5, 5, 15, 0.8);
   50% { transform: translate(40px, -40px) scale(1.1); }
 }
 
-.admin-nav {
-  position: relative;
-  z-index: 10;
-  background: $neo-bg;
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 
-    0 8px 24px $neo-dark,
-    0 -2px 10px $neo-light,
-    inset 0 1px 1px rgba(255, 255, 255, 0.03);
-
-  .nav-content {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 1rem 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+// Page Header
+.page-header {
+  margin-bottom: 2rem;
+  
+  .page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: theme.$text-primary;
+    margin-bottom: 0.5rem;
   }
-
-  .nav-left {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .back-btn {
-    padding: 0.5rem;
-    background: $neo-bg;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 0.75rem;
-    color: rgba(255, 255, 255, 0.7);
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 
-      5px 5px 12px $neo-dark,
-      -3px -3px 8px $neo-light,
-      inset 1px 1px 2px rgba(255, 255, 255, 0.05);
-
-    &:hover {
-      background: lighten($neo-bg, 3%);
-      color: #ffffff;
-      transform: translateX(-3px);
-    }
-    
-    &:active {
-      box-shadow: 
-        inset 4px 4px 8px $neo-dark,
-        inset -2px -2px 6px $neo-light;
-    }
-  }
-
-  .nav-title {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: #ffffff;
-
-    .admin-badge {
-      display: inline-block;
-      margin-left: 0.75rem;
-      padding: 0.25rem 0.75rem;
-      background: linear-gradient(135deg, rgba(239, 68, 68, 0.3) 0%, rgba(220, 38, 38, 0.2) 100%);
-      border: 1px solid rgba(239, 68, 68, 0.3);
-      border-radius: 1rem;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: #fca5a5;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      box-shadow: 
-        3px 3px 8px $neo-dark,
-        -2px -2px 6px $neo-light;
-    }
+  
+  .page-subtitle {
+    color: theme.$text-secondary;
+    font-size: 1rem;
   }
 }
 
@@ -144,22 +93,17 @@ $neo-dark: rgba(5, 5, 15, 0.8);
 }
 
 .stat-card {
-  background: $neo-bg;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: $glass-bg;
+  backdrop-filter: blur(20px);
+  border: 1px solid $glass-border;
   border-radius: 1.5rem;
   padding: 1.5rem;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 
-    12px 12px 28px $neo-dark,
-    -8px -8px 20px $neo-light,
-    inset 1px 1px 2px rgba(255, 255, 255, 0.05);
+  transition: all 0.4s theme.$transition-smooth;
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 
-      16px 16px 36px $neo-dark,
-      -10px -10px 26px $neo-light,
-      0 0 40px rgba(102, 126, 234, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border-color: rgba($accent-primary, 0.2);
   }
 
   .stat-header {
@@ -176,21 +120,18 @@ $neo-dark: rgba(5, 5, 15, 0.8);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(145deg, #1e1e3a, #16162a);
-    box-shadow: 
-      5px 5px 12px $neo-dark,
-      -3px -3px 8px $neo-light;
+    background: theme.$bg-secondary;
 
     svg {
       width: 1.5rem;
       height: 1.5rem;
-      color: #93c5fd;
+      color: theme.$accent-light;
     }
 
-    &.users svg { color: #93c5fd; }
-    &.mentors svg { color: #a78bfa; }
-    &.sessions svg { color: #86efac; }
-    &.revenue svg { color: #fcd34d; }
+    &.users svg { color: theme.$accent-light; }
+    &.mentors svg { color: $accent-secondary; }
+    &.sessions svg { color: theme.$accent-success; }
+    &.revenue svg { color: theme.$accent-warning; }
   }
 
   .stat-trend {
@@ -203,26 +144,26 @@ $neo-dark: rgba(5, 5, 15, 0.8);
     border-radius: 0.5rem;
     
     &.positive {
-      color: #86efac;
-      background: rgba(34, 197, 94, 0.1);
+      color: theme.$accent-success;
+      background: rgba(theme.$accent-success, 0.1);
     }
 
     &.negative {
-      color: #fca5a5;
-      background: rgba(239, 68, 68, 0.1);
+      color: theme.$accent-danger;
+      background: rgba(theme.$accent-danger, 0.1);
     }
   }
 
   .stat-value {
     font-size: 2rem;
     font-weight: 800;
-    color: #ffffff;
+    color: theme.$text-primary;
     margin-bottom: 0.25rem;
   }
 
   .stat-label {
     font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.5);
+    color: theme.$text-secondary;
   }
 }
 
@@ -233,14 +174,11 @@ $neo-dark: rgba(5, 5, 15, 0.8);
 }
 
 .admin-card {
-  background: $neo-bg;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: $glass-bg;
+  border: 1px solid $glass-border;
   border-radius: 2rem;
   overflow: hidden;
-  box-shadow: 
-    16px 16px 32px $neo-dark,
-    -10px -10px 24px $neo-light,
-    inset 1px 1px 2px rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
 
   &.full-width {
     grid-column: 1 / -1;
@@ -252,44 +190,29 @@ $neo-dark: rgba(5, 5, 15, 0.8);
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  background: darken($neo-bg, 2%);
-  box-shadow: 
-    0 4px 12px $neo-dark,
-    inset 0 1px 1px rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid $glass-border;
+  background: theme.$bg-secondary;
 
   .card-title {
     font-size: 1.25rem;
     font-weight: 700;
-    color: #ffffff;
+    color: theme.$text-primary;
   }
 
   .card-action {
     padding: 0.5rem 1rem;
-    background: $neo-bg;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: $glass-bg;
+    border: 1px solid $glass-border;
     border-radius: 0.75rem;
-    color: #93c5fd;
+    color: theme.$accent-light;
     font-size: 0.875rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 
-      4px 4px 10px $neo-dark,
-      -2px -2px 6px $neo-light;
+    transition: all 0.3s theme.$transition-smooth;
 
     &:hover {
-      background: lighten($neo-bg, 3%);
+      background: rgba(255, 255, 255, 0.05);
       transform: translateY(-2px);
-      box-shadow: 
-        6px 6px 14px $neo-dark,
-        -4px -4px 10px $neo-light;
-    }
-
-    &:active {
-      box-shadow: 
-        inset 3px 3px 6px $neo-dark,
-        inset -2px -2px 4px $neo-light;
     }
   }
 }
@@ -309,20 +232,14 @@ $neo-dark: rgba(5, 5, 15, 0.8);
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: darken($neo-bg, 2%);
-  border: 1px solid rgba(255, 255, 255, 0.03);
+  background: theme.$bg-secondary;
+  border: 1px solid $glass-border;
   border-radius: 1rem;
-  transition: all 0.3s ease;
-  box-shadow: 
-    inset 3px 3px 6px $neo-dark,
-    inset -2px -2px 4px $neo-light;
+  transition: all 0.3s theme.$transition-smooth;
 
   &:hover {
-    background: darken($neo-bg, 1%);
+    background: rgba(255, 255, 255, 0.03);
     transform: translateX(5px);
-    box-shadow: 
-      6px 6px 14px $neo-dark,
-      -4px -4px 10px $neo-light;
   }
 }
 
@@ -330,17 +247,13 @@ $neo-dark: rgba(5, 5, 15, 0.8);
   width: 2.75rem;
   height: 2.75rem;
   border-radius: 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, theme.$accent-success 0%, theme.$accent-teal 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   color: #ffffff;
   font-size: 1rem;
-  box-shadow: 
-    4px 4px 10px $neo-dark,
-    -2px -2px 6px $neo-light,
-    inset 1px 1px 2px rgba(255, 255, 255, 0.2);
 }
 
 .user-info {
@@ -348,13 +261,13 @@ $neo-dark: rgba(5, 5, 15, 0.8);
 
   .user-name {
     font-weight: 600;
-    color: #ffffff;
+    color: theme.$text-primary;
     margin-bottom: 0.25rem;
   }
 
   .user-email {
     font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.5);
+    color: theme.$text-secondary;
   }
 }
 
@@ -365,26 +278,23 @@ $neo-dark: rgba(5, 5, 15, 0.8);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  box-shadow: 
-    3px 3px 8px $neo-dark,
-    -2px -2px 6px $neo-light;
 
   &.role-admin {
-    background: $neo-bg;
-    color: #fca5a5;
-    border: 1px solid rgba(239, 68, 68, 0.3);
+    background: rgba(theme.$accent-danger, 0.1);
+    color: theme.$accent-danger;
+    border: 1px solid rgba(theme.$accent-danger, 0.3);
   }
 
   &.role-mentor {
-    background: $neo-bg;
-    color: #a78bfa;
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    background: rgba($accent-secondary, 0.1);
+    color: $accent-secondary;
+    border: 1px solid rgba($accent-secondary, 0.3);
   }
 
   &.role-student {
-    background: $neo-bg;
-    color: #86efac;
-    border: 1px solid rgba(34, 197, 94, 0.3);
+    background: rgba(theme.$accent-success, 0.1);
+    color: theme.$accent-success;
+    border: 1px solid rgba(theme.$accent-success, 0.3);
   }
 }
 
@@ -397,17 +307,14 @@ $neo-dark: rgba(5, 5, 15, 0.8);
   width: 2rem;
   height: 2rem;
   border-radius: 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  background: $neo-bg;
-  color: rgba(255, 255, 255, 0.6);
+  border: 1px solid $glass-border;
+  background: $glass-bg;
+  color: theme.$text-secondary;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s theme.$transition-smooth;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 
-    3px 3px 8px $neo-dark,
-    -2px -2px 6px $neo-light;
 
   svg {
     width: 1rem;
@@ -415,22 +322,13 @@ $neo-dark: rgba(5, 5, 15, 0.8);
   }
 
   &:hover {
-    background: lighten($neo-bg, 3%);
-    color: #ffffff;
-    box-shadow: 
-      4px 4px 10px $neo-dark,
-      -3px -3px 8px $neo-light;
-  }
-
-  &:active {
-    box-shadow: 
-      inset 2px 2px 4px $neo-dark,
-      inset -1px -1px 2px $neo-light;
+    background: rgba(255, 255, 255, 0.05);
+    color: theme.$text-primary;
   }
 
   &.delete:hover {
-    color: #fca5a5;
-    border-color: rgba(239, 68, 68, 0.3);
+    color: theme.$accent-danger;
+    border-color: rgba(theme.$accent-danger, 0.3);
   }
 }
 
@@ -439,13 +337,13 @@ $neo-dark: rgba(5, 5, 15, 0.8);
 
   .session-title {
     font-weight: 600;
-    color: #ffffff;
+    color: theme.$text-primary;
     margin-bottom: 0.25rem;
   }
 
   .session-participants {
     font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.5);
+    color: theme.$text-secondary;
   }
 }
 
@@ -455,27 +353,24 @@ $neo-dark: rgba(5, 5, 15, 0.8);
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
-  box-shadow: 
-    3px 3px 8px $neo-dark,
-    -2px -2px 6px $neo-light;
 
   &.status-scheduled {
-    background: $neo-bg;
-    color: #fcd34d;
-    border: 1px solid rgba(251, 191, 36, 0.3);
+    background: rgba(theme.$accent-warning, 0.1);
+    color: theme.$accent-warning;
+    border: 1px solid rgba(theme.$accent-warning, 0.3);
   }
 
   &.status-active {
-    background: $neo-bg;
-    color: #86efac;
-    border: 1px solid rgba(34, 197, 94, 0.3);
+    background: rgba(theme.$accent-success, 0.1);
+    color: theme.$accent-success;
+    border: 1px solid rgba(theme.$accent-success, 0.3);
     animation: pulse-status 2s infinite;
   }
 
   &.status-completed {
-    background: $neo-bg;
-    color: #93c5fd;
-    border: 1px solid rgba(59, 130, 246, 0.3);
+    background: rgba(theme.$accent-info, 0.1);
+    color: theme.$accent-info;
+    border: 1px solid rgba(theme.$accent-info, 0.3);
   }
 }
 
@@ -486,7 +381,7 @@ $neo-dark: rgba(5, 5, 15, 0.8);
 
 .session-time {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: theme.$text-secondary;
   text-align: right;
   min-width: 80px;
 }
@@ -494,10 +389,7 @@ $neo-dark: rgba(5, 5, 15, 0.8);
 .table-container {
   overflow-x: auto;
   border-radius: 1rem;
-  background: darken($neo-bg, 2%);
-  box-shadow: 
-    inset 4px 4px 10px $neo-dark,
-    inset -3px -3px 8px $neo-light;
+  background: theme.$bg-secondary;
 }
 
 .admin-table {
@@ -507,46 +399,43 @@ $neo-dark: rgba(5, 5, 15, 0.8);
   th, td {
     padding: 1rem;
     text-align: left;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid $glass-border;
   }
 
   th {
     font-size: 0.75rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.5);
+    color: theme.$text-secondary;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    background: darken($neo-bg, 3%);
+    background: $bg-primary;
   }
 
   td {
     font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.9);
+    color: theme.$text-primary;
   }
 
   tr:hover td {
-    background: darken($neo-bg, 1%);
+    background: rgba(255, 255, 255, 0.02);
   }
 }
 
 .empty-state {
   text-align: center;
   padding: 3rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: theme.$text-muted;
 
   .empty-icon {
     width: 4rem;
     height: 4rem;
     margin: 0 auto 1rem;
-    color: rgba(255, 255, 255, 0.3);
-    background: linear-gradient(145deg, #1e1e3a, #16162a);
+    color: theme.$text-muted;
+    background: theme.$bg-secondary;
     border-radius: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 
-      6px 6px 14px $neo-dark,
-      -4px -4px 10px $neo-light;
 
     svg {
       width: 2rem;
@@ -567,8 +456,8 @@ $neo-dark: rgba(5, 5, 15, 0.8);
   .spinner {
     width: 2.5rem;
     height: 2.5rem;
-    border: 3px solid rgba(255, 255, 255, 0.1);
-    border-top-color: #667eea;
+    border: 3px solid $glass-border;
+    border-top-color: $accent-primary;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
   }
@@ -625,5 +514,61 @@ $neo-dark: rgba(5, 5, 15, 0.8);
   .user-actions {
     width: 100%;
     justify-content: flex-end;
+  }
+}
+
+// Info Card styles
+.info-card {
+  background: $glass-bg;
+  backdrop-filter: blur(20px);
+  border: 1px solid $glass-border;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+
+  .card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: theme.$text-primary;
+    margin-bottom: 1rem;
+  }
+
+  .card-description {
+    color: theme.$text-secondary;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+}
+
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  background: theme.$bg-secondary;
+  border-radius: 1rem;
+  border: 1px solid $glass-border;
+
+  .feature-icon {
+    font-size: 1.5rem;
+  }
+
+  .feature-info {
+    h4 {
+      font-weight: 600;
+      color: theme.$text-primary;
+      margin-bottom: 0.25rem;
+    }
+
+    p {
+      font-size: 0.875rem;
+      color: theme.$text-secondary;
+    }
   }
 }

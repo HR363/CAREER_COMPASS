@@ -1,9 +1,14 @@
-// Sleek Modern Bento Design - COSMIC GLASS THEME
+// ============================================
+// PROFILE PAGE - Unified Theme
+// ============================================
+
+// Import shared theme variables
+@use '../../../../styles/theme' as theme;
 
 // Variables and Mixins
-$glass-bg: rgba(255, 255, 255, 0.03);
-$glass-border: rgba(255, 255, 255, 0.08);
-$glass-highlight: rgba(255, 255, 255, 0.1);
+$glass-bg: theme.$glass-bg;
+$glass-border: theme.$glass-border;
+$glass-highlight: theme.$glass-highlight;
 $blur-amt: 24px;
 
 @mixin glass-panel {
@@ -15,20 +20,21 @@ $blur-amt: 24px;
 }
 
 @mixin hover-glow {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s theme.$transition-smooth;
   &:hover {
     background: rgba(255, 255, 255, 0.06);
     border-color: rgba(255, 255, 255, 0.15);
     transform: translateY(-2px);
     box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.3), 
-                0 0 15px rgba(99, 102, 241, 0.2);
+                0 0 15px rgba(theme.$accent-primary, 0.2);
   }
 }
 
 // Global Layout Overrides
 :host {
   display: block;
-  min-height: 100vh;
+  min-height: calc(100vh - 64px);
+  background: theme.$bg-primary;
 }
 
 // Custom Scrollbar

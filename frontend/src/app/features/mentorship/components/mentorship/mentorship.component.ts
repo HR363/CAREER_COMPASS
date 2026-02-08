@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router } from '@angular/router';
 import { AuthService, User } from '../../../../core/services/auth.service';
 import { MentorshipService, Session } from '../../../../core/services/mentorship.service';
+import { AiService } from '../../../../core/services/ai.service';
 
 @Component({
   selector: 'app-mentorship',
@@ -16,6 +17,8 @@ export class MentorshipComponent implements OnInit {
   currentUser: User | null = null;
   sessions: Session[] = [];
   mentors: any[] = [];
+  recommendedMentors: any[] = [];
+  isLoadingRecommendations = false;
   
   scheduleForm: FormGroup;
   isScheduling = false;
@@ -24,6 +27,7 @@ export class MentorshipComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private mentorshipService: MentorshipService,
+    private aiService: AiService,
     private router: Router
   ) {
     this.scheduleForm = this.fb.group({
@@ -39,7 +43,22 @@ export class MentorshipComponent implements OnInit {
     
     if (this.currentUser?.role === 'STUDENT') {
       this.loadMentors();
+      this.loadRecommendations();
     }
+  }
+
+  loadRecommendations(): void {
+    this.isLoadingRecommendations = true;
+    this.aiService.getMentorRecommendations().subscribe({
+      next: (recommendations) => {
+        this.recommendedMentors = recommendations;
+        this.isLoadingRecommendations = false;
+      },
+      error: (error) => {
+        console.error('Error loading recommendations:', error);
+        this.isLoadingRecommendations = false;
+      }
+    });
   }
 
   loadSessions(): void {

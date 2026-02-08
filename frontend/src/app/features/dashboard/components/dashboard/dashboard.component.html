@@ -8,63 +8,6 @@
     <div class="grain-overlay"></div>
   </div>
 
-  <!-- Floating Navigation -->
-  <nav class="floating-nav">
-    <div class="nav-inner">
-      <div class="brand">
-        <div class="brand-icon">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <span class="brand-text">CareerCompass</span>
-        <span class="ai-chip">AI</span>
-      </div>
-      
-      <div class="nav-center">
-        <button class="nav-pill active" (click)="navigateTo('/dashboard')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="3" width="7" height="7" rx="1"/>
-            <rect x="14" y="3" width="7" height="7" rx="1"/>
-            <rect x="14" y="14" width="7" height="7" rx="1"/>
-            <rect x="3" y="14" width="7" height="7" rx="1"/>
-          </svg>
-          <span>Dashboard</span>
-        </button>
-        <button class="nav-pill" (click)="navigateTo('/chat')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-          </svg>
-          <span>AI Chat</span>
-        </button>
-        <button class="nav-pill" (click)="navigateTo('/mentorship')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-            <circle cx="9" cy="7" r="4"/>
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-          </svg>
-          <span>Mentors</span>
-        </button>
-      </div>
-
-      <div class="nav-end">
-        <div class="user-avatar" [style.background]="'linear-gradient(135deg, #10b981, #14b8a6)'">
-          {{ currentUser?.name?.charAt(0) || 'U' }}
-        </div>
-        <button class="logout-pill" (click)="logout()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-            <polyline points="16 17 21 12 16 7"/>
-            <line x1="21" y1="12" x2="9" y2="12"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-  </nav>
-
   <!-- Main Content -->
   <main class="main-content">
     <!-- Hero Section -->

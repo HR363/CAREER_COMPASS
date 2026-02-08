@@ -1,38 +1,41 @@
 // ============================================
-// SLEEK 2026 DASHBOARD - Education Theme (Emerald)
+// SLEEK 2026 DASHBOARD - Unified Theme
 // ============================================
 
-// Design Tokens
-$bg-primary: #0a0f0a;
-$bg-secondary: #121a14;
-$bg-elevated: rgba(255, 255, 255, 0.03);
-$glass-bg: rgba(255, 255, 255, 0.02);
-$glass-border: rgba(255, 255, 255, 0.06);
-$glass-highlight: rgba(255, 255, 255, 0.1);
+// Import shared theme variables
+@use '../../../../styles/theme' as theme;
 
-// Education-themed colors (Emerald + complementary)
-$accent-primary: #10b981;      // Emerald - main accent
-$accent-secondary: #059669;    // Darker emerald
-$accent-teal: #14b8a6;         // Teal - secondary
-$accent-cyan: #06b6d4;         // Cyan - highlights
-$accent-green: #22c55e;        // Bright green - success
-$accent-lime: #84cc16;         // Lime - fresh
-$accent-amber: #f59e0b;        // Amber - warnings/attention
-$accent-sky: #0ea5e9;          // Sky blue - info
-$accent-rose: #f43f5e;         // Rose - errors/logout
-$accent-violet: #8b5cf6;       // Violet - special accents
+// Design Tokens (using theme variables)
+$bg-primary: theme.$bg-primary;
+$bg-secondary: theme.$bg-secondary;
+$bg-elevated: theme.$bg-elevated;
+$glass-bg: theme.$glass-bg;
+$glass-border: theme.$glass-border;
+$glass-highlight: theme.$glass-highlight;
 
-$text-primary: rgba(255, 255, 255, 0.95);
-$text-secondary: rgba(255, 255, 255, 0.6);
-$text-muted: rgba(255, 255, 255, 0.4);
+// Accent colors (using unified theme)
+$accent-primary: theme.$accent-primary;     // Indigo
+$accent-secondary: theme.$accent-secondary; // Violet
+$accent-teal: theme.$accent-teal;
+$accent-cyan: theme.$accent-cyan;
+$accent-green: theme.$accent-success;
+$accent-lime: #84cc16;
+$accent-amber: theme.$accent-warning;
+$accent-sky: theme.$accent-sky;
+$accent-rose: theme.$accent-rose;
+$accent-violet: theme.$accent-secondary;
 
-$radius-sm: 12px;
-$radius-md: 16px;
-$radius-lg: 24px;
-$radius-xl: 32px;
+$text-primary: theme.$text-primary;
+$text-secondary: theme.$text-secondary;
+$text-muted: theme.$text-muted;
 
-$transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
-$transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+$radius-sm: theme.$radius-sm;
+$radius-md: theme.$radius-md;
+$radius-lg: theme.$radius-lg;
+$radius-xl: theme.$radius-xl;
+
+$transition-smooth: theme.$transition-smooth;
+$transition-spring: theme.$transition-spring;
 
 // Base Styles
 .dashboard {
@@ -44,9 +47,10 @@ $transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 // ============================================
-// ANIMATED MESH BACKGROUND
+// ANIMATED MESH BACKGROUND (Disabled - clean look)
 // ============================================
 .mesh-bg {
+  display: none; // Disabled gradient background
   position: fixed;
   inset: 0;
   z-index: 0;
@@ -57,9 +61,9 @@ $transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse 80% 50% at 20% 40%, rgba(16, 185, 129, 0.12) 0%, transparent 50%),
-      radial-gradient(ellipse 60% 80% at 80% 20%, rgba(20, 184, 166, 0.1) 0%, transparent 50%),
-      radial-gradient(ellipse 50% 50% at 50% 80%, rgba(6, 182, 212, 0.08) 0%, transparent 50%);
+      radial-gradient(ellipse 80% 50% at 20% 40%, rgba($accent-primary, 0.12) 0%, transparent 50%),
+      radial-gradient(ellipse 60% 80% at 80% 20%, rgba($accent-secondary, 0.1) 0%, transparent 50%),
+      radial-gradient(ellipse 50% 50% at 50% 80%, rgba($accent-cyan, 0.08) 0%, transparent 50%);
   }
 
   .aurora {
@@ -71,7 +75,7 @@ $transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     &.aurora-1 {
       width: 600px;
       height: 400px;
-      background: linear-gradient(135deg, $accent-primary, $accent-teal);
+      background: linear-gradient(135deg, $accent-primary, $accent-secondary);
       top: -200px;
       left: -100px;
       animation-delay: 0s;
@@ -89,7 +93,7 @@ $transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     &.aurora-3 {
       width: 700px;
       height: 300px;
-      background: linear-gradient(45deg, $accent-teal, $accent-lime);
+      background: linear-gradient(45deg, $accent-secondary, $accent-primary);
       bottom: -100px;
       left: 30%;
       animation-delay: 16s;
@@ -113,157 +117,14 @@ $transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 // ============================================
-// FLOATING NAVIGATION
+// MAIN CONTENT (No floating nav - using global navbar)
 // ============================================
-.floating-nav {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  padding: 1rem 2rem;
-
-  .nav-inner {
-    max-width: 1400px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.75rem 1.5rem;
-    background: $glass-bg;
-    backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid $glass-border;
-    border-radius: $radius-xl;
-    box-shadow:
-      0 4px 30px rgba(0, 0, 0, 0.3),
-      inset 0 1px 0 $glass-highlight;
-  }
-
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-
-    .brand-icon {
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, $accent-primary, $accent-teal);
-      border-radius: $radius-sm;
-      color: white;
-
-      svg {
-        width: 20px;
-        height: 20px;
-      }
-    }
-
-    .brand-text {
-      font-size: 1.125rem;
-      font-weight: 700;
-      color: $text-primary;
-      letter-spacing: -0.02em;
-    }
-
-    .ai-chip {
-      padding: 0.25rem 0.5rem;
-      font-size: 0.65rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: $accent-primary;
-      background: rgba($accent-primary, 0.1);
-      border: 1px solid rgba($accent-primary, 0.2);
-      border-radius: 6px;
-    }
-  }
-
-  .nav-center {
-    display: flex;
-    gap: 0.5rem;
-
-    .nav-pill {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.625rem 1rem;
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: $text-secondary;
-      background: transparent;
-      border: none;
-      border-radius: $radius-md;
-      cursor: pointer;
-      transition: all 0.3s $transition-smooth;
-
-      svg {
-        width: 18px;
-        height: 18px;
-        opacity: 0.7;
-      }
-
-      &:hover {
-        color: $text-primary;
-        background: $glass-bg;
-
-        svg { opacity: 1; }
-      }
-
-      &.active {
-        color: $text-primary;
-        background: rgba($accent-primary, 0.15);
-
-        svg { opacity: 1; color: $accent-primary; }
-      }
-    }
-  }
-
-  .nav-end {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-
-    .user-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: white;
-      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
-    }
-
-    .logout-pill {
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba($accent-rose, 0.1);
-      border: 1px solid rgba($accent-rose, 0.2);
-      border-radius: 50%;
-      color: $accent-rose;
-      cursor: pointer;
-      transition: all 0.3s $transition-smooth;
-
-      svg {
-        width: 16px;
-        height: 16px;
-      }
-
-      &:hover {
-        background: rgba($accent-rose, 0.2);
-        transform: scale(1.05);
-      }
-    }
-  }
+.main-content {
+  padding-top: 1rem;
 }
 
 // ============================================
-// MAIN CONTENT
+// MAIN CONTENT LAYOUT
 // ============================================
 .main-content {
   position: relative;
@@ -821,7 +682,7 @@ $transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     font-size: 0.875rem;
     font-weight: 600;
     color: white;
-    background: linear-gradient(135deg, $accent-primary, $accent-secondary);
+    background: linear-gradient(135deg, $accent-green, $accent-teal);
     border: none;
     border-radius: $radius-md;
     cursor: pointer;
@@ -834,7 +695,7 @@ $transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     &:hover {
-      box-shadow: 0 8px 24px rgba($accent-primary, 0.4);
+      box-shadow: 0 8px 24px rgba($accent-green, 0.4);
 
       svg { transform: translateX(4px); }
     }
@@ -1090,7 +951,7 @@ $transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     font-size: 0.9rem;
     font-weight: 600;
     color: white;
-    background: linear-gradient(135deg, $accent-primary, $accent-secondary);
+    background: linear-gradient(135deg, $accent-green, $accent-teal);
     border: none;
     border-radius: $radius-md;
     cursor: pointer;
@@ -1104,7 +965,7 @@ $transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba($accent-primary, 0.4);
+      box-shadow: 0 12px 32px rgba($accent-green, 0.4);
 
       svg { transform: translateX(4px); }
     }

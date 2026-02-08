@@ -1,8 +1,13 @@
-// Sleek Modern Cosmic Chat Design
+// ============================================
+// CHAT PAGE - Unified Theme
+// ============================================
+
+// Import shared theme variables
+@use '../../../../styles/theme' as theme;
 
 // Variables
-$glass-bg: rgba(255, 255, 255, 0.03);
-$glass-border: rgba(255, 255, 255, 0.08);
+$glass-bg: theme.$glass-bg;
+$glass-border: theme.$glass-border;
 $blur-amt: 24px;
 
 @mixin glass-panel {
@@ -14,8 +19,9 @@ $blur-amt: 24px;
 
 :host {
   display: block;
-  height: 100vh;
+  height: calc(100vh - 64px); // Account for navbar
   overflow: hidden;
+  background: theme.$bg-primary;
 }
 
 // Background Animations
@@ -35,7 +41,7 @@ $blur-amt: 24px;
 
 // Main Layout
 .chat-layout {
-  height: 100vh;
+  height: calc(100vh - 64px); // Account for navbar
   display: flex;
   flex-direction: column;
 }

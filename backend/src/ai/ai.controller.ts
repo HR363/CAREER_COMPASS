@@ -26,6 +26,11 @@ export class AiController {
     return this.aiService.generateLearningPath(learningPathDto, user.id);
   }
 
+  @Get('mentors')
+  async getMentorRecommendations(@CurrentUser() user: any) {
+    return this.aiService.getMentorRecommendations(user.id);
+  }
+
   @Post('chat')
   async chatWithAI(
     @Body() body: { message: string; context?: any },

@@ -73,6 +73,56 @@ export class AiService {
     }
   }
 
+  async getMentorRecommendations(userId: string) {
+    try {
+      // 1. Get Student Profile
+      const studentProfile = await this.prisma.profile.findUnique({
+        where: { userId },
+        include: { user: true },
+      });
+
+      if (!studentProfile) {
+        throw new Error('Student profile not found');
+      }
+
+      // 2. Get All Mentors
+      const mentors = await this.prisma.user.findMany({
+        where: { role: 'MENTOR' },
+        include: { profile: true },
+        take: 50, // Limit to avoid context overflow
+      });
+
+      if (mentors.length === 0) {
+        return [];
+      }
+
+      // 3. Build Prompt
+      const prompt = this.buildMentorMatchingPrompt(studentProfile, mentors);
+
+      // 4. Call AI
+      const response = await this.callGeminiAPI(prompt);
+
+      // 5. Map response to actual mentor objects
+      const recommendations = Array.isArray(response) ? response : [];
+      
+      const enrichedRecommendations = recommendations.map((rec: any) => {
+        const mentor = mentors.find(m => m.id === rec.mentorId);
+        return {
+          ...rec,
+          mentorName: mentor ? mentor.name : 'Unknown Mentor',
+          mentorEmail: mentor ? mentor.email : '',
+          mentorId: mentor ? mentor.id : rec.mentorId,
+        };
+      });
+
+      return enrichedRecommendations;
+
+    } catch (error) {
+      console.error('Error generating mentor recommendations:', error);
+      throw new Error('Failed to generate mentor recommendations');
+    }
+  }
+
   async chatWithAI(message: string, context?: any) {
     try {
       const prompt = this.buildChatPrompt(message, context);
@@ -117,6 +167,50 @@ Please provide:
 6. Key milestones and checkpoints
 
 Format as a JSON object with phases array, where each phase contains: name, duration, skills, resources, projects, and milestones.`;
+  }
+
+  private buildMentorMatchingPrompt(studentProfile: any, mentors: any[]): string {
+    const studentContext = {
+      name: studentProfile.user.name,
+      skills: studentProfile.skills,
+      interests: studentProfile.interests,
+      goals: studentProfile.goals,
+      education: studentProfile.education
+    };
+
+    const mentorsList = mentors.map(m => ({
+      id: m.id,
+      name: m.name,
+      skills: m.profile?.skills || 'Not specified',
+      interests: m.profile?.interests || 'Not specified',
+      education: m.profile?.education || 'Not specified',
+    }));
+
+    return `System: You are an expert implementation of a mentorship matching algorithm.
+    
+    Task: Select specific suitable mentors for the student based on profile compatibility.
+    
+    Student Profile:
+    ${JSON.stringify(studentContext)}
+    
+    Available Mentors:
+    ${JSON.stringify(mentorsList)}
+    
+    Instructions:
+    1. Analyze the student's skills, interests, and goals.
+    2. Compare with each mentor's profile (skills, interests, education).
+    3. Select top 3-5 matches. If fewer are good matches, return fewer.
+    4. Provide a match score (0-100) and a reasoning for each.
+    
+    Output Format (JSON Array):
+    [
+      {
+        "mentorId": "string (must match input id)",
+        "matchScore": number,
+        "reasoning": "string"
+      }
+    ]
+    `;
   }
 
   private buildChatPrompt(message: string, context?: any): string {
