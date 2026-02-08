@@ -163,27 +163,13 @@ $card-shadow-hover: 0 16px 48px rgba(0, 0, 0, 0.2);
   }
 }
 
-// LARGE SECTION SEPARATOR (The Big CTA Style)
+// LARGE SECTION SEPARATOR
 .section-header {
   text-align: center;
   margin: 6rem auto 4rem;
   max-width: 900px;
-  
-  // Premium glass card header
-  background: $glass-bg;
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  padding: 4rem 2rem;
-  border-radius: 32px;
-  border: 1px solid $glass-border;
+  padding: 2rem;
   position: relative;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  
-  &:hover {
-    background: $glass-bg-hover;
-    border-color: $glass-border-hover;
-    transform: translateY(-4px);
-  }
 
   .section-badge {
     display: inline-block;
@@ -209,16 +195,6 @@ $card-shadow-hover: 0 16px 48px rgba(0, 0, 0, 0.2);
     max-width: 600px;
     margin: 0 auto;
     line-height: 1.6;
-  }
-
-  &::after {
-    content: '';
-    display: block;
-    font-size: 2rem;
-    color: #3b82f6;
-    margin-top: 2rem;
-    opacity: 0.5;
-    animation: bounce 2s infinite;
   }
 }
 
