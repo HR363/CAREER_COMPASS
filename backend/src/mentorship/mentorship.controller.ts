@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
 import { MentorshipService } from './mentorship.service';
 import { ScheduleSessionDto } from './dto/schedule-session.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -8,6 +8,40 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 @UseGuards(JwtAuthGuard)
 export class MentorshipController {
   constructor(private readonly mentorshipService: MentorshipService) {}
+
+  // ==================== RESOURCES ====================
+
+  @Get('resources')
+  async getMyResources(@CurrentUser() user: any) {
+    return this.mentorshipService.getMyResources(user.id);
+  }
+
+  @Post('resources')
+  async addResource(
+    @Body() body: { title: string; link: string; category: string },
+    @CurrentUser() user: any,
+  ) {
+    return this.mentorshipService.addResource(user.id, body);
+  }
+
+  @Put('resources/:id')
+  async updateResource(
+    @Param('id') resourceId: string,
+    @Body() body: { title?: string; link?: string; category?: string },
+    @CurrentUser() user: any,
+  ) {
+    return this.mentorshipService.updateResource(user.id, resourceId, body);
+  }
+
+  @Delete('resources/:id')
+  async deleteResource(
+    @Param('id') resourceId: string,
+    @CurrentUser() user: any,
+  ) {
+    return this.mentorshipService.deleteResource(user.id, resourceId);
+  }
+
+  // ==================== SESSIONS ====================
 
   @Post('schedule')
   async scheduleSession(

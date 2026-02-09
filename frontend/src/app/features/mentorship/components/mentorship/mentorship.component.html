@@ -25,6 +25,22 @@
   <!-- Content -->
   <div class="mentorship-content">
     
+    <!-- Browse Mentors Button (for students) -->
+    <div *ngIf="currentUser?.role === 'STUDENT'" class="browse-mentors-card" style="grid-column: 1 / -1; margin-bottom: 1rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 1rem;">
+        <div>
+          <h3 style="color: white; margin: 0 0 0.25rem 0; font-size: 1.1rem;">👨‍🏫 Looking for a mentor?</h3>
+          <p style="color: #94a3b8; margin: 0; font-size: 0.9rem;">Browse through our mentors, view their profiles, and connect directly.</p>
+        </div>
+        <button (click)="browseMentors()" style="padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); border: none; border-radius: 0.75rem; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease;">
+          Browse Mentors
+          <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
     <!-- AI Recommended Mentors -->
     <div *ngIf="currentUser?.role === 'STUDENT' && recommendedMentors.length > 0" class="schedule-card mb-8" style="margin-bottom: 2rem;">
       <h2 class="card-title">✨ AI Recommended Mentors</h2>

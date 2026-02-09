@@ -8,6 +8,7 @@ import { AiModule } from './ai/ai.module';
 import { MentorshipModule } from './mentorship/mentorship.module';
 import { AdminModule } from './admin/admin.module';
 import { AgoraModule } from './agora/agora.module';
+import { MessagesModule } from './messages/messages.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { AgoraModule } from './agora/agora.module';
     AiModule,
     MentorshipModule,
     AdminModule,
+    MessagesModule,
   ],
 })
 export class AppModule {}

@@ -11,6 +11,65 @@ export class MentorshipService {
     private agoraService: AgoraService,
   ) {}
 
+  // ==================== RESOURCES ====================
+
+  async getMyResources(mentorId: string) {
+    return this.prisma.resource.findMany({
+      where: { mentorId },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  async addResource(mentorId: string, data: { title: string; link: string; category: string }) {
+    return this.prisma.resource.create({
+      data: {
+        mentorId,
+        title: data.title,
+        link: data.link,
+        category: data.category,
+      },
+    });
+  }
+
+  async updateResource(mentorId: string, resourceId: string, data: { title?: string; link?: string; category?: string }) {
+    const resource = await this.prisma.resource.findUnique({
+      where: { id: resourceId },
+    });
+
+    if (!resource) {
+      throw new NotFoundException('Resource not found');
+    }
+
+    if (resource.mentorId !== mentorId) {
+      throw new ForbiddenException('You can only edit your own resources');
+    }
+
+    return this.prisma.resource.update({
+      where: { id: resourceId },
+      data,
+    });
+  }
+
+  async deleteResource(mentorId: string, resourceId: string) {
+    const resource = await this.prisma.resource.findUnique({
+      where: { id: resourceId },
+    });
+
+    if (!resource) {
+      throw new NotFoundException('Resource not found');
+    }
+
+    if (resource.mentorId !== mentorId) {
+      throw new ForbiddenException('You can only delete your own resources');
+    }
+
+    return this.prisma.resource.delete({
+      where: { id: resourceId },
+    });
+  }
+
+  // ==================== SESSIONS ====================
+
   async scheduleSession(dto: ScheduleSessionDto) {
     // Verify mentor exists and is actually a mentor
     const mentor = await this.prisma.user.findUnique({

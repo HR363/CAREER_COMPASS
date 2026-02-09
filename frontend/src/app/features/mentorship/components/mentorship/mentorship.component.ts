@@ -164,5 +164,9 @@ export class MentorshipComponent implements OnInit {
   goBack(): void {
     this.router.navigate(['/dashboard']);
   }
+
+  browseMentors(): void {
+    this.router.navigate(['/mentorship/mentors']);
+  }
 }
 

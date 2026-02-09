@@ -59,15 +59,27 @@
           </span>
 
           <div class="mt-8 w-full pt-8 border-t border-white/5 flex justify-between text-sm">
-             <div class="text-center">
+             <div class="text-center" *ngIf="currentUser?.role === 'MENTOR'">
+               <span class="block text-xl font-bold text-white">{{ resources.length }}</span>
+               <span class="text-gray-500 text-xs uppercase">Resources</span>
+             </div>
+             <div class="text-center" *ngIf="currentUser?.role === 'MENTOR'">
+               <span class="block text-xl font-bold text-white">{{ mentorSessions.length }}</span>
+               <span class="text-gray-500 text-xs uppercase">Sessions</span>
+             </div>
+             <div class="text-center" *ngIf="currentUser?.role === 'MENTOR'">
+               <span class="block text-xl font-bold text-white">{{ getUpcomingSessions().length }}</span>
+               <span class="text-gray-500 text-xs uppercase">Upcoming</span>
+             </div>
+             <div class="text-center" *ngIf="currentUser?.role === 'STUDENT'">
                <span class="block text-xl font-bold text-white">4</span>
                <span class="text-gray-500 text-xs uppercase">Projects</span>
              </div>
-             <div class="text-center">
+             <div class="text-center" *ngIf="currentUser?.role === 'STUDENT'">
                <span class="block text-xl font-bold text-white">12</span>
                <span class="text-gray-500 text-xs uppercase">Skills</span>
              </div>
-             <div class="text-center">
+             <div class="text-center" *ngIf="currentUser?.role === 'STUDENT'">
                <span class="block text-xl font-bold text-white">85%</span>
                <span class="text-gray-500 text-xs uppercase">Progress</span>
              </div>
@@ -164,6 +176,149 @@
               </div>
            </div>
         </form>
+
+        <!-- MENTOR ONLY: Resources Management Section -->
+        <section *ngIf="currentUser?.role === 'MENTOR'" class="space-y-6">
+           
+           <!-- Resources Header -->
+           <div class="flex items-center justify-between">
+              <h3 class="text-xl font-bold text-white flex items-center gap-3">
+                 <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-lg">📚</span>
+                 My Resources
+              </h3>
+              <button (click)="openAddResourceModal()" 
+                 class="px-4 py-2 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 text-sm font-bold transition-all flex items-center gap-2 hover:shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                 Add Resource
+              </button>
+           </div>
+
+           <!-- Loading -->
+           <div *ngIf="isLoadingResources" class="bento-card p-8 text-center">
+              <div class="w-8 h-8 border-2 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin mx-auto mb-3"></div>
+              <p class="text-gray-400 text-sm">Loading resources...</p>
+           </div>
+
+           <!-- Empty State -->
+           <div *ngIf="!isLoadingResources && resources.length === 0" class="bento-card p-8 text-center">
+              <div class="text-4xl mb-3">📖</div>
+              <h4 class="text-lg font-semibold text-white mb-2">No resources yet</h4>
+              <p class="text-gray-400 text-sm mb-4">Share articles, books, PDFs or courses with your students.</p>
+              <button (click)="openAddResourceModal()" 
+                 class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition-all">
+                 Add Your First Resource
+              </button>
+           </div>
+
+           <!-- Resources List -->
+           <div *ngIf="!isLoadingResources && resources.length > 0" class="space-y-3">
+              <div *ngFor="let resource of resources" class="bento-card p-5 flex items-start gap-4 group">
+                 <div class="text-2xl flex-shrink-0 mt-0.5">{{ getResourceIcon(resource.category) }}</div>
+                 <div class="flex-1 min-w-0">
+                    <h4 class="text-white font-semibold text-sm truncate">{{ resource.title }}</h4>
+                    <a [href]="resource.link" target="_blank" class="text-indigo-400 text-xs hover:underline truncate block mt-0.5">{{ resource.link }}</a>
+                    <div class="flex items-center gap-2 mt-2">
+                       <span class="px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-xs text-gray-400 capitalize">{{ resource.category }}</span>
+                       <span class="text-xs text-gray-500">{{ resource.createdAt | date:'MMM dd, yyyy' }}</span>
+                    </div>
+                 </div>
+                 <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
+                    <button (click)="openEditResourceModal(resource)" class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 hover:bg-indigo-500/20 hover:border-indigo-500/30 flex items-center justify-center text-gray-400 hover:text-indigo-400 transition-all">
+                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                    </button>
+                    <button (click)="deleteResource(resource.id)" class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 hover:bg-red-500/20 hover:border-red-500/30 flex items-center justify-center text-gray-400 hover:text-red-400 transition-all">
+                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    </button>
+                 </div>
+              </div>
+           </div>
+
+           <!-- Mentorship Sessions -->
+           <div class="flex items-center justify-between mt-8">
+              <h3 class="text-xl font-bold text-white flex items-center gap-3">
+                 <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-lg">📅</span>
+                 My Mentorship Sessions
+              </h3>
+           </div>
+
+           <div *ngIf="isLoadingSessions" class="bento-card p-8 text-center">
+              <div class="w-8 h-8 border-2 border-purple-500/30 border-t-purple-500 rounded-full animate-spin mx-auto mb-3"></div>
+              <p class="text-gray-400 text-sm">Loading sessions...</p>
+           </div>
+
+           <div *ngIf="!isLoadingSessions && mentorSessions.length === 0" class="bento-card p-8 text-center">
+              <div class="text-4xl mb-3">📋</div>
+              <h4 class="text-lg font-semibold text-white mb-2">No sessions yet</h4>
+              <p class="text-gray-400 text-sm">Students will be able to book sessions with you.</p>
+           </div>
+
+           <!-- Upcoming Sessions -->
+           <div *ngIf="getUpcomingSessions().length > 0" class="space-y-3">
+              <h4 class="text-sm font-bold text-yellow-400 uppercase tracking-widest">Upcoming</h4>
+              <div *ngFor="let session of getUpcomingSessions()" class="bento-card p-5 border-l-4 border-l-yellow-500">
+                 <div class="flex justify-between items-start">
+                    <div>
+                       <h5 class="text-white font-semibold text-sm">Session with {{ session.student?.name }}</h5>
+                       <p class="text-gray-400 text-xs mt-1">{{ session.scheduledAt | date:'EEEE, MMM dd, yyyy • h:mm a' }}</p>
+                    </div>
+                    <span class="px-2 py-1 rounded-full bg-yellow-500/15 text-yellow-400 text-xs font-bold border border-yellow-500/30">{{ session.status }}</span>
+                 </div>
+              </div>
+           </div>
+
+           <!-- Completed Sessions -->
+           <div *ngIf="getCompletedSessions().length > 0" class="space-y-3">
+              <h4 class="text-sm font-bold text-green-400 uppercase tracking-widest">Completed</h4>
+              <div *ngFor="let session of getCompletedSessions()" class="bento-card p-5 border-l-4 border-l-green-500 opacity-75">
+                 <div class="flex justify-between items-start">
+                    <div>
+                       <h5 class="text-white font-semibold text-sm">Session with {{ session.student?.name }}</h5>
+                       <p class="text-gray-400 text-xs mt-1">{{ session.scheduledAt | date:'EEEE, MMM dd, yyyy • h:mm a' }}</p>
+                    </div>
+                    <span class="px-2 py-1 rounded-full bg-green-500/15 text-green-400 text-xs font-bold border border-green-500/30">{{ session.status }}</span>
+                 </div>
+              </div>
+           </div>
+        </section>
+
+        <!-- Add/Edit Resource Modal -->
+        <div *ngIf="showAddResourceModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+           <div class="bento-card w-full max-w-lg p-8 mx-4" (click)="$event.stopPropagation()">
+              <div class="flex justify-between items-center mb-6">
+                 <h3 class="text-xl font-bold text-white">{{ editingResource ? '✏️ Edit Resource' : '➕ Add Resource' }}</h3>
+                 <button (click)="closeResourceModal()" class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                 </button>
+              </div>
+              <form [formGroup]="resourceForm" (ngSubmit)="saveResource()" class="space-y-5">
+                 <div>
+                    <label class="block text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">Title</label>
+                    <input type="text" formControlName="title" class="input-glass w-full rounded-xl px-4 py-3 text-sm" placeholder="e.g. Clean Code by Robert C. Martin">
+                 </div>
+                 <div>
+                    <label class="block text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">Link / URL</label>
+                    <input type="text" formControlName="link" class="input-glass w-full rounded-xl px-4 py-3 text-sm" placeholder="https://...">
+                 </div>
+                 <div>
+                    <label class="block text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">Category</label>
+                    <select formControlName="category" class="input-glass w-full rounded-xl px-4 py-3 text-sm bg-[#0a0a0a]">
+                       <option value="article">📄 Article</option>
+                       <option value="book">📚 Book</option>
+                       <option value="pdf">📑 PDF</option>
+                       <option value="video">🎬 Video</option>
+                       <option value="course">🎓 Course</option>
+                       <option value="tutorial">📖 Tutorial</option>
+                    </select>
+                 </div>
+                 <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" (click)="closeResourceModal()" class="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:bg-white/10 text-sm font-medium transition-all">Cancel</button>
+                    <button type="submit" [disabled]="resourceForm.invalid" class="px-5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                       {{ editingResource ? 'Update Resource' : 'Add Resource' }}
+                    </button>
+                 </div>
+              </form>
+           </div>
+        </div>
 
         <!-- STUDENT ONLY: AI Career Section -->
         <section *ngIf="currentUser?.role === 'STUDENT'" class="space-y-6">

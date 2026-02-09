@@ -21,6 +21,28 @@ export interface Session {
   student?: any;
 }
 
+export interface Mentor {
+  id: string;
+  name: string;
+  email: string;
+  createdAt?: string;
+  profile?: {
+    education?: string;
+    skills?: string;
+    interests?: string;
+    goals?: string;
+  };
+  resources?: Resource[];
+}
+
+export interface Resource {
+  id: string;
+  title: string;
+  link: string;
+  category: string;
+  createdAt: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -35,8 +57,12 @@ export class MentorshipService {
     return this.http.get<Session[]>(`${environment.apiUrl}/mentorship/sessions`);
   }
 
-  getMentors(): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.apiUrl}/users/mentors`);
+  getMentors(): Observable<Mentor[]> {
+    return this.http.get<Mentor[]>(`${environment.apiUrl}/users/mentors`);
+  }
+
+  getMentorById(mentorId: string): Observable<Mentor> {
+    return this.http.get<Mentor>(`${environment.apiUrl}/users/mentors/${mentorId}`);
   }
 
   getSession(sessionId: string): Observable<Session> {
@@ -57,5 +83,23 @@ export class MentorshipService {
 
   getVideoCallToken(sessionId: string): Observable<any> {
     return this.http.get(`${environment.apiUrl}/mentorship/sessions/${sessionId}/token`);
+  }
+
+  // ==================== RESOURCES ====================
+
+  getMyResources(): Observable<Resource[]> {
+    return this.http.get<Resource[]>(`${environment.apiUrl}/mentorship/resources`);
+  }
+
+  addResource(data: { title: string; link: string; category: string }): Observable<Resource> {
+    return this.http.post<Resource>(`${environment.apiUrl}/mentorship/resources`, data);
+  }
+
+  updateResource(resourceId: string, data: { title?: string; link?: string; category?: string }): Observable<Resource> {
+    return this.http.put<Resource>(`${environment.apiUrl}/mentorship/resources/${resourceId}`, data);
+  }
+
+  deleteResource(resourceId: string): Observable<any> {
+    return this.http.delete(`${environment.apiUrl}/mentorship/resources/${resourceId}`);
   }
 }

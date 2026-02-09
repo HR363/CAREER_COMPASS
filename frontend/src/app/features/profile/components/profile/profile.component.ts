@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService, User } from '../../../../core/services/auth.service';
 import { AiService } from '../../../../core/services/ai.service';
 import { ProfileService } from '../../../../core/services/profile.service';
+import { MentorshipService, Resource, Session } from '../../../../core/services/mentorship.service';
 import { NgChartsModule } from 'ng2-charts';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 
@@ -26,6 +27,15 @@ export class ProfileComponent implements OnInit {
   isGeneratingRoadmap = false;
   activeRoadmapCareer: string | null = null;
   selectedRoadmap: any = null;
+
+  // Mentor State
+  resources: Resource[] = [];
+  mentorSessions: Session[] = [];
+  isLoadingResources = false;
+  isLoadingSessions = false;
+  showAddResourceModal = false;
+  editingResource: Resource | null = null;
+  resourceForm: FormGroup;
 
   // Chart Data
   public pieChartOptions: ChartConfiguration['options'] = {
@@ -70,6 +80,7 @@ export class ProfileComponent implements OnInit {
     private authService: AuthService,
     private aiService: AiService,
     private profileService: ProfileService,
+    private mentorshipService: MentorshipService,
     private router: Router
   ) {
     this.profileForm = this.fb.group({
@@ -78,11 +89,23 @@ export class ProfileComponent implements OnInit {
       interests: [''],
       goals: ['']
     });
+    
+    this.resourceForm = this.fb.group({
+      title: ['', Validators.required],
+      link: ['', Validators.required],
+      category: ['article', Validators.required]
+    });
   }
 
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
     this.loadProfile();
+    
+    // Load mentor-specific data
+    if (this.currentUser?.role === 'MENTOR') {
+      this.loadMentorResources();
+      this.loadMentorSessions();
+    }
   }
 
   loadProfile(): void {
@@ -254,6 +277,111 @@ export class ProfileComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['/dashboard']);
+  }
+
+  // ==================== MENTOR METHODS ====================
+
+  loadMentorResources(): void {
+    this.isLoadingResources = true;
+    this.mentorshipService.getMyResources().subscribe({
+      next: (resources) => {
+        this.resources = resources;
+        this.isLoadingResources = false;
+      },
+      error: (error) => {
+        console.error('Error loading resources:', error);
+        this.isLoadingResources = false;
+      }
+    });
+  }
+
+  loadMentorSessions(): void {
+    this.isLoadingSessions = true;
+    this.mentorshipService.getSessions().subscribe({
+      next: (sessions) => {
+        this.mentorSessions = sessions;
+        this.isLoadingSessions = false;
+      },
+      error: (error) => {
+        console.error('Error loading sessions:', error);
+        this.isLoadingSessions = false;
+      }
+    });
+  }
+
+  openAddResourceModal(): void {
+    this.editingResource = null;
+    this.resourceForm.reset({ category: 'article' });
+    this.showAddResourceModal = true;
+  }
+
+  openEditResourceModal(resource: Resource): void {
+    this.editingResource = resource;
+    this.resourceForm.patchValue({
+      title: resource.title,
+      link: resource.link,
+      category: resource.category
+    });
+    this.showAddResourceModal = true;
+  }
+
+  closeResourceModal(): void {
+    this.showAddResourceModal = false;
+    this.editingResource = null;
+    this.resourceForm.reset({ category: 'article' });
+  }
+
+  saveResource(): void {
+    if (!this.resourceForm.valid) return;
+    
+    const data = this.resourceForm.value;
+    
+    if (this.editingResource) {
+      this.mentorshipService.updateResource(this.editingResource.id, data).subscribe({
+        next: () => {
+          this.loadMentorResources();
+          this.closeResourceModal();
+        },
+        error: (error) => console.error('Error updating resource:', error)
+      });
+    } else {
+      this.mentorshipService.addResource(data).subscribe({
+        next: () => {
+          this.loadMentorResources();
+          this.closeResourceModal();
+        },
+        error: (error) => console.error('Error adding resource:', error)
+      });
+    }
+  }
+
+  deleteResource(resourceId: string): void {
+    if (confirm('Are you sure you want to delete this resource?')) {
+      this.mentorshipService.deleteResource(resourceId).subscribe({
+        next: () => this.loadMentorResources(),
+        error: (error) => console.error('Error deleting resource:', error)
+      });
+    }
+  }
+
+  getResourceIcon(category: string): string {
+    const icons: { [key: string]: string } = {
+      'article': '📄',
+      'book': '📚',
+      'pdf': '📑',
+      'video': '🎬',
+      'course': '🎓',
+      'tutorial': '📖'
+    };
+    return icons[category?.toLowerCase()] || '📎';
+  }
+
+  getUpcomingSessions(): Session[] {
+    return this.mentorSessions.filter(s => s.status === 'SCHEDULED');
+  }
+
+  getCompletedSessions(): Session[] {
+    return this.mentorSessions.filter(s => s.status === 'COMPLETED');
   }
 
   isArray(value: any): boolean {

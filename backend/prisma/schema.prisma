@@ -25,6 +25,8 @@ model User {
   resources      Resource[]
   mentorSessions Session[] @relation("MentorSessions")
   studentSessions Session[] @relation("StudentSessions")
+  sentMessages    Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
 
   @@map("users")
 }
@@ -89,6 +91,22 @@ model Session {
   student User @relation("StudentSessions", fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("sessions")
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  senderId    String
+  receiverId  String
+  content     String
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  sender   User @relation("SentMessages", fields: [senderId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  receiver User @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("messages")
 }
 
 // Enums converted to strings for SQL Server compatibility
