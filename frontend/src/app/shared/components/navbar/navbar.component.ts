@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { AuthService, User } from '../../../core/services/auth.service';
-import { Subscription, filter } from 'rxjs';
+import { MessagesService } from '../../../core/services/messages.service';
+import { Subscription, filter, interval } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -16,11 +17,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
   isScrolled = false;
   isMobileMenuOpen = false;
   currentRoute = '';
+  unreadCount = 0;
   private authSub?: Subscription;
   private routerSub?: Subscription;
+  private unreadSub?: Subscription;
 
   constructor(
     private authService: AuthService,
+    private messagesService: MessagesService,
     private router: Router
   ) {}
 
@@ -29,6 +33,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
     
     this.authSub = this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
+      if (user) {
+        this.loadUnreadCount();
+      } else {
+        this.unreadCount = 0;
+      }
     });
 
     this.routerSub = this.router.events.pipe(
@@ -36,14 +45,42 @@ export class NavbarComponent implements OnInit, OnDestroy {
     ).subscribe(event => {
       this.currentRoute = event.urlAfterRedirects;
       this.isMobileMenuOpen = false;
+      // Refresh unread count on navigation
+      if (this.currentUser) {
+        this.loadUnreadCount();
+      }
     });
 
     this.currentRoute = this.router.url;
+    
+    // Initial load of unread count
+    if (this.currentUser) {
+      this.loadUnreadCount();
+    }
+    
+    // Refresh unread count every 30 seconds
+    this.unreadSub = interval(30000).subscribe(() => {
+      if (this.currentUser) {
+        this.loadUnreadCount();
+      }
+    });
+  }
+
+  private loadUnreadCount(): void {
+    this.messagesService.getUnreadCount().subscribe({
+      next: (response) => {
+        this.unreadCount = response.count;
+      },
+      error: () => {
+        // Silently fail - unread count is not critical
+      }
+    });
   }
 
   ngOnDestroy(): void {
     this.authSub?.unsubscribe();
     this.routerSub?.unsubscribe();
+    this.unreadSub?.unsubscribe();
   }
 
   @HostListener('window:scroll')

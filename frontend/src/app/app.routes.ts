@@ -27,6 +27,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'messages',
+    loadChildren: () => import('./features/messages/messages.routes').then(m => m.messagesRoutes),
+    canActivate: [authGuard]
+  },
+  {
     path: 'mentorship',
     loadChildren: () => import('./features/mentorship/mentorship.routes').then(m => m.mentorshipRoutes),
     canActivate: [authGuard]
