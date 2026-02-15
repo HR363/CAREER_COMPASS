@@ -1,114 +1,192 @@
-<div class="h-screen bg-[#050505] text-white flex flex-col">
+<div class="chat-container">
   
+  <!-- Background Effects -->
+  <div class="bg-effects">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+  </div>
+
   <!-- Header -->
-  <header class="flex-shrink-0 px-4 py-4 bg-[#0a0a0a] border-b border-white/5">
-    <div class="max-w-4xl mx-auto flex items-center gap-4">
-      <button (click)="goBack()" 
-        class="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
-        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+  <header class="chat-header">
+    <div class="header-content">
+      <button (click)="goBack()" class="back-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 19l-7-7 7-7"/>
         </svg>
       </button>
       
-      <div *ngIf="otherUser" class="flex items-center gap-3 flex-1 min-w-0">
-        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold flex-shrink-0">
+      <div *ngIf="otherUser" class="user-profile" (click)="showUserInfo = !showUserInfo">
+        <div class="avatar" [style.background]="getAvatarGradient(otherUser.name)">
           {{ getUserInitial() }}
+          <div class="status-dot online"></div>
         </div>
-        <div class="min-w-0">
-          <h1 class="font-semibold text-white truncate">{{ otherUser.name }}</h1>
-          <p class="text-xs text-gray-500 truncate">{{ otherUser.email }}</p>
+        <div class="user-details">
+          <h1 class="user-name">{{ otherUser.name }}</h1>
+          <p class="user-status">
+            <span class="status-text">Active now</span>
+          </p>
         </div>
       </div>
       
-      <div *ngIf="!otherUser && !isLoading" class="flex-1">
-        <h1 class="font-semibold text-white">New Conversation</h1>
+      <div *ngIf="!otherUser && !isLoading" class="user-profile">
+        <div class="avatar placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <div class="user-details">
+          <h1 class="user-name">New Conversation</h1>
+        </div>
+      </div>
+      
+      <div class="header-actions">
+        <button class="action-btn" title="Video Call">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="23 7 16 12 23 17 23 7"/>
+            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+          </svg>
+        </button>
+        <button class="action-btn" title="More options">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="1"/>
+            <circle cx="19" cy="12" r="1"/>
+            <circle cx="5" cy="12" r="1"/>
+          </svg>
+        </button>
       </div>
     </div>
   </header>
 
   <!-- Messages Area -->
-  <div #messagesContainer class="flex-1 overflow-y-auto px-4 py-6">
-    <div class="max-w-4xl mx-auto">
-      
-      <!-- Loading -->
-      <div *ngIf="isLoading" class="flex flex-col items-center justify-center py-20">
-        <div class="w-10 h-10 border-2 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin mb-4"></div>
-        <p class="text-gray-400 text-sm">Loading messages...</p>
+  <div #messagesContainer class="messages-area">
+    
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="loading-spinner">
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
       </div>
+      <p>Loading messages...</p>
+    </div>
 
-      <!-- Empty State -->
-      <div *ngIf="!isLoading && messages.length === 0" class="flex flex-col items-center justify-center py-20">
-        <div class="w-16 h-16 rounded-full bg-indigo-500/10 flex items-center justify-center mb-4">
-          <svg class="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
-                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && messages.length === 0" class="empty-state">
+      <div class="empty-illustration">
+        <div class="wave-container">
+          <svg class="wave-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
           </svg>
+          <div class="wave-ring"></div>
+          <div class="wave-ring delay-1"></div>
+          <div class="wave-ring delay-2"></div>
         </div>
-        <h3 class="text-lg font-semibold text-white mb-2">Start the conversation</h3>
-        <p class="text-gray-400 text-sm text-center max-w-sm">Send a message to begin your conversation.</p>
       </div>
+      <h3>Start the conversation</h3>
+      <p>Send a message to begin chatting with {{ otherUser?.name || 'this user' }}</p>
+    </div>
 
-      <!-- Messages -->
-      <div *ngIf="!isLoading && messages.length > 0" class="space-y-4">
-        <ng-container *ngFor="let message of messages; let i = index">
+    <!-- Messages -->
+    <div *ngIf="!isLoading && messages.length > 0" class="messages-list">
+      <ng-container *ngFor="let message of messages; let i = index">
+        
+        <!-- Date Divider -->
+        <div *ngIf="shouldShowDateDivider(i)" class="date-divider">
+          <span>{{ getMessageDate(message.createdAt) }}</span>
+        </div>
+
+        <!-- Message -->
+        <div class="message-wrapper" 
+             [class.sent]="message.senderId === currentUser?.id"
+             [class.received]="message.senderId !== currentUser?.id">
           
-          <!-- Date Divider -->
-          <div *ngIf="shouldShowDateDivider(i)" class="flex items-center justify-center my-6">
-            <span class="px-3 py-1 rounded-full bg-white/5 text-xs text-gray-500 font-medium">
-              {{ getMessageDate(message.createdAt) }}
-            </span>
+          <!-- Avatar for received messages -->
+          <div *ngIf="message.senderId !== currentUser?.id && shouldShowAvatar(i)" 
+               class="message-avatar" 
+               [style.background]="getAvatarGradient(otherUser?.name || '')">
+            {{ getUserInitial() }}
           </div>
-
-          <!-- Message Bubble -->
-          <div class="flex" [class.justify-end]="message.senderId === currentUser?.id">
-            <div class="max-w-[75%] sm:max-w-[60%]">
-              <div class="rounded-2xl px-4 py-3 text-sm"
-                   [ngClass]="message.senderId === currentUser?.id 
-                     ? 'bg-indigo-600 text-white rounded-br-md' 
-                     : 'bg-white/[0.06] text-gray-200 rounded-bl-md'">
-                <p class="whitespace-pre-wrap break-words">{{ message.content }}</p>
-              </div>
-              <div class="flex items-center gap-2 mt-1 px-1"
-                   [class.justify-end]="message.senderId === currentUser?.id">
-                <span class="text-[10px] text-gray-600">{{ getMessageTime(message.createdAt) }}</span>
-                <svg *ngIf="message.senderId === currentUser?.id && message.isRead" 
-                     class="w-3 h-3 text-indigo-400" fill="currentColor" viewBox="0 0 24 24">
+          <div *ngIf="message.senderId !== currentUser?.id && !shouldShowAvatar(i)" 
+               class="message-avatar-placeholder"></div>
+          
+          <div class="message-bubble-container">
+            <div class="message-bubble" [class.tail]="shouldShowTail(i)">
+              <p class="message-text">{{ message.content }}</p>
+            </div>
+            <div class="message-meta">
+              <span class="message-time">{{ getMessageTime(message.createdAt) }}</span>
+              <div *ngIf="message.senderId === currentUser?.id" class="read-status">
+                <svg *ngIf="message.isRead" class="read-icon" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M18 7l-1.41-1.41-6.34 6.34 1.41 1.41L18 7zm4.24-1.41L11.66 16.17 7.48 12l-1.41 1.41L11.66 19l12-12-1.42-1.41zM.41 13.41L6 19l1.41-1.41L1.83 12 .41 13.41z"/>
+                </svg>
+                <svg *ngIf="!message.isRead" class="sent-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="20 6 9 17 4 12"/>
                 </svg>
               </div>
             </div>
           </div>
-        </ng-container>
+        </div>
+        
+      </ng-container>
+      
+      <!-- Typing Indicator (placeholder) -->
+      <div *ngIf="isTyping" class="message-wrapper received">
+        <div class="message-avatar" [style.background]="getAvatarGradient(otherUser?.name || '')">
+          {{ getUserInitial() }}
+        </div>
+        <div class="message-bubble typing">
+          <div class="typing-dots">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
       </div>
-
     </div>
   </div>
 
-  <!-- Message Input -->
-  <div class="flex-shrink-0 px-4 py-4 bg-[#0a0a0a] border-t border-white/5">
-    <form [formGroup]="messageForm" (ngSubmit)="sendMessage()" class="max-w-4xl mx-auto">
-      <div class="flex items-end gap-3">
-        <div class="flex-1 relative">
-          <textarea 
-            formControlName="content"
-            (keydown)="onKeyDown($event)"
-            rows="1"
-            class="w-full bg-white/[0.04] border border-white/10 rounded-2xl px-4 py-3 pr-12 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 resize-none overflow-hidden"
-            style="min-height: 48px; max-height: 120px;"
-            placeholder="Type a message..."></textarea>
-        </div>
-        <button 
-          type="submit"
-          [disabled]="messageForm.invalid || isSending"
-          class="w-12 h-12 rounded-full bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-600/50 disabled:cursor-not-allowed flex items-center justify-center transition-colors flex-shrink-0">
-          <svg *ngIf="!isSending" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+  <!-- Input Area -->
+  <div class="input-area">
+    <form [formGroup]="messageForm" (ngSubmit)="sendMessage()" class="input-form">
+      
+      <button type="button" class="attach-btn" title="Attach file">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+        </svg>
+      </button>
+      
+      <div class="input-wrapper">
+        <textarea 
+          formControlName="content"
+          (keydown)="onKeyDown($event)"
+          (input)="autoResize($event)"
+          rows="1"
+          placeholder="Type a message..."
+          class="message-input"
+          #messageInput></textarea>
+        
+        <button type="button" class="emoji-btn" title="Add emoji">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+            <line x1="9" y1="9" x2="9.01" y2="9"/>
+            <line x1="15" y1="9" x2="15.01" y2="9"/>
           </svg>
-          <div *ngIf="isSending" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
         </button>
       </div>
-      <p class="text-xs text-gray-600 mt-2 ml-1">Press Enter to send, Shift+Enter for new line</p>
+      
+      <button 
+        type="submit"
+        [disabled]="messageForm.invalid || isSending"
+        class="send-btn"
+        [class.active]="messageForm.valid && !isSending">
+        <svg *ngIf="!isSending" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+        <div *ngIf="isSending" class="send-spinner"></div>
+      </button>
     </form>
+    
+    <p class="input-hint">Press <kbd>Enter</kbd> to send, <kbd>Shift</kbd>+<kbd>Enter</kbd> for new line</p>
   </div>
 
 </div>

@@ -1,108 +1,158 @@
-<div class="min-h-screen bg-[#050505] text-white relative selection:bg-indigo-500/30">
+<div class="messages-container">
   
-  <!-- Ambient Background -->
-  <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-    <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px] animate-blob"></div>
-    <div class="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-[140px] animate-blob animation-delay-2000"></div>
+  <!-- Animated Background -->
+  <div class="bg-effects">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+    <div class="noise-overlay"></div>
   </div>
 
-  <!-- Main Container -->
-  <div class="relative z-10 w-full max-w-4xl mx-auto px-4 py-6 md:p-8">
+  <!-- Main Content -->
+  <div class="content-wrapper">
     
-    <!-- Header -->
-    <header class="mb-8 flex flex-wrap justify-between items-center gap-4">
-      <div class="flex items-center gap-4">
-        <button (click)="goBack()" 
-          class="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
-          <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-          </svg>
-        </button>
-        <div>
-          <nav class="text-xs text-gray-500 font-medium mb-1 uppercase tracking-widest">Dashboard / Messages</nav>
-          <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">Inbox</h1>
+    <!-- Glass Header -->
+    <header class="inbox-header">
+      <div class="header-content">
+        <div class="header-left">
+          <button (click)="goBack()" class="back-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 19l-7-7 7-7"/>
+            </svg>
+          </button>
+          <div class="header-title-group">
+            <span class="breadcrumb">Dashboard / Messages</span>
+            <h1 class="page-title">
+              <svg class="title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
+              </svg>
+              Messages
+            </h1>
+          </div>
+        </div>
+        
+        <div class="header-right">
+          <div *ngIf="getTotalUnread() > 0" class="unread-chip">
+            <span class="pulse-dot"></span>
+            {{ getTotalUnread() }} unread
+          </div>
         </div>
       </div>
-      <div class="flex items-center gap-3">
-        <span *ngIf="getTotalUnread() > 0" class="px-3 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-sm font-medium text-indigo-400">
-          {{ getTotalUnread() }} unread
-        </span>
+      
+      <!-- Search Bar -->
+      <div class="search-container">
+        <div class="search-input-wrapper">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input type="text" 
+                 placeholder="Search conversations..." 
+                 class="search-input"
+                 [(ngModel)]="searchQuery"
+                 (input)="filterConversations()">
+        </div>
       </div>
     </header>
 
     <!-- Loading State -->
-    <div *ngIf="isLoading" class="flex flex-col items-center justify-center py-20">
-      <div class="w-12 h-12 border-2 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin mb-4"></div>
-      <p class="text-gray-400">Loading conversations...</p>
+    <div *ngIf="isLoading" class="loading-container">
+      <div class="loading-spinner">
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+      </div>
+      <p class="loading-text">Loading conversations...</p>
     </div>
 
     <!-- Empty State -->
-    <div *ngIf="!isLoading && conversations.length === 0" 
-         class="flex flex-col items-center justify-center py-20 px-4 bg-white/[0.02] rounded-2xl border border-white/5">
-      <div class="w-20 h-20 rounded-full bg-indigo-500/10 flex items-center justify-center mb-6">
-        <svg class="w-10 h-10 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
-                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-        </svg>
+    <div *ngIf="!isLoading && conversations.length === 0" class="empty-state">
+      <div class="empty-illustration">
+        <div class="empty-icon-wrapper">
+          <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
+          </svg>
+          <div class="empty-icon-glow"></div>
+        </div>
+        <div class="floating-dots">
+          <span></span><span></span><span></span>
+        </div>
       </div>
-      <h3 class="text-xl font-semibold text-white mb-2">No messages yet</h3>
-      <p class="text-gray-400 text-center max-w-sm mb-6">
+      <h3 class="empty-title">No conversations yet</h3>
+      <p class="empty-description">
         {{ currentUser?.role === 'MENTOR' 
-           ? 'Students will be able to send you messages when they view your profile.' 
-           : 'Start a conversation by visiting a mentor\'s profile.' }}
+           ? 'Students will be able to send you messages when they visit your profile.' 
+           : 'Start a conversation by visiting a mentor\'s profile and sending a message.' }}
       </p>
-      <a *ngIf="currentUser?.role === 'STUDENT'" routerLink="/mentorship/mentors"
-         class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm transition-all">
+      <a *ngIf="currentUser?.role === 'STUDENT'" routerLink="/mentorship/mentors" class="empty-cta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
         Browse Mentors
       </a>
     </div>
 
     <!-- Conversations List -->
-    <div *ngIf="!isLoading && conversations.length > 0" class="space-y-3">
-      <div *ngFor="let conversation of conversations" 
+    <div *ngIf="!isLoading && filteredConversations.length > 0" class="conversations-list">
+      
+      <div *ngFor="let conversation of filteredConversations; let i = index" 
            (click)="openConversation(conversation.user.id)"
-           class="group p-5 bg-white/[0.02] rounded-2xl border border-white/5 hover:bg-white/[0.04] hover:border-white/10 cursor-pointer transition-all">
+           class="conversation-card"
+           [class.has-unread]="conversation.unreadCount > 0"
+           [style.animation-delay]="i * 50 + 'ms'">
         
-        <div class="flex items-start gap-4">
-          <!-- Avatar -->
-          <div class="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+        <!-- Avatar with status -->
+        <div class="avatar-container">
+          <div class="avatar" [style.background]="getAvatarGradient(conversation.user.name)">
             {{ conversation.user.name.charAt(0).toUpperCase() }}
           </div>
-          
-          <!-- Content -->
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center justify-between gap-2 mb-1">
-              <div class="flex items-center gap-2 min-w-0">
-                <h3 class="font-semibold text-white truncate">{{ conversation.user.name }}</h3>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider"
-                      [ngClass]="getRoleBadgeClass(conversation.user.role)">
-                  {{ conversation.user.role }}
-                </span>
-              </div>
-              <span class="text-xs text-gray-500 flex-shrink-0">{{ getTimeAgo(conversation.lastMessage.createdAt) }}</span>
+          <div class="status-indicator online"></div>
+        </div>
+        
+        <!-- Content -->
+        <div class="conversation-content">
+          <div class="conversation-header">
+            <div class="user-info">
+              <h3 class="user-name">{{ conversation.user.name }}</h3>
+              <span class="role-badge" [attr.data-role]="conversation.user.role.toLowerCase()">
+                {{ conversation.user.role }}
+              </span>
             </div>
-            
-            <p class="text-sm text-gray-400 truncate mb-1">{{ conversation.user.email }}</p>
-            
-            <p class="text-sm text-gray-300 truncate" [class.font-medium]="conversation.unreadCount > 0">
-              <span *ngIf="conversation.lastMessage.senderId === currentUser?.id" class="text-gray-500">You: </span>
-              {{ conversation.lastMessage.content }}
-            </p>
+            <span class="timestamp">{{ getTimeAgo(conversation.lastMessage.createdAt) }}</span>
           </div>
           
-          <!-- Unread Badge -->
-          <div *ngIf="conversation.unreadCount > 0" 
-               class="w-6 h-6 rounded-full bg-indigo-500 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">
-            {{ conversation.unreadCount > 9 ? '9+' : conversation.unreadCount }}
+          <p class="last-message" [class.unread]="conversation.unreadCount > 0">
+            <span *ngIf="conversation.lastMessage.senderId === currentUser?.id" class="you-prefix">You: </span>
+            {{ conversation.lastMessage.content }}
+          </p>
+        </div>
+        
+        <!-- Right section -->
+        <div class="conversation-meta">
+          <div *ngIf="conversation.unreadCount > 0" class="unread-badge">
+            {{ conversation.unreadCount > 99 ? '99+' : conversation.unreadCount }}
           </div>
-          
-          <!-- Arrow -->
-          <svg class="w-5 h-5 text-gray-600 group-hover:text-gray-400 transition-colors flex-shrink-0" 
-               fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18l6-6-6-6"/>
           </svg>
         </div>
+        
+        <!-- Hover effect -->
+        <div class="card-glow"></div>
       </div>
+      
+    </div>
+
+    <!-- No search results -->
+    <div *ngIf="!isLoading && conversations.length > 0 && filteredConversations.length === 0" class="no-results">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="11" cy="11" r="8"/>
+        <path d="m21 21-4.35-4.35"/>
+      </svg>
+      <p>No conversations match "{{ searchQuery }}"</p>
     </div>
 
   </div>

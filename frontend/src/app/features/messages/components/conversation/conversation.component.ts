@@ -22,6 +22,7 @@ interface OtherUser {
 })
 export class ConversationComponent implements OnInit, OnDestroy, AfterViewChecked {
   @ViewChild('messagesContainer') messagesContainer!: ElementRef;
+  @ViewChild('messageInput') messageInput!: ElementRef;
 
   messages: Message[] = [];
   currentUser: User | null = null;
@@ -30,8 +31,22 @@ export class ConversationComponent implements OnInit, OnDestroy, AfterViewChecke
   messageForm: FormGroup;
   isLoading = true;
   isSending = false;
+  isTyping = false;
+  showUserInfo = false;
   private shouldScrollToBottom = false;
   private refreshSubscription?: Subscription;
+
+  // Avatar gradient colors
+  private avatarGradients = [
+    'linear-gradient(135deg, #6366f1, #8b5cf6)',
+    'linear-gradient(135deg, #ec4899, #f43f5e)',
+    'linear-gradient(135deg, #14b8a6, #06b6d4)',
+    'linear-gradient(135deg, #f59e0b, #f97316)',
+    'linear-gradient(135deg, #8b5cf6, #d946ef)',
+    'linear-gradient(135deg, #10b981, #34d399)',
+    'linear-gradient(135deg, #3b82f6, #6366f1)',
+    'linear-gradient(135deg, #ef4444, #ec4899)',
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -125,6 +140,11 @@ export class ConversationComponent implements OnInit, OnDestroy, AfterViewChecke
         this.isSending = false;
         this.shouldScrollToBottom = true;
         
+        // Reset textarea height
+        if (this.messageInput) {
+          this.messageInput.nativeElement.style.height = 'auto';
+        }
+        
         // Set other user info if not set
         if (!this.otherUser && message.receiver) {
           this.otherUser = message.receiver as OtherUser;
@@ -192,11 +212,36 @@ export class ConversationComponent implements OnInit, OnDestroy, AfterViewChecke
     return currentDate !== prevDate;
   }
 
+  shouldShowAvatar(index: number): boolean {
+    if (index === this.messages.length - 1) return true;
+    const currentSender = this.messages[index].senderId;
+    const nextSender = this.messages[index + 1].senderId;
+    return currentSender !== nextSender;
+  }
+
+  shouldShowTail(index: number): boolean {
+    if (index === 0) return false;
+    const currentSender = this.messages[index].senderId;
+    const prevSender = this.messages[index - 1].senderId;
+    return currentSender === prevSender;
+  }
+
   onKeyDown(event: KeyboardEvent): void {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
       this.sendMessage();
     }
+  }
+
+  autoResize(event: Event): void {
+    const textarea = event.target as HTMLTextAreaElement;
+    textarea.style.height = 'auto';
+    textarea.style.height = Math.min(textarea.scrollHeight, 150) + 'px';
+  }
+
+  getAvatarGradient(name: string): string {
+    const charCode = (name || '').charCodeAt(0) || 0;
+    return this.avatarGradients[charCode % this.avatarGradients.length];
   }
 
   getUserInitial(): string {
