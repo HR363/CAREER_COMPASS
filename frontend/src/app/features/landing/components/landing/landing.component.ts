@@ -1,6 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+
+interface FloatingIcon {
+  icon: string;
+  x: number;
+  y: number;
+  size: number;
+  speed: number;
+  delay: number;
+  opacity: number;
+}
 
 @Component({
   selector: 'app-landing',
@@ -9,7 +19,26 @@ import { RouterModule } from '@angular/router';
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.scss']
 })
-export class LandingComponent {
+export class LandingComponent implements OnInit, OnDestroy, AfterViewInit {
+  // Mouse tracking
+  mouseX = 0;
+  mouseY = 0;
+  cursorX = 0;
+  cursorY = 0;
+  
+  // Scroll position
+  scrollY = 0;
+  
+  // Floating icons for background
+  floatingIcons: FloatingIcon[] = [];
+  
+  // Animation frame ID
+  private animationFrameId: number | null = null;
+  private observer: IntersectionObserver | null = null;
+
+  // Tech icons for floating background
+  private techIcons = ['⚡', '🎯', '💡', '🚀', '✨', '🔮', '💫', '🌟', '⭐', '🎓', '📊', '🤖', '💻', '🔑', '🎨'];
+  
   features = [
     {
       icon: '🎯',
@@ -163,5 +192,103 @@ export class LandingComponent {
 
   toggleFaq(index: number) {
     this.faqs[index].isOpen = !this.faqs[index].isOpen;
+  }
+
+  ngOnInit() {
+    this.generateFloatingIcons();
+    this.startAnimation();
+  }
+
+  ngAfterViewInit() {
+    this.setupScrollObserver();
+  }
+
+  ngOnDestroy() {
+    if (this.animationFrameId) {
+      cancelAnimationFrame(this.animationFrameId);
+    }
+    if (this.observer) {
+      this.observer.disconnect();
+    }
+  }
+
+  @HostListener('window:mousemove', ['$event'])
+  onMouseMove(event: MouseEvent) {
+    this.mouseX = event.clientX;
+    this.mouseY = event.clientY;
+  }
+
+  @HostListener('window:scroll')
+  onScroll() {
+    this.scrollY = window.scrollY;
+  }
+
+  private generateFloatingIcons() {
+    this.floatingIcons = [];
+    for (let i = 0; i < 20; i++) {
+      this.floatingIcons.push({
+        icon: this.techIcons[Math.floor(Math.random() * this.techIcons.length)],
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: 16 + Math.random() * 24,
+        speed: 0.5 + Math.random() * 1.5,
+        delay: Math.random() * 5,
+        opacity: 0.03 + Math.random() * 0.08
+      });
+    }
+  }
+
+  private startAnimation() {
+    const animate = () => {
+      // Smooth cursor following
+      this.cursorX += (this.mouseX - this.cursorX) * 0.08;
+      this.cursorY += (this.mouseY - this.cursorY) * 0.08;
+      
+      this.animationFrameId = requestAnimationFrame(animate);
+    };
+    animate();
+  }
+
+  private setupScrollObserver() {
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    );
+
+    // Observe all animated elements
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+      this.observer?.observe(el);
+    });
+  }
+
+  // Get parallax transform based on scroll
+  getParallaxStyle(speed: number = 0.5) {
+    return {
+      transform: `translateY(${this.scrollY * speed}px)`
+    };
+  }
+
+  // Get 3D card transform based on mouse position
+  getCardTransform(event: MouseEvent, element: HTMLElement) {
+    const rect = element.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    const rotateX = (y - centerY) / 20;
+    const rotateY = (centerX - x) / 20;
+    
+    return `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+  }
+
+  resetCardTransform() {
+    return 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
   }
 }
