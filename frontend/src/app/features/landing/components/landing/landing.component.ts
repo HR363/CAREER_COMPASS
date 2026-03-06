@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ElementRef, ViewChild, AfterViewInit, QueryList, ViewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -31,6 +31,38 @@ export class LandingComponent implements OnInit, OnDestroy, AfterViewInit {
   
   // Floating icons for background
   floatingIcons: FloatingIcon[] = [];
+  
+  // Journey steps tracking
+  activeStep = 0;
+  stepsProgress = 0;
+  
+  // Journey steps data
+  journeySteps = [
+    {
+      number: '01',
+      icon: '📝',
+      title: 'Create Your Profile',
+      description: 'Tell us about your skills, experience, and career aspirations. Our AI will start building your personalized roadmap.',
+      details: ['Skills assessment', 'Interest mapping', 'Goal setting'],
+      graphic: 'profile'
+    },
+    {
+      number: '02',
+      icon: '🤖',
+      title: 'Get AI Recommendations',
+      description: 'Receive intelligent career path suggestions based on market trends, your strengths, and growth potential.',
+      details: ['Career matching', 'Learning paths', 'Salary insights'],
+      graphic: 'ai'
+    },
+    {
+      number: '03',
+      icon: '🎯',
+      title: 'Connect & Grow',
+      description: 'Book sessions with industry mentors, track your progress, and transform your career journey.',
+      details: ['Expert mentorship', 'Progress tracking', 'Community access'],
+      graphic: 'connect'
+    }
+  ];
   
   // Animation frame ID
   private animationFrameId: number | null = null;
@@ -221,6 +253,50 @@ export class LandingComponent implements OnInit, OnDestroy, AfterViewInit {
   @HostListener('window:scroll')
   onScroll() {
     this.scrollY = window.scrollY;
+    this.updateJourneyProgress();
+  }
+
+  private updateJourneyProgress() {
+    const journeySection = document.querySelector('.how-it-works') as HTMLElement;
+    if (!journeySection) return;
+
+    const rect = journeySection.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+    const sectionTop = rect.top;
+    const sectionHeight = rect.height;
+
+    // Calculate progress through the section (0 to 1)
+    const startTrigger = windowHeight * 0.8; // Start when section is 80% visible
+    const endTrigger = -sectionHeight * 0.5; // End halfway through section scroll
+    
+    if (sectionTop <= startTrigger && sectionTop >= endTrigger) {
+      const totalScroll = startTrigger - endTrigger;
+      const currentScroll = startTrigger - sectionTop;
+      this.stepsProgress = Math.min(100, Math.max(0, (currentScroll / totalScroll) * 100));
+      
+      // Determine active step based on progress
+      if (this.stepsProgress < 33) {
+        this.activeStep = 0;
+      } else if (this.stepsProgress < 66) {
+        this.activeStep = 1;
+      } else {
+        this.activeStep = 2;
+      }
+    } else if (sectionTop > startTrigger) {
+      this.stepsProgress = 0;
+      this.activeStep = 0;
+    } else {
+      this.stepsProgress = 100;
+      this.activeStep = 2;
+    }
+  }
+
+  isStepActive(index: number): boolean {
+    return index <= this.activeStep;
+  }
+
+  isStepCurrent(index: number): boolean {
+    return index === this.activeStep;
   }
 
   private generateFloatingIcons() {
