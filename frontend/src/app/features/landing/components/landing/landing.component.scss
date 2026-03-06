@@ -198,10 +198,10 @@ $card-shadow-hover: 0 20px 60px rgba(0, 0, 0, 0.25);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 120px 2rem 80px;
-  text-align: center;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 120px 0 3rem;
+  text-align: left;
   position: relative;
   z-index: 1;
 }
@@ -209,42 +209,73 @@ $card-shadow-hover: 0 20px 60px rgba(0, 0, 0, 0.25);
 .hero-wrapper {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 2rem;
-  max-width: 1400px;
+  justify-content: space-between;
   width: 100%;
+  max-width: 100%;
+  padding: 0;
+  position: relative;
+  flex: 1;
+  min-height: 500px;
   
   @media (max-width: 1024px) {
     flex-direction: column;
-    gap: 3rem;
+    min-height: auto;
   }
 }
 
 .hero-image {
-  flex: 0 0 auto;
-  max-width: 500px;
-  width: 100%;
-  animation: heroImageFloat 6s ease-in-out infinite;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  width: auto;
+  max-width: 70%;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
   
   img {
-    width: 100%;
-    height: auto;
+    height: 95%;
+    width: auto;
+    max-width: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
+    object-position: bottom right;
+    mask-image: linear-gradient(to left, rgba(0,0,0,1) 50%, rgba(0,0,0,0.7) 75%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 50%, rgba(0,0,0,0.7) 75%, transparent 100%);
+  }
+  
+  .hero-image-glow {
+    position: absolute;
+    bottom: 20%;
+    right: 20%;
+    width: 60%;
+    height: 60%;
+    background: radial-gradient(ellipse at center, rgba($accent-primary, 0.2) 0%, transparent 60%);
+    filter: blur(100px);
+    z-index: -1;
+  }
+  
+  .hero-image-particles {
+    display: none;
   }
   
   @media (max-width: 1024px) {
-    max-width: 350px;
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    top: auto;
+    bottom: auto;
     order: -1;
-  }
-}
-
-@keyframes heroImageFloat {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-15px);
+    margin-bottom: 2rem;
+    
+    img {
+      width: 100%;
+      height: auto;
+      mask-image: linear-gradient(to top, rgba(0,0,0,1) 70%, rgba(0,0,0,0.5) 90%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 70%, rgba(0,0,0,0.5) 90%, transparent 100%);
+    }
   }
 }
 
@@ -290,14 +321,18 @@ $card-shadow-hover: 0 20px 60px rgba(0, 0, 0, 0.25);
 }
 
 .hero-content {
-  max-width: 650px;
+  flex: none;
+  max-width: 550px;
   position: relative;
-  z-index: 2;
+  z-index: 10;
   text-align: left;
+  padding-left: 6%;
   
   @media (max-width: 1024px) {
+    flex: none;
     text-align: center;
     max-width: 700px;
+    padding: 0 2rem;
   }
 }
 
@@ -440,21 +475,29 @@ $card-shadow-hover: 0 20px 60px rgba(0, 0, 0, 0.25);
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
-  max-width: 900px;
-  margin: 4rem auto 0;
+  max-width: 1000px;
+  margin: 2rem auto 0;
   width: 100%;
-  padding: 0 1rem;
+  padding: 2rem;
+  position: relative;
+  z-index: 10;
   
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
+    padding: 1rem;
   }
 }
 
 .stat-item {
-  padding: 1.5rem;
+  padding: 2rem 1.5rem;
   border-radius: 20px;
   text-align: center;
   position: relative;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   
   .stat-icon-wrapper {
     margin-bottom: 0.75rem;
@@ -494,10 +537,8 @@ $card-shadow-hover: 0 20px 60px rgba(0, 0, 0, 0.25);
 
 // Scroll Indicator
 .scroll-indicator {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
+  margin: 2rem auto 0;
   display: flex;
   flex-direction: column;
   align-items: center;
